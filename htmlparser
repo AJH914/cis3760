@@ -10,3 +10,48 @@ if len(sys.argv) != 2:
     usage()
     sys.exit()
 
+file = sys.argv[1]
+print(file)
+
+# HTML FORMAT NOTES:
+# courses start at first html tabel row without any <th> tags
+# windowIdx is the id for each course, will help us find courses in the html document
+
+class HTMLCourseParser(HTMLParser):
+
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.currentData = ''
+    
+    def handle_starttag(self, tag, attrs):
+        #idIndex = [name[0] for name in attrs].index('id')
+        idIndex = 0
+        if tag == 'p' and len(attrs) > 0 and attrs[idIndex][1].startswith('WSS_COURSE_SECTIONS_'):
+            # do something to handle the course semester 
+            self.currentData = 'semester'
+    
+    def handle_data(self, data):
+        if self.currentData == 'semester':
+            print(data)
+            self.currentData = ''
+            
+
+Term = []
+Status = []
+SecName = []
+Loc = []
+MeetInfo = []
+Faculty = []
+Capacity = []
+Credit = []
+AcademicLevel = []
+
+parser = HTMLCourseParser()
+with open(file, 'r') as f:
+    for line in f:
+        parser.feed(line)
+
+
+
+
+
