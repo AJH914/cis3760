@@ -28,7 +28,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
 
 search_course = sys.argv[1] #assigns searched value to a variable
 
-file = open('data/example.json')
+file = open(INPUT_DATA)
 courseData = json.load(file) # loads json data in dictionary
 
 #if courseData contains sys.argv[1] then print info else course does not exist
