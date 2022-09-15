@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# coded by Sahejveer, Tristan, Ali & Kyler
+
 import os
 import sys
 import json
@@ -24,7 +26,24 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
 	usage()
 	sys.exit()
 
-search_course = sys.argv[1]
+search_course = sys.argv[1] #assigns searched value to a variable
 
-file = open('jsonFile.json')
-courseData = json.load(file)
+file = open('data/example.json')
+courseData = json.load(file) # loads json data in dictionary
+
+#if courseData contains sys.argv[1] then print info else course does not exist
+
+if search_course in courseData:
+		#print("\nCourse:", courseData[search_course])
+		print("\nCourse: ", search_course)
+		print("\nName:", courseData[search_course].get('name'))
+		print("\nTerm:", courseData[search_course].get('term'))
+		print("\nStaus:", courseData[search_course].get('status'))
+		print("\nLocation:", courseData[search_course].get('location'))
+		print("\nMeetingInfo:", courseData[search_course].get('meetingInfo'))
+		print("\nCapacity:", courseData[search_course].get('capacity'))
+		print("\nCredit:", courseData[search_course].get('credit'))
+		print("\nAcademic Level:", courseData[search_course].get('academiclevel'))
+		print("\n")
+else:
+	print("Course does not exist")

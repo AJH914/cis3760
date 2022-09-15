@@ -1,5 +1,32 @@
 {
-  "CIS3760": {
-    "name": "Software Engineering"
-  }
+  "CIS3760":  {
+      "name": "Software Engineering",
+      "term": "Fall22",
+      "status": "Open",
+      "location": "Guelph",
+      "meetingInfo": "thursdays",
+      "capacity": "20",
+      "credit" : "0.5",
+      "academicLevel": "undergraduate"
+    },
+    "CIS3260":  {
+      "name": "Software Engineering 2",
+      "term": "Fall22",
+      "status": "Open",
+      "location": "Guelph",
+      "meetingInfo": "thursdays",
+      "capacity": "20",
+      "credit" : "0.5",
+      "academicLevel": "undergraduate"
+    },
+    "CIS3560":  {
+      "name": "Software Engineering",
+      "term": "Fall22",
+      "status": "Open",
+      "location": "Guelph",
+      "meetingInfo": "thursdays",
+      "capacity": "20",
+      "credit" : "0.5",
+      "academicLevel": "undergraduate"
+    }
 }
