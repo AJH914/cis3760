@@ -4,22 +4,27 @@ import os
 import sys
 import json
 
+INPUT_DATA = 'data/output.json'
+
 def usage():
-	print('Usage: coursesearch <course_code>')
+	print('Usage: coursesearch <course_code> [--in input_file.json]')
 
 # python3 coursesearch.py [args..]
 # coursesearch CIS*3760
 # coursesearch --help
 
 if len(sys.argv) != 2:
-    usage()
-    sys.exit()
+	if len(sys.argv) == 4 and sys.argv[2] == '--in':
+		INPUT_DATA = sys.argv[3]
+	else:
+		usage()
+		sys.exit()
 
-course_json_path = sys.argv[1]
+if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+	usage()
+	sys.exit()
 
-if not os.path.isdir(course_json_path):
-    print('coursesearch: "' + course_json_path + '" does not exist')
-    sys.exit()
+search_course = sys.argv[1]
 
 file = open('jsonFile.json')
 courseData = json.load(file)
