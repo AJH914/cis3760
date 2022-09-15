@@ -6,7 +6,7 @@ import os
 import sys
 import json
 
-INPUT_DATA = 'data/output.json'
+INPUT_FILE = 'data/output.json'
 
 def usage():
 	print('Usage: coursesearch <course_code> [--in input_file.json]')
@@ -17,7 +17,7 @@ def usage():
 
 if len(sys.argv) != 2:
 	if len(sys.argv) == 4 and sys.argv[2] == '--in':
-		INPUT_DATA = sys.argv[3]
+		INPUT_FILE = sys.argv[3]
 	else:
 		usage()
 		sys.exit()
@@ -28,7 +28,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
 
 search_course = sys.argv[1] #assigns searched value to a variable
 
-file = open(INPUT_DATA)
+file = open(INPUT_FILE)
 courseData = json.load(file) # loads json data in dictionary
 
 #if courseData contains sys.argv[1] then print info else course does not exist
