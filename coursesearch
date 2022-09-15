@@ -4,9 +4,22 @@ import os
 import sys
 import json
 
+def usage():
+	print('Usage: coursesearch <course_code>')
+
 # python3 coursesearch.py [args..]
 # coursesearch CIS*3760
 # coursesearch --help
+
+if len(sys.argv) != 2:
+    usage()
+    sys.exit()
+
+course_json_path = sys.argv[1]
+
+if not os.path.isdir(course_json_path):
+    print('coursesearch: "' + course_json_path + '" does not exist')
+    sys.exit()
 
 file = open('jsonFile.json')
 courseData = json.load(file)
