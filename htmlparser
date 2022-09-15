@@ -1,0 +1,12 @@
+#!/usr/bin/python3
+
+import sys
+from html.parser import HTMLParser # docs at https://docs.python.org/3/library/html.parser.html
+
+def usage():
+	print('Usage: htmlparser <html_file>')
+
+if len(sys.argv) != 2:
+    usage()
+    sys.exit()
+
