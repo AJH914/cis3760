@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import json
+
+# python3 coursesearch.py [args..]
+# coursesearch CIS*3760
+# coursesearch --help
+
+file = open('jsonFile.json')
+courseData = json.load(file)
