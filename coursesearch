@@ -37,20 +37,19 @@ search_course = sys.argv[1]
 file = open(INPUT_FILE)
 courseData = json.load(file) # load json data in dictionary
 
-# if courseData contains sys.argv[1] then print info else course does not exist
-
+# if courseData contains search term then print info else course does not exist
 if search_course in courseData:
     course = courseData[search_course]
     
     print("\nCourse: ", search_course)
-    print("\nName:", course.get('name'))
-    print("\nTerm:", course.get('term'))
-    print("\nStaus:", course.get('status'))
-    print("\nLocation:", course.get('location'))
-    print("\nMeetingInfo:", course.get('meetingInfo'))
-    print("\nCapacity:", course.get('capacity'))
-    print("\nCredit:", course.get('credit'))
-    print("\nAcademic Level:", course.get('academiclevel'))
+    print("\nName:", course['name'])
+    print("\nTerm:", course['term'])
+    print("\nStaus:", course['status'])
+    print("\nLocation:", course['location'])
+    print("\nMeetingInfo:", course['meetingInfo'])
+    print("\nCapacity:", course['capacity'])
+    print("\nCredit:", course['credit'])
+    print("\nAcademic Level:", course['academiclevel'])
     print("\n")
 else:
 	print("Course does not exist")
