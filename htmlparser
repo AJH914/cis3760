@@ -12,7 +12,6 @@ if len(sys.argv) != 2:
     sys.exit()
 
 file = sys.argv[1]
-course_dict = {}
 
 #count is only used for debugging, if the parser fails at a line in the HTMl this will tell us which line if we print it
 #could be used to implement easy debug mode in the future
@@ -93,8 +92,6 @@ class HTMLCourseParser(HTMLParser):
             self.section_dict.update({'courseName' : tokens[4]})
             self.current_data = ''
 
-            coursekey = self.section_dict['department'] + self.section_dict['courseCode']
-            json_dict[coursekey] = []
         elif self.current_data == 'location':
             self.section_dict.update({'location' : data})
             self.current_data = ''
@@ -150,8 +147,13 @@ class HTMLCourseParser(HTMLParser):
             self.section_dict.update({'academicLevel' : data})
 
             coursekey = self.section_dict['department'] + self.section_dict['courseCode']
-            json_dict[coursekey].append(self.section_dict.copy()) #section dictionary is added to the array of sections
 
+            if coursekey not in json_dict:
+                json_dict[coursekey] = []
+
+            json_dict[coursekey].append(self.section_dict.copy()) #section dictionary is added to the array of sections
+            if (coursekey == 'ACCT1220'):
+                print('acct1220')
             self.section_dict = {
                 'meeting': []
             }
