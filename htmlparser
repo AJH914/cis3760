@@ -59,7 +59,7 @@ class HTMLCourseParser(HTMLParser):
 
             attr_value = attrs[attr_names.index('id')][1]
 
-            if tag == 'p' and 'id' in attr_names:
+            if tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')]:
                 if attr_value.startswith(data_type_identifiers['term']):
                     self.current_data = 'term'
                 elif attr_value.startswith(data_type_identifiers['status']):
