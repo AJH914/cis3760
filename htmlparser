@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+import json
 from html.parser import HTMLParser # docs at https://docs.python.org/3/library/html.parser.html
 
 def usage():
@@ -11,47 +12,160 @@ if len(sys.argv) != 2:
     sys.exit()
 
 file = sys.argv[1]
-print(file)
+course_dict = {}
+
+#count is only used for debugging, if the parser fails at a line in the HTMl this will tell us which line if we print it
+#could be used to implement easy debug mode in the future
+count = 0
 
 # HTML FORMAT NOTES:
 # courses start at first html tabel row without any <th> tags
 # windowIdx is the id for each course, will help us find courses in the html document
 
+data_type_identifiers = {
+    'term' : 'WSS_COURSE_SECTIONS_',
+    'status' : 'LIST_VAR1_',
+    'location' : 'SEC_LOCATION_',
+    'meeting' : 'meet',
+    'prof' : 'SEC_FACULTY_INFO_',
+    'available_capacity' : 'LIST_VAR5_',
+    'credits' : 'SEC_MIN_CRED_',
+    'section_title' : 'SEC_SHORT_TITLE',
+    'level' : 'SEC_ACAD_LEVEL_'
+}
+
+json_dict = {}
+
 class HTMLCourseParser(HTMLParser):
 
     def __init__(self):
         HTMLParser.__init__(self)
-        self.currentData = ''
+
+        #dictionary for each class section and each meeting time
+        self.section_dict = {
+            'meeting': []
+        }
+
+        self.meeting_dict = {}
+
+        #flags and other variables
+        self.current_data = ''
+        self.meeting_info_count = 0
     
     def handle_starttag(self, tag, attrs):
-        #idIndex = [name[0] for name in attrs].index('id')
-        idIndex = 0
-        if tag == 'p' and len(attrs) > 0 and attrs[idIndex][1].startswith('WSS_COURSE_SECTIONS_'):
-            # do something to handle the course semester 
-            self.currentData = 'semester'
+        
+        if len(attrs) > 0:
+            attr_names = [attr[0] for attr in attrs] #used for finding attribute names in tuples list
+
+            if tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['term']):
+                self.current_data = 'term'
+            elif tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['status']):
+                self.current_data = 'status'
+            elif tag == 'a' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['section_title']):
+                self.current_data = 'section_title'
+            elif tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['location']):
+                self.current_data = 'location'
+            elif tag == 'div' and 'class' in attr_names and attrs[attr_names.index('class')][1].startswith(data_type_identifiers['meeting']):
+                self.current_data = 'meeting'
+            elif tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['prof']):
+                self.current_data = 'prof'
+            elif tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['available_capacity']):
+                self.current_data = 'available_capacity'
+            elif tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['credits']):
+                self.current_data = 'credits'
+            elif tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')][1].startswith(data_type_identifiers['level']):
+                self.current_data = 'level'
     
     def handle_data(self, data):
-        if self.currentData == 'semester':
-            print(data)
-            self.currentData = ''
-            
+        if self.current_data == 'term':
+            self.section_dict.update({'term' : data})
+            self.current_data = ''
+        elif self.current_data == 'status':
+            self.section_dict.update({'status' : data})
+            self.current_data = ''
+        elif self.current_data == 'section_title':
+            tokens = data.replace('*', '(').replace(')', '(')
+            tokens = tokens.split('(')
+            self.section_dict.update({'department' : tokens[0]})
+            self.section_dict.update({'courseCode' : tokens[1]})
+            self.section_dict.update({'section' : tokens[2]})
+            self.section_dict.update({'num' : tokens[3]})
+            self.section_dict.update({'courseName' : tokens[4]})
+            self.current_data = ''
 
-Term = []
-Status = []
-SecName = []
-Loc = []
-MeetInfo = []
-Faculty = []
-Capacity = []
-Credit = []
-AcademicLevel = []
+            coursekey = self.section_dict['department'] + self.section_dict['courseCode']
+            json_dict[coursekey] = []
+        elif self.current_data == 'location':
+            self.section_dict.update({'location' : data})
+            self.current_data = ''
+        elif self.current_data == 'meeting':
+
+            if self.meeting_info_count == 0:
+
+                if len(data.strip()) > 0:
+                    tokens = data.split(' ')
+                    self.meeting_dict.update({'meeting_type' : tokens[0]})
+                    self.meeting_dict.update({'meeting_day' : tokens[1]})
+                    self.meeting_info_count += 1
+                else:
+                    self.current_data = ''
+
+            elif self.meeting_info_count == 1:
+                if data.strip() == 'Times TBA':
+                    #both keys are given the Times TBA values to avoid using null values
+                    self.meeting_dict.update({'start_time' : data})
+                    self.meeting_dict.update({'end_time' : data})
+                else:
+                    tokens = data.split('-')
+                    #print('COUNT = 1\n')
+                    #print(tokens)
+                    self.meeting_dict.update({'start_time' : tokens[0].strip()})
+                    self.meeting_dict.update({'end_time' : tokens[1].strip()})
+                self.meeting_info_count += 1
+
+            elif self.meeting_info_count == 2:
+                self.meeting_dict.update({'building' : data.strip()})
+                self.meeting_info_count += 1
+            
+            elif self.meeting_info_count == 3:
+                self.meeting_dict.update({'room' : data.strip(', ')})
+                self.section_dict['meeting'].append(self.meeting_dict.copy()) #meeting dictionary is added to the array of meetings
+                self.meeting_dict.clear() #meeting dictionary is cleared for the next meeting
+                self.meeting_info_count = 0
+                self.current_data = ''
+
+        elif self.current_data == 'prof':
+            self.section_dict.update({'faculty' : data})
+            self.current_data = ''
+        elif self.current_data == 'available_capacity' and len(data.strip()) > 0:
+            tokens = data.split('/')
+            self.section_dict.update({'available' : tokens[0].strip()})
+            self.section_dict.update({'capacity' : tokens[1].strip()})
+            self.current_data = ''
+        elif self.current_data == 'credits':
+            self.section_dict.update({'credits' : data})
+            self.current_data = ''
+        elif self.current_data == 'level':
+            #this is the last peice of info we parse before moving on to a new section
+            self.section_dict.update({'academicLevel' : data})
+
+            coursekey = self.section_dict['department'] + self.section_dict['courseCode']
+            json_dict[coursekey].append(self.section_dict.copy()) #section dictionary is added to the array of sections
+
+            self.section_dict = {
+                'meeting': []
+            }
+
+            self.current_data = ''
 
 parser = HTMLCourseParser()
 with open(file, 'r') as f:
     for line in f:
+        count += 1
         parser.feed(line)
 
-
+with open('data/results.json', 'w') as f:
+    json.dump(json_dict, f, indent=4)
 
 
 
