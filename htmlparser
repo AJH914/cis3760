@@ -152,8 +152,7 @@ class HTMLCourseParser(HTMLParser):
                 json_dict[coursekey] = []
 
             json_dict[coursekey].append(self.section_dict.copy()) #section dictionary is added to the array of sections
-            if (coursekey == 'ACCT1220'):
-                print('acct1220')
+
             self.section_dict = {
                 'meeting': []
             }
