@@ -9,15 +9,18 @@ import json
 INPUT_FILE = 'data/results.json'
 
 SECTION_INFO = {
+    'courseName': 'Course Name',
+    'faculty': 'Instructor',
     'term': 'Term',
     'open': 'Status',
     'location': 'Location',
+    'available': 'Available Spots',
     'capacity': 'Capacity',
     'credits': 'Credits',
     'academicLevel': 'Academic Level'
 }
 
-MEETING_INFO = ['type', 'day', 'startTime', 'endTime', 'building', 'room']
+MEETING_INFO = ['meeting_type', 'meeting_day', 'start_time', 'end_time', 'building', 'room']
 
 def usage():
 	print('Usage: coursesearch <course_code> [--in input_file.json]')
@@ -72,8 +75,7 @@ if search_course in courseData:
             for meeting in section['meeting']:
                 # ensure all meeting data is present
                 if all(key in meeting for key in MEETING_INFO):
-                    print("\t(" + meeting['type'] + ") " + meeting['day'] + " " + meeting['startTime'] + " - " + meeting['endTime'] + ", " + meeting['building'] + " " + meeting['room'])
-
+                    print("\t(" + meeting['meeting_type'] + ") " + meeting['meeting_day'] + " " + meeting['start_time'] + " - " + meeting['end_time'] + ", " + meeting['building'] + " " + meeting['room'])
         print("\n")
 else:
 	print("coursesearch: Course does not exist")
