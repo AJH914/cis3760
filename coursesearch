@@ -53,14 +53,27 @@ if search_course in courseData:
     course = courseData[search_course]
     
     print("\nCourse: ", search_course)
-    print("\nName:", course['name'])
-    print("\nTerm:", course['term'])
-    print("\nStaus:", course['status'])
-    print("\nLocation:", course['location'])
-    print("\nMeetingInfo:", course['meetingInfo'])
-    print("\nCapacity:", course['capacity'])
-    print("\nCredit:", course['credit'])
-    print("\nAcademic Level:", course['academiclevel'])
-    print("\n")
+
+    # print each section
+    for i in range(len(course)):
+        section = course[i]
+
+        print("\nSection: ", section['section'])
+
+        # print each key we want to display from SECTION_INFO
+        for key, title in SECTION_INFO.enumerate():
+            # ensure that the key exists in the course dictionary
+            if key in section and section[key]:
+                print("\n" + title + ": ", section[key])
+
+        # ensure meetings exist and is non-empty
+        if 'meetingInfo' in section and section['meetingInfo']:
+            print("\nMeeting Info:\n")
+            for meeting in section['meetingInfo']:
+                # ensure all meeting data is present
+                if all(key in meeting for key in MEETING_INFO):
+                    print("\t(" + meeting['meetingType'] + ") " + meeting['day'] + " " + meeting['startTime'] + " - " + meeting['endTime'] + ", " + meeting['building'] + " " + meeting['room'] + "\n")
+
+        print("\n")
 else:
 	print("Course does not exist")
