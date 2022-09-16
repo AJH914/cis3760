@@ -8,6 +8,17 @@ import json
 
 INPUT_FILE = 'data/output.json'
 
+SECTION_INFO = {
+    'term': 'Term',
+    'status': 'Status',
+    'location': 'Location',
+    'capacity': 'Capacity',
+    'credits': 'Credits',
+    'academicLevel': 'Academic Level'
+}
+
+MEETING_INFO = ['meetingType', 'day', 'startTime', 'endTime', 'building', 'room']
+
 def usage():
 	print('Usage: coursesearch <course_code> [--in input_file.json]')
 
