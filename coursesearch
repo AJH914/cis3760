@@ -10,14 +10,14 @@ INPUT_FILE = 'data/output.json'
 
 SECTION_INFO = {
     'term': 'Term',
-    'status': 'Status',
+    'open': 'Status',
     'location': 'Location',
     'capacity': 'Capacity',
     'credits': 'Credits',
     'academicLevel': 'Academic Level'
 }
 
-MEETING_INFO = ['meetingType', 'day', 'startTime', 'endTime', 'building', 'room']
+MEETING_INFO = ['type', 'day', 'startTime', 'endTime', 'building', 'room']
 
 def usage():
 	print('Usage: coursesearch <course_code> [--in input_file.json]')
@@ -52,28 +52,28 @@ courseData = json.load(file) # load json data in dictionary
 if search_course in courseData:
     course = courseData[search_course]
     
-    print("\nCourse: ", search_course)
+    print("Course: " + search_course + "\n")
 
     # print each section
     for i in range(len(course)):
         section = course[i]
 
-        print("\nSection: ", section['section'])
+        print("Section: ", section['section'])
 
         # print each key we want to display from SECTION_INFO
-        for key, title in SECTION_INFO.enumerate():
+        for key, title in SECTION_INFO.items():
             # ensure that the key exists in the course dictionary
             if key in section and section[key]:
-                print("\n" + title + ": ", section[key])
+                print("" + title + ": ", section[key])
 
         # ensure meetings exist and is non-empty
-        if 'meetingInfo' in section and section['meetingInfo']:
-            print("\nMeeting Info:\n")
-            for meeting in section['meetingInfo']:
+        if 'meeting' in section and section['meeting']:
+            print("Meeting Info:")
+            for meeting in section['meeting']:
                 # ensure all meeting data is present
                 if all(key in meeting for key in MEETING_INFO):
-                    print("\t(" + meeting['meetingType'] + ") " + meeting['day'] + " " + meeting['startTime'] + " - " + meeting['endTime'] + ", " + meeting['building'] + " " + meeting['room'] + "\n")
+                    print("\t(" + meeting['type'] + ") " + meeting['day'] + " " + meeting['startTime'] + " - " + meeting['endTime'] + ", " + meeting['building'] + " " + meeting['room'])
 
         print("\n")
 else:
-	print("Course does not exist")
+	print("coursesearch: Course does not exist")
