@@ -1,32 +1,37 @@
 {
-  "CIS3760":  {
-      "name": "Software Engineering",
-      "term": "Fall22",
-      "status": "Open",
+  "CIS3760": [
+    {
+      "term": "Fall 2022",
+      "open": "Open",
+      "department": "CIS",
+      "courseCode": 3760,
+      "section": "0102",
+      "num": "7264",
+      "courseName": "Software Engineering",
       "location": "Guelph",
-      "meetingInfo": "thursdays",
-      "capacity": "20",
-      "credit" : "0.5",
-      "academicLevel": "undergraduate"
-    },
-    "CIS3260":  {
-      "name": "Software Engineering 2",
-      "term": "Fall22",
-      "status": "Open",
-      "location": "Guelph",
-      "meetingInfo": "thursdays",
-      "capacity": "20",
-      "credit" : "0.5",
-      "academicLevel": "undergraduate"
-    },
-    "CIS3560":  {
-      "name": "Software Engineering",
-      "term": "Fall22",
-      "status": "Open",
-      "location": "Guelph",
-      "meetingInfo": "thursdays",
-      "capacity": "20",
-      "credit" : "0.5",
-      "academicLevel": "undergraduate"
+      "meeting": [
+        {
+          "type": "LEC",
+          "day": "Tues, Thur",
+          "startTime": "08:30AM",
+          "endTime": "09:50AM",
+          "building": "RICH",
+          "room": "2529"
+        },
+        {
+          "type": "LAB",
+          "day": "Mon",
+          "startTime": "02:30PM",
+          "endTime": "04:20PM",
+          "building": "THRN",
+          "room": "2420"
+        }
+      ],
+      "faculty": "G. Klotz",
+      "registeredStudents": 0,
+      "capacity": 32,
+      "credits": 0.75,
+      "academicLevel": "Undergraduate"
     }
+  ]
 }
