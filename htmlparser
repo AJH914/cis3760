@@ -57,9 +57,9 @@ class HTMLCourseParser(HTMLParser):
             # find attribute names in tuples list
             attr_names = [attr[0] for attr in attrs]
 
-            attr_value = attrs[attr_names.index('id')][1]
-
             if tag == 'p' and 'id' in attr_names and attrs[attr_names.index('id')]:
+                attr_value = attrs[attr_names.index('id')][1]
+
                 if attr_value.startswith(data_type_identifiers['term']):
                     self.current_data = 'term'
                 elif attr_value.startswith(data_type_identifiers['status']):
@@ -75,8 +75,11 @@ class HTMLCourseParser(HTMLParser):
                 elif attr_value.startswith(data_type_identifiers['level']):
                     self.current_data = 'level'
 
-            elif tag == 'a' and 'id' in attr_names and attr_value.startswith(data_type_identifiers['section_title']):
-                self.current_data = 'section_title'
+            elif tag == 'a' and 'id' in attr_names:
+                attr_value = attrs[attr_names.index('id')][1]
+                
+                if attr_value.startswith(data_type_identifiers['section_title']):
+                    self.current_data = 'section_title'
 
             elif tag == 'div' and 'class' in attr_names and attrs[attr_names.index('class')][1].startswith(data_type_identifiers['meeting']):
                 self.current_data = 'meeting'
