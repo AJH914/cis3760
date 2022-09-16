@@ -6,7 +6,7 @@ import os
 import sys
 import json
 
-INPUT_FILE = 'data/output.json'
+INPUT_FILE = 'data/results.json'
 
 SECTION_INFO = {
     'term': 'Term',
