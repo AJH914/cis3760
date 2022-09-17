@@ -48,6 +48,9 @@ if not os.path.exists(INPUT_FILE):
 # assign searched value to a variable
 search_course = sys.argv[1]
 
+# make the search string case insensitive
+search_course = search_course.upper()
+
 file = open(INPUT_FILE)
 courseData = json.load(file) # load json data in dictionary
 
