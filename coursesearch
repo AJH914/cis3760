@@ -27,7 +27,7 @@ SECTION_INFO = {
 MEETING_INFO = ['meeting_type', 'meeting_day', 'start_time', 'end_time', 'building', 'room']
 
 def usage():
-	print('Usage: coursesearch <course_code>/<"course name"> [--in input_file.json]')
+	print('Usage: coursesearch <course_code|course_name> [--in input_file.json]')
 
 # python3 coursesearch.py [args..]
 # coursesearch CIS3760
