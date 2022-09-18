@@ -66,8 +66,9 @@ while exit_cond == 0:
 
     if search_course.upper() in course_data:
         course = course_data[search_course.upper()]
+        course_code = course[0]['department'] + course[0]['courseCode']
     
-        print("Course: " + search_course.upper() + "\n")
+        print("Course: " + course_code + "\n")
 
         # print each section
         for i in range(len(course)):
