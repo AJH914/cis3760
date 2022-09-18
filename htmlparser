@@ -173,7 +173,7 @@ class HTMLCourseParser(HTMLParser):
 
             json_dict[coursekey].append(self.section_dict.copy()) # section dictionary is added to the array of sections
 
-            course_mappings[self.section_dict['courseName']] = coursekey
+            course_mappings[self.section_dict['courseName'].upper()] = coursekey
 
             self.section_dict = {
                 'meeting': []

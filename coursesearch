@@ -5,6 +5,8 @@
 import os
 import sys
 import json
+import argparse
+from tkinter import N
 
 INPUT_FILE = 'data/results.json'
 NAME_MAPPING_FILE = 'data/course_mapping.json'
@@ -24,7 +26,7 @@ SECTION_INFO = {
 MEETING_INFO = ['meeting_type', 'meeting_day', 'start_time', 'end_time', 'building', 'room']
 
 def usage():
-	print('Usage: coursesearch <course_code> [--in input_file.json]')
+	print('Usage: coursesearch <course_code>/<"course name"> [--in input_file.json]')
 
 # python3 coursesearch.py [args..]
 # coursesearch CIS*3760
@@ -50,7 +52,7 @@ if not os.path.exists(INPUT_FILE):
 search_course = sys.argv[1]
 
 # make the search string case insensitive
-search_course = search_course.upper()
+#search_course = search_course.upper()
 
 file = open(INPUT_FILE)
 course_data = json.load(file) # load json data in dictionary
@@ -58,12 +60,12 @@ course_data = json.load(file) # load json data in dictionary
 mapping_file = open(NAME_MAPPING_FILE)
 course_mapping = json.load(mapping_file) # load secondary json dictionary with course names as the key
 
-# if course_data contains search term then print info else course does not exist
+
 exit_cond = 0   
 while exit_cond == 0:
-    if search_course in course_mapping:
-        search_course = course_mapping[search_course]
-        
+    if search_course.upper() in course_mapping:
+        search_course = course_mapping[search_course.upper()]
+
     if search_course in course_data:
         course = course_data[search_course]
     
@@ -92,9 +94,11 @@ while exit_cond == 0:
     else:
         print("coursesearch: Course does not exist")
 
+
     # looping to search multiple times before exiting.
     search_course = input("Would you like to search for another course? (Yes, No) ")
     if search_course.upper() == "YES":
         search_course = input("Enter a course:")
     elif search_course.upper() == "NO":
         exit_cond = 1
+
