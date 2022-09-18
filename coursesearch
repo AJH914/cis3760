@@ -6,7 +6,6 @@ import os
 import sys
 import json
 import argparse
-from tkinter import N
 
 INPUT_FILE = 'data/results.json'
 NAME_MAPPING_FILE = 'data/course_mapping.json'
@@ -66,10 +65,10 @@ while exit_cond == 0:
     if search_course.upper() in course_mapping:
         search_course = course_mapping[search_course.upper()]
 
-    if search_course in course_data:
-        course = course_data[search_course]
+    if search_course.upper() in course_data:
+        course = course_data[search_course.upper()]
     
-        print("Course: " + search_course + "\n")
+        print("Course: " + search_course.upper() + "\n")
 
         # print each section
         for i in range(len(course)):
