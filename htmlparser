@@ -182,11 +182,16 @@ class HTMLCourseParser(HTMLParser):
             self.current_data = ''
 
 parser = HTMLCourseParser()
-with open(file, 'r') as f:
-    for line in f:
-        count += 1
-        parser.feed(line)
-parser.close()
+
+try:
+    with open(file, 'r') as f:
+        for line in f:
+            count += 1
+            parser.feed(line)
+            parser.close()
+except IOError:
+    print("File not found.")
+
 
 with open('data/results.json', 'w') as f:
     json.dump(json_dict, f, indent=4)

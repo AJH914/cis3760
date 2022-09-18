@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+# Help derived from https://docs.python.org/3/library/html.parser.html
 
-# authored by Sahejveer, Tristan, Ali & Kyler
+# Authored by Sahejveer, Tristan, Ali & Kyler
 
 import os
+from re import search
 import sys
 import json
 import argparse
@@ -28,7 +30,7 @@ def usage():
 	print('Usage: coursesearch <course_code>/<"course name"> [--in input_file.json]')
 
 # python3 coursesearch.py [args..]
-# coursesearch CIS*3760
+# coursesearch CIS3760
 # coursesearch --help
 
 if len(sys.argv) != 2:
