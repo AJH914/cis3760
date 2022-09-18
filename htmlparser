@@ -34,6 +34,9 @@ data_type_identifiers = {
 }
 
 json_dict = {}
+course_mappings = {}
+
+# For the second json file we would like the course name to be the key that maps to the course code
 
 class HTMLCourseParser(HTMLParser):
 
@@ -101,7 +104,7 @@ class HTMLCourseParser(HTMLParser):
             self.section_dict['courseCode'] = tokens[1]
             self.section_dict['section'] = tokens[2]
             self.section_dict['num'] = tokens[3]
-            self.section_dict['courseName'] = tokens[4]
+            self.section_dict['courseName'] = tokens[4].strip()
             self.current_data = ''
 
         elif self.current_data == 'location':
@@ -170,6 +173,8 @@ class HTMLCourseParser(HTMLParser):
 
             json_dict[coursekey].append(self.section_dict.copy()) # section dictionary is added to the array of sections
 
+            course_mappings[self.section_dict['courseName']] = coursekey
+
             self.section_dict = {
                 'meeting': []
             }
@@ -181,9 +186,13 @@ with open(file, 'r') as f:
     for line in f:
         count += 1
         parser.feed(line)
+parser.close()
 
 with open('data/results.json', 'w') as f:
     json.dump(json_dict, f, indent=4)
+
+with open('data/course_mapping.json', 'w') as f:
+    json.dump(course_mappings, f, indent=4)
 
 
 
