@@ -82,3 +82,9 @@ if search_course in courseData:
         print("\n")
 else:
 	print("coursesearch: Course does not exist")
+
+search_course = input("Would you like to search for another course? ")
+if search_course.upper() == "YES":
+    search_course = input("Enter a course:")
+elif search_course.upper() == "NO":
+    exitCond = 1
