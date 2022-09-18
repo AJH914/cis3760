@@ -95,9 +95,8 @@ while exit_cond == 0:
 
 
     # looping to search multiple times before exiting.
-    search_course = input("Would you like to search for another course? (Yes, No) ")
-    if search_course.upper() == "YES":
-        search_course = input("Enter a course:")
-    elif search_course.upper() == "NO":
+    repeat_input = input("Would you like to search for another course? (y/n) ")
+    if repeat_input.lower() == "n":
         exit_cond = 1
-
+    else:
+        search_course = input("Enter a course: ")
