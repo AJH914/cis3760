@@ -1,92 +1,169 @@
-# CIS3760_Team_203
+# Sprint1
 
+## Overview
 
+`htmlparser` parses an `.html` file and creates two `.json` files for usage by `coursesearch`
 
-## Getting started
+`htmlparser` assumes that the html input into the program contains specific string prefixes found in the `id` tag of the html element or in the case of meeting times, the `class` tag. The prefixes used in the program have been listed below:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+| Data Type          |    id/class prefix     |
+| :----------------- | :--------------------: |
+| term               | WSS\*COURSE_SECTIONS\* |
+| status             |      LIST\*VAR1\*      |
+| location           |    SEC\*LOCATION\*     |
+| meeting            |          meet          |
+| professor          |  SEC\*FACULTY_INFO\*   |
+| available capacity |      LIST\*VAR5\*      |
+| credits            |    SEC\*MIN_CRED\*     |
+| section title      |    SEC_SHORT_TITLE     |
+| level              |   SEC\*ACAD_LEVEL\*    |
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.socs.uoguelph.ca/sahejvee/cis3760_team_203.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.socs.uoguelph.ca/sahejvee/cis3760_team_203/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+`coursesearch` searches a `.json` or an `.html` file for a course. `coursesearch` allows one to search by course code or course name
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### htmlparser
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+`htmlparser <html_file>`
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+`<html_file>` is the name of the `.html` file to be parsed.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+`htmlparser` will create two `.json` files in a directory called `data`: `results.json` and `course_mapping.json`.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+**NOTE:** any additional formatting applied to the HTML file to be parsed has the potential to cause unexpected behaviour and break the parser. Ensure the HTML file is as it was downloaded from the web without unnessecarry newline characters.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+##### Notes
 
-## License
-For open source projects, say how it is licensed.
+`results.json` may be renamed and used by `coursesearch` by using the `--in` tag.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**DO NOT** rename or move `course_mapping.json`. See the notes section for the coursesearch for more details
+
+### coursesearch
+
+`coursesearch <course_code|course_name> [--in input_file.json|--html input_file.html]`
+`coursesearch [-h|--help]`
+
+`<course_code|course_name>` is the course code or the name of the course.
+`input_file.json` is the name of the `.json` file to be used.
+`input_file.html` is the name of the `.html` file to be used.
+
+Using the `-h` or `--help` tag will display a help message.
+
+After the initial search, one may make additional searches or exit the program.
+
+##### Notes
+
+By default, `coursesearch` will use `/data/results.json` and `/data/course_mapping.json`. Using the `--in` tag will allow you to specify a file instead of `/data/results.json`
+
+`coursesearch` **requires** there to be `/data/course_mapping.json`. **DO NOT RENAME OR MOVE THIS FILE.** Using `htmlparser` or a correct usage of the `--html` tag will recreate this file.
+
+Usage of `--html` tag **requires** the `htmlparser` file to be in the same directory as `coursesearch`.
+
+Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal.
+
+### Testing
+
+You can run the full test suite (covering coursesearch and htmlparser) by running the following command:
+`python3 -m unittest discover -s tests`
+
+## JSON Formating
+
+### JSON format for a course section
+
+{
+"meeting": [],
+"term": "Fall 2022",
+"status": "Closed",
+"department": "CIS",
+"courseCode": "3760",
+"section": "0101 ",
+"num": "7263",
+"courseName": "Software Engineering",
+"location": "Guelph",
+"faculty": "G. Klotz",
+"available": "0",
+"capacity": "32",
+"credits": "0.75",
+"academicLevel": "Undergraduate"
+}
+
+meeting: An array of meeting JSONs as a string. See below
+term: The term the course is offered in, e.g. "Fall 2022"
+status: Whether the course is open or closed. e.g. "Closed"
+department: The department the course belongs to e.g. "CIS"
+courseCode: The course code e.g. "3760"
+section: The section number e.g. "0102"
+num: A number of unknown importance. Included just in case, e.g. "7264"
+courseName: Name of the course e.g. "Software Engineering"
+location: The campus the course is on, e.g. "Guelph"
+faculty: The instructor for the course e.g. "G. Klotz"
+registeredStudents: Number of students registered for a course. e.g. "0"
+capacity: How many students can register for a course e.g. "32"
+credits: How many credits the course is worth e.g. "0.75"
+academicLevel: Course level e.g. "Undergraduate"
+
+### JSON format for meeting times
+
+{
+"meeting_type": "LEC",
+"meeting_day": "Tues,Thur",
+"start_time": "08:30AM",
+"end_time": "09:50AM",
+"building": "RICH",
+"room": "Room 2529"
+}
+
+meeting_type: Whether the meeting is a lecture, lab, seminar or exam e.g. "LEC"
+meeting_day: Day(s) of the week the meeting is held e.g. "Tues,Thur"
+startTime: Starting time for the meeting e.g "08:30AM"
+endTime: Ending time for the meeting e.g "09:50AM"
+building: Building in which the meeting is held e.g. "RICH"
+room: Room where the meeting is held e.g. "Room 2529"
+
+### Example of JSON
+
+{
+"meeting": [
+{
+"meeting_type": "LEC",
+"meeting_day": "Tues,Thur",
+"start_time": "08:30AM",
+"end_time": "09:50AM",
+"building": "RICH",
+"room": "Room 2529"
+},
+{
+"meeting_type": "LAB",
+"meeting_day": "Mon",
+"start_time": "11:30AM",
+"end_time": "01:20PM",
+"building": "THRN",
+"room": "Room 2420"
+}
+],
+"term": "Fall 2022",
+"status": "Closed",
+"department": "CIS",
+"courseCode": "3760",
+"section": "0101 ",
+"num": "7263",
+"courseName": "Software Engineering",
+"location": "Guelph",
+"faculty": "G. Klotz",
+"available": "0",
+"capacity": "32",
+"credits": "0.75",
+"academicLevel": "Undergraduate"
+}
+
+### Example JSON for course_mapping.json file
+
+{
+"INTRO FINANCIAL ACCOUNTING": "ACCT1220",
+"MANAGEMENT ACCOUNTING": "ACCT2230",
+"AUDITING I": "ACCT3280",
+"INTERMED FINANCIAL ACCOUNT I": "ACCT3330",
+"INTERMED FINANCIAL ACCOUNT II": "ACCT3340",
+"TAXATION": "ACCT3350",
+"ADVANCED FINANCIAL ACCOUNTING": "ACCT4220",
+}

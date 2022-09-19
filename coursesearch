@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import subprocess
+from src.coursesearch.core import CourseSearch
+
+# Authored by Sahejveer, Tristan, Ali & Kyler
+
+# python3 coursesearch.py [args..]
+# coursesearch CIS3760
+# coursesearch --help
+
+INPUT_FILE = 'data/results.json'
+COURSE_MAPPING_FILE = 'data/course_mapping.json'
+
+SECTION_INFO = {
+    'courseName': 'Course Name',
+    'faculty': 'Instructor',
+    'term': 'Term',
+    'open': 'Status',
+    'location': 'Location',
+    'available': 'Available Spots',
+    'capacity': 'Capacity',
+    'credits': 'Credits',
+    'academicLevel': 'Academic Level'
+}
+
+MEETING_INFO = ['meeting_type', 'meeting_day', 'start_time', 'end_time', 'building', 'room']
+
+def usage():
+	print('Usage: coursesearch <course_code|course_name> [--in input_file.json|--html input_file.html]')
+
+if len(sys.argv) != 2:
+    if len(sys.argv) == 4 and sys.argv[2] == '--in':
+        INPUT_FILE = sys.argv[3]
+    elif len(sys.argv) == 4 and sys.argv[2] == '--html':
+        # run the parser to get json from html
+        try:
+            subprocess.run(["./htmlparser", sys.argv[3]], check=True)
+        except:
+            # parser failed
+            sys.exit(1)
+    else:
+        usage()
+        sys.exit()
+
+if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+    usage()
+    sys.exit(0)
+
+# check for existence of input file
+if not os.path.exists(INPUT_FILE):
+    print('coursesearch: input file does not exist')
+    sys.exit(1)
+
+search = CourseSearch(INPUT_FILE, COURSE_MAPPING_FILE)
+
+# assign searched value to a variable
+search_term = sys.argv[1]
+
+exit_cond = 0   
+while exit_cond == 0:
+    course = search.search_course(search_term)
+
+    if course:
+        course_code = course[0]['department'] + course[0]['courseCode']
+        print("Course: " + course_code + "\n")
+
+        # print each section
+        for i in range(len(course)):
+            section = course[i]
+
+            print("Section: ", section['section'])
+
+            # print each key we want to display from SECTION_INFO
+            for key, title in SECTION_INFO.items():
+                # ensure that the key exists in the course dictionary
+                if key in section and section[key]:
+                    print("" + title + ": ", section[key])
+
+            # ensure meetings exist and is non-empty
+            if 'meeting' in section and section['meeting']:
+                print("Meeting Info:")
+                for meeting in section['meeting']:
+                    # ensure all meeting data is present
+                    if all(key in meeting for key in MEETING_INFO):
+                        print("\t(" + meeting['meeting_type'] + ") " + meeting['meeting_day'] + " " + meeting['start_time'] + " - " + meeting['end_time'] + ", " + meeting['building'] + " " + meeting['room'])
+            print("\n")
+    else:
+        print("coursesearch: Course does not exist")
+
+    # looping to search multiple times before exiting.
+    repeat_input = input("Would you like to search for another course? (y/n) ")
+    if repeat_input.lower() == "y" or repeat_input == "":
+        search_term = input("Enter a course: ")
+    else:
+        exit_cond = 1

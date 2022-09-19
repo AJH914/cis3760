@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+
+# Authored by Ali and Mack
+
+import sys
+import json
+from src.htmlparser.core import HTMLCourseParser
+
+def usage():
+	print('Usage: htmlparser <html_file>')
+
+if len(sys.argv) != 2:
+    usage()
+    sys.exit(1)
+
+file = sys.argv[1]
+exitcode = 0;
+# count is only used for debugging, if the parser fails at a line in the HTMl this will tell us which line if we print it
+# could be used to implement easy debug mode in the future
+count = 0
+
+parser = HTMLCourseParser()
+
+try:
+    with open(file, 'r') as f:
+        for line in f:
+            count += 1
+            parser.feed(line)
+except IOError:
+    print("File not found.")
+    exitcode = 1
+
+# close method flushes parser buffer and forces the processing of remaining data
+parser.close()
+
+# first we create the main JSON file to be used by the coursesearch script
+with open('data/results.json', 'w') as f:
+    json.dump(parser.get_course_dict(), f, indent=4)
+
+# then we create the JSON containing mappings of course codes to course names
+with open('data/course_mapping.json', 'w') as f:
+    json.dump(parser.get_course_mapping(), f, indent=4)
+
+sys.exit(exitcode)
+
