@@ -6,8 +6,9 @@ from html.parser import HTMLParser # docs at https://docs.python.org/3/library/h
 # courses start at first html table row without any <th> tags
 # windowIdx is the id for each course, will help us find courses in the html document
 
-# For the second json file we would like the course name to be the key that maps to the course code
 
+# the following dictionary contains strings found in html tag id or class attributes, using the data that these strings represent as
+# keys to greatly aid in readability throughout the parser
 data_type_identifiers = {
     'term' : 'WSS_COURSE_SECTIONS_',
     'status' : 'LIST_VAR1_',
@@ -131,11 +132,18 @@ class HTMLCourseParser(HTMLParser):
                 self.meeting_info_count += 1
 
             elif self.meeting_info_count == 2:
-                self.meeting_dict['building'] = data.strip()
+                if data == 'Room TBA':
+                    # This is an edge case, if this string is found instead of a building name then an appropriate value is added to the dictionary
+                    self.meeting_dict['building'] = 'Building TBA'
+                else:
+                    self.meeting_dict['building'] = data.strip()
                 self.meeting_info_count += 1
             
             elif self.meeting_info_count == 3:
-                self.meeting_dict['room'] = data.strip(', ')
+                if self.meeting_dict['building'] == 'Building TBA':
+                    self.meeting_dict['room'] = 'Room TBA'
+                else:
+                    self.meeting_dict['room'] = data.strip(', ')
 
                 # meeting dictionary is added to the array of meetings
                 self.section_dict['meeting'].append(self.meeting_dict.copy())
