@@ -106,7 +106,7 @@ academicLevel: Course level e.g. "Undergraduate"
 
 {
 "meeting_type": "LEC",
-"meeting_day": "Tues,",
+"meeting_day": "Tues,Thur",
 "start_time": "08:30AM",
 "end_time": "09:50AM",
 "building": "RICH",
@@ -114,7 +114,7 @@ academicLevel: Course level e.g. "Undergraduate"
 }
 
 meeting_type: Whether the meeting is a lecture, lab, seminar or exam e.g. "LEC"
-meeting_day: Day(s) of the week the meeting is held e.g. "Tues, "
+meeting_day: Day(s) of the week the meeting is held e.g. "Tues,Thur"
 startTime: Starting time for the meeting e.g "08:30AM"
 endTime: Ending time for the meeting e.g "09:50AM"
 building: Building in which the meeting is held e.g. "RICH"
@@ -126,7 +126,7 @@ room: Room where the meeting is held e.g. "Room 2529"
 "meeting": [
 {
 "meeting_type": "LEC",
-"meeting_day": "Tues,",
+"meeting_day": "Tues,Thur",
 "start_time": "08:30AM",
 "end_time": "09:50AM",
 "building": "RICH",
