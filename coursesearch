@@ -53,7 +53,6 @@ search_term = sys.argv[1]
 
 exit_cond = 0   
 while exit_cond == 0:
-    search_term = search_term.replace('*', '')
     course = search.search_course(search_term)
 
     if course:
