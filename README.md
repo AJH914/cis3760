@@ -4,7 +4,23 @@
 
 `htmlparser` parses an `.html` file and creates two `.json` files for usage by `coursesearch`
 
+`htmlparser` assumes that the html input into the program contains specific string prefixes found in the `id` tag of the html element or in the case of meeting times, the `class` tag. The prefixes used in the program have been listed below:
+
+| Data Type          |    id/class prefix     |
+| :----------------- | :--------------------: |
+| term               | WSS\*COURSE_SECTIONS\* |
+| status             |      LIST\*VAR1\*      |
+| location           |    SEC\*LOCATION\*     |
+| meeting            |         'meet'         |
+| professor          |  SEC\*FACULTY_INFO\*   |
+| available capacity |      LIST\*VAR5\*      |
+| credits            |    SEC\*MIN_CRED\*     |
+| section title      |    SEC_SHORT_TITLE     |
+| level              |   SEC\*ACAD_LEVEL\*    |
+
 `coursesearch` searches a `.json` or an `.html` file for a course. `coursesearch` allows one to search by course code or course name
+
+---
 
 ## Usage
 
@@ -46,6 +62,8 @@ By default, `coursesearch` will use `/data/results.json` and `/data/course_mappi
 Usage of `--html` tag **requires** the `htmlparser` file to be in the same directory as `coursesearch`.
 
 Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal.
+
+---
 
 ## JSON Formating
 
@@ -135,4 +153,16 @@ room: Room where the meeting is held e.g. "Room 2529"
 "capacity": "32",
 "credits": "0.75",
 "academicLevel": "Undergraduate"
+}
+
+### example JSON for course_mapping.json file
+
+{
+"INTRO FINANCIAL ACCOUNTING": "ACCT1220",
+"MANAGEMENT ACCOUNTING": "ACCT2230",
+"AUDITING I": "ACCT3280",
+"INTERMED FINANCIAL ACCOUNT I": "ACCT3330",
+"INTERMED FINANCIAL ACCOUNT II": "ACCT3340",
+"TAXATION": "ACCT3350",
+"ADVANCED FINANCIAL ACCOUNTING": "ACCT4220",
 }
