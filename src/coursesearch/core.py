@@ -16,6 +16,7 @@ class CourseSearch:
         return json.load(mapping_file) # load secondary json dictionary with course names as the key
 
     def search_course(self, search_term: str) -> list:
+        search_term = search_term.replace('*', '')
         search_term = search_term.upper()
 
         if search_term in self.course_mapping:
