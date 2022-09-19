@@ -11,7 +11,7 @@
 | term               | WSS\*COURSE_SECTIONS\* |
 | status             |      LIST\*VAR1\*      |
 | location           |    SEC\*LOCATION\*     |
-| meeting            |         'meet'         |
+| meeting            |          meet          |
 | professor          |  SEC\*FACULTY_INFO\*   |
 | available capacity |      LIST\*VAR5\*      |
 | credits            |    SEC\*MIN_CRED\*     |
@@ -19,8 +19,6 @@
 | level              |   SEC\*ACAD_LEVEL\*    |
 
 `coursesearch` searches a `.json` or an `.html` file for a course. `coursesearch` allows one to search by course code or course name
-
----
 
 ## Usage
 
@@ -62,8 +60,6 @@ By default, `coursesearch` will use `/data/results.json` and `/data/course_mappi
 Usage of `--html` tag **requires** the `htmlparser` file to be in the same directory as `coursesearch`.
 
 Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal.
-
----
 
 ## JSON Formating
 
