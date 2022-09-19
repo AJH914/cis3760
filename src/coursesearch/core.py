@@ -9,11 +9,17 @@ class CourseSearch:
 
     def load_courses(self, input_file: str) -> dict:
         file = open(input_file)
-        return json.load(file) # load json data in dictionary
+        courses = json.load(file) # load json data in dictionary
+        file.close()
+
+        return courses
 
     def load_course_mapping(self, input_file: str) -> dict:
-        mapping_file = open(input_file)
-        return json.load(mapping_file) # load secondary json dictionary with course names as the key
+        file = open(input_file)
+        mapping = json.load(file) # load secondary json dictionary with course names as the key
+        file.close()
+
+        return mapping
 
     def search_course(self, search_term: str) -> list:
         search_term = search_term.replace('*', '')
