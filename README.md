@@ -61,6 +61,11 @@ Usage of `--html` tag **requires** the `htmlparser` file to be in the same direc
 
 Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal.
 
+### Testing
+
+You can run the full test suite (covering coursesearch and htmlparser) by running the following command:
+`python3 -m unittest discover -s tests`
+
 ## JSON Formating
 
 ### JSON format for a course section
