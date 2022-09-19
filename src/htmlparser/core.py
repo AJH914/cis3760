@@ -1,3 +1,5 @@
+# Authored by Ali and Mack
+
 from html.parser import HTMLParser # docs at https://docs.python.org/3/library/html.parser.html
 
 # HTML FORMAT NOTES:
@@ -104,7 +106,14 @@ class HTMLCourseParser(HTMLParser):
                 if len(data.strip()) > 0:
                     tokens = data.split(' ')
                     self.meeting_dict['meeting_type'] = tokens[0]
-                    self.meeting_dict['meeting_day'] = tokens[1]
+
+                    #if meetings are on multiple days all the rest of the tokens will be days
+                    day_string = ''
+                    for i in range(1, len(tokens)):
+                        day_string += tokens[i]
+
+                    self.meeting_dict['meeting_day'] = day_string
+
                     self.meeting_info_count += 1
                 else:
                     self.current_data = ''

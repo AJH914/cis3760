@@ -10,34 +10,36 @@
 
 ### htmlparser
 
-```htmlparser <html_file>```
+`htmlparser <html_file>`
 
 `<html_file>` is the name of the `.html` file to be parsed.
 
 `htmlparser` will create two `.json` files in a directory called `data`: `results.json` and `course_mapping.json`.
 
+**NOTE:** any additional formatting applied to the HTML file to be parsed has the potential to cause unexpected behaviour and break the parser. Ensure the HTML file is as it was downloaded from the web without unnessecarry newline characters.
+
 ##### Notes
 
-`results.json` may be renamed and used by `coursesearch` by using the `--in` tag. 
+`results.json` may be renamed and used by `coursesearch` by using the `--in` tag.
 
 **DO NOT** rename or move `course_mapping.json`. See the notes section for the coursesearch for more details
 
 ### coursesearch
 
-```coursesearch <course_code|course_name> [--in input_file.json|--html input_file.html]```
-```coursesearch [-h|--help]```
+`coursesearch <course_code|course_name> [--in input_file.json|--html input_file.html]`
+`coursesearch [-h|--help]`
 
 `<course_code|course_name>` is the course code or the name of the course.
 `input_file.json` is the name of the `.json` file to be used.
 `input_file.html` is the name of the `.html` file to be used.
 
-Using the  `-h` or `--help` tag will display a help message.
+Using the `-h` or `--help` tag will display a help message.
 
 After the initial search, one may make additional searches or exit the program.
 
 ##### Notes
 
-By default, `coursesearch` will use `/data/results.json` and `/data/course_mapping.json`. Using the `--in` tag will allow you to specify a file instead of  `/data/results.json`
+By default, `coursesearch` will use `/data/results.json` and `/data/course_mapping.json`. Using the `--in` tag will allow you to specify a file instead of `/data/results.json`
 
 `coursesearch` **requires** there to be `/data/course_mapping.json`. **DO NOT RENAME OR MOVE THIS FILE.** Using `htmlparser` or a correct usage of the `--html` tag will recreate this file.
 
@@ -50,20 +52,20 @@ Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesear
 ### JSON format for a course section
 
 {
-    "meeting": [],
-    "term": "Fall 2022",
-    "status": "Closed",
-    "department": "CIS",
-    "courseCode": "3760",
-    "section": "0101 ",
-    "num": "7263",
-    "courseName": "Software Engineering",
-    "location": "Guelph",
-    "faculty": "G. Klotz",
-    "available": "0",
-    "capacity": "32",
-    "credits": "0.75",
-    "academicLevel": "Undergraduate"
+"meeting": [],
+"term": "Fall 2022",
+"status": "Closed",
+"department": "CIS",
+"courseCode": "3760",
+"section": "0101 ",
+"num": "7263",
+"courseName": "Software Engineering",
+"location": "Guelph",
+"faculty": "G. Klotz",
+"available": "0",
+"capacity": "32",
+"credits": "0.75",
+"academicLevel": "Undergraduate"
 }
 
 meeting: An array of meeting JSONs as a string. See below
@@ -84,12 +86,12 @@ academicLevel: Course level e.g. "Undergraduate"
 ### JSON format for meeting times
 
 {
-    "meeting_type": "LEC",
-    "meeting_day": "Tues,",
-    "start_time": "08:30AM",
-    "end_time": "09:50AM",
-    "building": "RICH",
-    "room": "Room 2529"
+"meeting_type": "LEC",
+"meeting_day": "Tues,",
+"start_time": "08:30AM",
+"end_time": "09:50AM",
+"building": "RICH",
+"room": "Room 2529"
 }
 
 meeting_type: Whether the meeting is a lecture, lab, seminar or exam e.g. "LEC"
@@ -102,35 +104,35 @@ room: Room where the meeting is held e.g. "Room 2529"
 ### Example of JSON
 
 {
-    "meeting": [
-        {
-            "meeting_type": "LEC",
-            "meeting_day": "Tues,",
-            "start_time": "08:30AM",
-            "end_time": "09:50AM",
-            "building": "RICH",
-            "room": "Room 2529"
-        },
-        {
-            "meeting_type": "LAB",
-            "meeting_day": "Mon",
-            "start_time": "11:30AM",
-            "end_time": "01:20PM",
-            "building": "THRN",
-            "room": "Room 2420"
-        }
-    ],
-    "term": "Fall 2022",
-    "status": "Closed",
-    "department": "CIS",
-    "courseCode": "3760",
-    "section": "0101 ",
-    "num": "7263",
-    "courseName": "Software Engineering",
-    "location": "Guelph",
-    "faculty": "G. Klotz",
-    "available": "0",
-    "capacity": "32",
-    "credits": "0.75",
-    "academicLevel": "Undergraduate"
+"meeting": [
+{
+"meeting_type": "LEC",
+"meeting_day": "Tues,",
+"start_time": "08:30AM",
+"end_time": "09:50AM",
+"building": "RICH",
+"room": "Room 2529"
+},
+{
+"meeting_type": "LAB",
+"meeting_day": "Mon",
+"start_time": "11:30AM",
+"end_time": "01:20PM",
+"building": "THRN",
+"room": "Room 2420"
+}
+],
+"term": "Fall 2022",
+"status": "Closed",
+"department": "CIS",
+"courseCode": "3760",
+"section": "0101 ",
+"num": "7263",
+"courseName": "Software Engineering",
+"location": "Guelph",
+"faculty": "G. Klotz",
+"available": "0",
+"capacity": "32",
+"credits": "0.75",
+"academicLevel": "Undergraduate"
 }
