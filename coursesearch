@@ -2,6 +2,7 @@
 
 import os
 import sys
+import subprocess
 from src.coursesearch.core import CourseSearch
 
 # Authored by Sahejveer, Tristan, Ali & Kyler
@@ -28,23 +29,30 @@ SECTION_INFO = {
 MEETING_INFO = ['meeting_type', 'meeting_day', 'start_time', 'end_time', 'building', 'room']
 
 def usage():
-	print('Usage: coursesearch <course_code|course_name> [--in input_file.json]')
+	print('Usage: coursesearch <course_code|course_name> [--in input_file.json|--html input_file.html]')
 
 if len(sys.argv) != 2:
-	if len(sys.argv) == 4 and sys.argv[2] == '--in':
-		INPUT_FILE = sys.argv[3]
-	else:
-		usage()
-		sys.exit()
+    if len(sys.argv) == 4 and sys.argv[2] == '--in':
+        INPUT_FILE = sys.argv[3]
+    elif len(sys.argv) == 4 and sys.argv[2] == '--html':
+        # run the parser to get json from html
+        try:
+            subprocess.run(["./htmlparser", sys.argv[3]], check=True)
+        except:
+            # parser failed
+            sys.exit(1)
+    else:
+        usage()
+        sys.exit()
 
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
-	usage()
-	sys.exit()
+    usage()
+    sys.exit(0)
 
 # check for existence of input file
 if not os.path.exists(INPUT_FILE):
     print('coursesearch: input file does not exist')
-    sys.exit()
+    sys.exit(1)
 
 search = CourseSearch(INPUT_FILE, COURSE_MAPPING_FILE)
 

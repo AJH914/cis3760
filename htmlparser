@@ -9,10 +9,10 @@ def usage():
 
 if len(sys.argv) != 2:
     usage()
-    sys.exit()
+    sys.exit(1)
 
 file = sys.argv[1]
-
+exitcode = 0;
 # count is only used for debugging, if the parser fails at a line in the HTMl this will tell us which line if we print it
 # could be used to implement easy debug mode in the future
 count = 0
@@ -27,6 +27,7 @@ try:
             parser.close()
 except IOError:
     print("File not found.")
+    exitcode = 1
 
 
 with open('data/results.json', 'w') as f:
@@ -35,5 +36,5 @@ with open('data/results.json', 'w') as f:
 with open('data/course_mapping.json', 'w') as f:
     json.dump(parser.get_course_mapping(), f, indent=4)
 
-
+sys.exit(exitcode)
 
