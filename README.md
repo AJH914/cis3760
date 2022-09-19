@@ -33,6 +33,8 @@
 
 Using the  `-h` or `--help` tag will display a help message.
 
+After the initial search, one may make additional searches or exit the program.
+
 #### Notes
 
 By default, `coursesearch` will use `/data/results.json` and `/data/course_mapping.json`. Using the `--in` tag will allow you to specify a file instead of  `/data/results.json`
@@ -41,4 +43,4 @@ By default, `coursesearch` will use `/data/results.json` and `/data/course_mappi
 
 Usage of `--html` tag **requires** the `htmlparser` file to be in the same directory as `coursesearch`.
 
-Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal
+Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal.
