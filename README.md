@@ -50,7 +50,7 @@ Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesear
 ### JSON format for a course section
 
 {
-    "meeting": []
+    "meeting": [],
     "term": "Fall 2022",
     "status": "Closed",
     "department": "CIS",
