@@ -51,6 +51,7 @@ if not os.path.exists(INPUT_FILE):
 
 # assign searched value to a variable
 search_course = sys.argv[1]
+search_course = search_course.replace('*', '')
 
 file = open(INPUT_FILE)
 course_data = json.load(file) # load json data in dictionary
