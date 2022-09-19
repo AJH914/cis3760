@@ -156,7 +156,7 @@ room: Room where the meeting is held e.g. "Room 2529"
 "academicLevel": "Undergraduate"
 }
 
-### example JSON for course_mapping.json file
+### Example JSON for course_mapping.json file
 
 {
 "INTRO FINANCIAL ACCOUNTING": "ACCT1220",
