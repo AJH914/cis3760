@@ -97,7 +97,7 @@ while exit_cond == 0:
 
     # looping to search multiple times before exiting.
     repeat_input = input("Would you like to search for another course? (y/n) ")
-    if repeat_input.lower() == "n":
-        exit_cond = 1
-    else:
+    if repeat_input.lower() == "y" or repeat_input == "":
         search_course = input("Enter a course: ")
+    elif repeat_input.lower() == "n":
+        exit_cond = 1
