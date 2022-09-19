@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-# Help derived from https://docs.python.org/3/library/html.parser.html
+
+import os
+import sys
+from src.coursesearch.core import CourseSearch
 
 # Authored by Sahejveer, Tristan, Ali & Kyler
 
-import os
-from re import search
-import sys
-import json
-import argparse
+# python3 coursesearch.py [args..]
+# coursesearch CIS3760
+# coursesearch --help
 
 INPUT_FILE = 'data/results.json'
-NAME_MAPPING_FILE = 'data/course_mapping.json'
+COURSE_MAPPING_FILE = 'data/course_mapping.json'
 
 SECTION_INFO = {
     'courseName': 'Course Name',
@@ -29,10 +30,6 @@ MEETING_INFO = ['meeting_type', 'meeting_day', 'start_time', 'end_time', 'buildi
 def usage():
 	print('Usage: coursesearch <course_code|course_name> [--in input_file.json]')
 
-# python3 coursesearch.py [args..]
-# coursesearch CIS3760
-# coursesearch --help
-
 if len(sys.argv) != 2:
 	if len(sys.argv) == 4 and sys.argv[2] == '--in':
 		INPUT_FILE = sys.argv[3]
@@ -49,26 +46,18 @@ if not os.path.exists(INPUT_FILE):
     print('coursesearch: input file does not exist')
     sys.exit()
 
+search = CourseSearch(INPUT_FILE, COURSE_MAPPING_FILE)
+
 # assign searched value to a variable
-search_course = sys.argv[1]
-search_course = search_course.replace('*', '')
-
-file = open(INPUT_FILE)
-course_data = json.load(file) # load json data in dictionary
-
-mapping_file = open(NAME_MAPPING_FILE)
-course_mapping = json.load(mapping_file) # load secondary json dictionary with course names as the key
-
+search_term = sys.argv[1]
 
 exit_cond = 0   
 while exit_cond == 0:
-    if search_course.upper() in course_mapping:
-        search_course = course_mapping[search_course.upper()]
+    search_term = search_term.replace('*', '')
+    course = search.search_course(search_term)
 
-    if search_course.upper() in course_data:
-        course = course_data[search_course.upper()]
+    if course:
         course_code = course[0]['department'] + course[0]['courseCode']
-    
         print("Course: " + course_code + "\n")
 
         # print each section
@@ -94,10 +83,9 @@ while exit_cond == 0:
     else:
         print("coursesearch: Course does not exist")
 
-
     # looping to search multiple times before exiting.
     repeat_input = input("Would you like to search for another course? (y/n) ")
     if repeat_input.lower() == "y" or repeat_input == "":
-        search_course = input("Enter a course: ")
+        search_term = input("Enter a course: ")
     elif repeat_input.lower() == "n":
         exit_cond = 1
