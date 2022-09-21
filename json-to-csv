@@ -5,7 +5,7 @@ import csv
 import sys
 
 INPUT_FILE = 'data/results.json'
-OUTPUT_DIR = 'example'
+OUTPUT_DIR = 'csv'
 
 if len(sys.argv) == 2:
     if sys.argv[1] == '-h' or sys.argv[1] == '--help':
