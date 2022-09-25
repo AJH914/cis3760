@@ -61,6 +61,17 @@ Usage of `--html` tag **requires** the `htmlparser` file to be in the same direc
 
 Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal.
 
+### json-to-csv
+
+`./json-to-csv [input_json] [output_dir]`
+
+This script converts the course data in JSON format into two CSV files, one containing section data, and the other containing meeting data.
+
+There is a relation between these two tables where the dash-separated values in the "Meetings" column in the sections CSV file are associated with one Meeting ID in the meetings CSV file.
+
+The VBA script uses this data once imported into two separate sheets to correctly draw meeting information in the timestable.
+
+
 ### Testing
 
 You can run the full test suite (covering coursesearch and htmlparser) by running the following command:
