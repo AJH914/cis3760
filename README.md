@@ -33,6 +33,8 @@ To help find conflicts, sections with conflicts will be colored in `red` and cou
 
 Clear the schedule by clicking on `clear selection` button before generating a new schedule.
 
+If a selected course's meetings (Lecture, Lab, Exam, etc.) conflict with that of any of the other selected courses, a message will appear in the `conflicts` column detailing which section is causing the conflict.  The application will search for other sections of that course and if one is found that does not cause a conflict a suggestion will be reported in the `suggestions` column.
+
 **NOTE:** if a course does not exist, a pop up will be displayed saying that the course does not exist.
 
 
