@@ -3,6 +3,7 @@
 import json
 import csv
 import sys
+from src.jsontocsv.core import JSONToCSV
 
 INPUT_FILE = 'data/results.json'
 OUTPUT_DIR = 'csv'
@@ -22,42 +23,7 @@ if len(sys.argv) > 3:
     print('Usage: ./json-to-csv [input_json] [output_dir]')
     sys.exit()
 
-file = open(INPUT_FILE)
-courses = json.load(file) # load json data in dictionary
-file.close()
+jsontocsv = JSONToCSV(INPUT_FILE)
 
-meetings = []
-
-# section sheet
-with open(OUTPUT_DIR + '/sections.csv', 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile, delimiter='=', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(['Course Code', 'Section', 'Term', 'Status', 'Course Name', 'Location', 'Faculty', 'Available', 'Capacity', 'Credits', 'Level', 'Meetings'])
-
-    for course_code, sections in courses.items():
-        for section in sections:
-            meeting_ids = []
-
-            for i in range(len(section['meeting'])):
-                meeting_ids.append(str(len(meetings)))
-                meetings.append(section['meeting'][i])
-
-            output_row = [str(course_code), section['section'], section['term'], section['status'], section['courseName'], section['location'], section['faculty'], (section['available'] if 'available' in section else ''), (section['capacity'] if 'capacity' in section else ''), section['credits'], section['academicLevel'], '-'.join(meeting_ids)]
-            writer.writerow(output_row)
-
-# meeting sheet
-with open(OUTPUT_DIR + '/meetings.csv', 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile, delimiter='=', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(['id', 'Meeting Type', 'Meeting Day', 'Start Time', 'End Time', 'Building', 'Room', 'Exam Date'])
-
-    for i in range(len(meetings)):
-        meeting = meetings[i]
-
-        exam_date = ''
-        if '(' in meeting['end_time'] and '(' in meeting['end_time']:
-            end_time = meeting['end_time']
-            exam_date = end_time[end_time.find("(")+1:end_time.find(")")]
-
-            meeting['end_time'] = end_time[0:end_time.find("(")].strip()
-
-        output_row = [str(i), meeting['meeting_type'], meeting['meeting_day'], meeting['start_time'], meeting['end_time'], meeting['building'], meeting['room'], exam_date]
-        writer.writerow(output_row)
+jsontocsv.createSectionsCSV(OUTPUT_DIR + '/sections.csv')
+jsontocsv.createMeetingsCSV(OUTPUT_DIR + '/meetings.csv')
