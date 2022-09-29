@@ -107,6 +107,16 @@ class CourseSearchTests(unittest.TestCase):
         
         self.assertEqual(result, course_fixture)
 
+    def test_search_lowercase(self):
+        result = self.coursesearch.search_course('cis3760')
+        
+        self.assertEqual(result, course_fixture)
+
+    def test_search_lowercase_asterisks(self):
+        result = self.coursesearch.search_course('cis*3760')
+        
+        self.assertEqual(result, course_fixture)
+
     def test_search_course_name(self):
         result = self.coursesearch.search_course('Software Engineering')
 
