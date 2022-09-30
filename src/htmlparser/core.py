@@ -1,6 +1,7 @@
 # Authored by Ali and Mack
 
-from html.parser import HTMLParser # docs at https://docs.python.org/3/library/html.parser.html
+from html.parser import \
+    HTMLParser  # docs at https://docs.python.org/3/library/html.parser.html
 
 # HTML FORMAT NOTES:
 # courses start at first html table row without any <th> tags

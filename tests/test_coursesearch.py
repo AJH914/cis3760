@@ -1,8 +1,9 @@
 import sys
 import unittest
 
-sys.path.append('../coursesearch')
 from src.coursesearch.core import CourseSearch
+
+sys.path.append('../coursesearch')
 
 courses_fixture = {
     "CIS3760": [

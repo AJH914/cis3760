@@ -1,10 +1,11 @@
-import sys
-import os
-import unittest
 import filecmp
+import os
+import sys
+import unittest
+
+from src.jsontocsv.core import JSONToCSV
 
 sys.path.append('../jsontocsv')
-from src.jsontocsv.core import JSONToCSV
 
 class JSONToCSVTests(unittest.TestCase):
     def setUp(self):
