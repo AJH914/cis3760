@@ -4,7 +4,6 @@ import sys
 
 from src.jsontocsv.core import JSONToCSV
 
-
 INPUT_FILE = 'data/results.json'
 OUTPUT_DIR = 'csv'
 
