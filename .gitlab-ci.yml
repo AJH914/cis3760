@@ -33,7 +33,10 @@ test:
   script:
     - python3 -m unittest discover -s tests
 
-formatter:
+linting:
   image: registry.gitlab.com/mafda/python-linting
   script:
-    - black --fast .
+    - isort . --check-only
+    - black --check .
+    - flake8 .
+    - find . -type f -name "*.py" | xargs pylint
