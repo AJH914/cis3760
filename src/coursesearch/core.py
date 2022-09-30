@@ -2,7 +2,6 @@
 
 import json
 
-
 class CourseSearch:
     def __init__(self, courses_file: str, course_mapping_file: str):
         self.courses = self.load_courses(courses_file)

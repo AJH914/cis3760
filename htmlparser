@@ -4,6 +4,7 @@
 
 import json
 import sys
+
 from src.htmlparser.core import HTMLCourseParser
 
 def usage():

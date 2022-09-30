@@ -1,7 +1,6 @@
 import csv
 import json
 
-
 class JSONToCSV:
     meetings = []
 

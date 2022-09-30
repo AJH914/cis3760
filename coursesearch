@@ -3,6 +3,7 @@
 import os
 import subprocess
 import sys
+
 from src.coursesearch.core import CourseSearch
 
 # Authored by Sahejveer, Tristan, Ali & Kyler
