@@ -36,7 +36,7 @@ test:
 linting:
   image: registry.gitlab.com/mafda/python-linting
   script:
-    - isort . --check-only
+    - isort . --diff
     - black --check .
     - flake8 .
     - find . -type f -name "*.py" | xargs pylint
