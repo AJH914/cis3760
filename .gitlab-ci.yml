@@ -32,3 +32,8 @@ before_script:
 test:
   script:
     - python3 -m unittest discover -s tests
+
+formatter:
+  image: registry.gitlab.com/mafda/python-linting
+  script:
+    - black --fast .
