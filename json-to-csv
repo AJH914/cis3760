@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-import csv
-import json
 import sys
 from src.jsontocsv.core import JSONToCSV
 
