@@ -36,6 +36,9 @@ test:
 linting:
   image: registry.gitlab.com/mafda/python-linting
   script:
-    - black --check --diff .
+    - black --check --diff src/ 
+    - black --check --diff coursesearch
+    - black --check --diff htmlparser
+    - black --check --diff json-to-csv
     - flake8 .
     - find . -type f -name "*.py" | xargs pylint
