@@ -1,13 +1,20 @@
+import filecmp
+import os
 import sys
 import unittest
-import filecmp
+
+from src.jsontocsv.core import JSONToCSV
 
 sys.path.append('../jsontocsv')
-from src.jsontocsv.core import JSONToCSV
 
 class JSONToCSVTests(unittest.TestCase):
     def setUp(self):
         self.jsontocsv = JSONToCSV('tests/data/results.json')
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove('tests/data/csv/sections.csv')
+        os.remove('tests/data/csv/meetings.csv')
 
     def test_generate_sections(self):
         self.jsontocsv.createSectionsCSV('tests/data/csv/sections.csv')
