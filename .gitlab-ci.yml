@@ -11,7 +11,7 @@ image: python:latest
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
 
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
@@ -24,7 +24,7 @@ cache:
     - venv/
 
 before_script:
-  - python --version  # For debugging
+  - python --version # For debugging
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
@@ -32,13 +32,17 @@ before_script:
 test:
   script:
     - python3 -m unittest discover -s tests
+  only:
+    - merge_requests
 
 linting:
   image: registry.gitlab.com/mafda/python-linting
   script:
-    - black --check --diff src/ 
+    - black --check --diff src/
     - black --check --diff coursesearch
     - black --check --diff htmlparser
     - black --check --diff json-to-csv
     - flake8 .
     - find . -type f -name "*.py" | xargs pylint
+  only:
+    - merge_requests
