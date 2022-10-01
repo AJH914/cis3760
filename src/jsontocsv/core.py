@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import json
 
 class JSONToCSV:
@@ -10,6 +11,13 @@ class JSONToCSV:
         for course_code, sections in self.courses.items():
             for section in sections:
                 for i in range(len(section['meeting'])):
+                    meeting = section['meeting'][i]
+
+                    if section['faculty'] == 'G. Klotz':
+                        meeting['professorGreg'] = 1
+                    else:
+                        meeting['professorGreg'] = 0
+
                     self.meetings.append(section['meeting'][i])
 
     def createSectionsCSV(self, output_file):
@@ -33,7 +41,7 @@ class JSONToCSV:
     def createMeetingsCSV(self, output_file):
         with open(output_file, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter='=', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(['id', 'Meeting Type', 'Meeting Day', 'Start Time', 'End Time', 'Building', 'Room', 'Exam Date'])
+            writer.writerow(['id', 'Meeting Type', 'Meeting Day', 'Start Time', 'End Time', 'Building', 'Room', 'Exam Date', 'isMorning', 'isAfternoon', 'isEvening', 'onFriday', 'onThursday', 'professorGreg'])
 
             for i in range(len(self.meetings)):
                 meeting = self.meetings[i]
@@ -45,7 +53,19 @@ class JSONToCSV:
 
                     meeting['end_time'] = end_time[0:end_time.find("(")].strip()
 
-                output_row = [str(i), meeting['meeting_type'], meeting['meeting_day'], meeting['start_time'], meeting['end_time'], meeting['building'], meeting['room'], exam_date]
+                # suggestion flags
+
+                start_time = None
+                if meeting['start_time'] != 'Times TBA':
+                    start_time = datetime.strptime(meeting['start_time'], '%I:%M%p')
+
+                isMorning = 1 if start_time and start_time.hour < 12 else 0
+                isAfternoon = 1 if start_time and start_time.hour >= 12 and start_time.hour < 17 else 0
+                isEvening = 1 if start_time and start_time.hour >= 17 else 0
+                onFriday = 1 if start_time and 'Fri' in meeting['meeting_day'] else 0
+                onThursday = 1 if start_time and 'Thur' in meeting['meeting_day'] else 0
+
+                output_row = [str(i), meeting['meeting_type'], meeting['meeting_day'], meeting['start_time'], meeting['end_time'], meeting['building'], meeting['room'], exam_date, isMorning, isAfternoon, isEvening, onFriday, onThursday, meeting['professorGreg']]
                 writer.writerow(output_row)
     
     def getCourseData(self, json_file):
