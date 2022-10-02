@@ -29,7 +29,8 @@ class JSONToCSV:
 
                     flags = self.getSuggestionFlags(section['meeting'])
 
-                    output_row = [str(course_code) + '*' + section['section'], section['section'], section['term'], section['status'], section['courseName'], section['location'], section['faculty'], (section['available'] if 'available' in section else ''), (section['capacity'] if 'capacity' in section else ''), section['credits'], section['academicLevel'], '-'.join(meeting_ids), flags['isMorning'], flags['isAfternoon'], flags['isEvening'], flags['onFriday'], flags['onThursday'], 1 if section['faculty'] == 'G. Klotz' else 0]
+                    course_string = str(course_code) + '*' + section['section'].strip()
+                    output_row = [course_string, section['section'], section['term'], section['status'], section['courseName'], section['location'], section['faculty'], (section['available'] if 'available' in section else ''), (section['capacity'] if 'capacity' in section else ''), section['credits'], section['academicLevel'], '-'.join(meeting_ids), flags['isMorning'], flags['isAfternoon'], flags['isEvening'], flags['onFriday'], flags['onThursday'], 1 if section['faculty'] == 'G. Klotz' else 0]
                     writer.writerow(output_row)
 
     def createMeetingsCSV(self, output_file):
