@@ -77,9 +77,9 @@ For each section, we store every seperate meeting as a unique ID. These Id's the
 
 **NOTE:** any additional formatting applied to the json file to be parsed has the potential to cause unexpected behaviour and break the parser.
 
-### scheduler
+# Excel Scheduler
 
-After running json-to-csv, import the 2 csv files into the scheduler.xlsm file by using `=` as the delimiter.
+After running json-to-csv, import the 2 csv files into the scheduler.xlsm file by using `=` as the delimiter.  You can do this by clicking "Data" in the menu bar then "From Text/CSV".  Ensure that each csv is imported onto it's own sheet named `sections` and `meetings` as appropriate.
 
 To add courses to the schedule, add the courses with the correct section code in the assigned space on the timetable sheet.
 
