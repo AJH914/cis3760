@@ -20,9 +20,9 @@
 
 `coursesearch` searches a `.json` or an `.html` file for a course. `coursesearch` allows one to search by course code or course name
 
-`scheduler.xlsm` searches through these `.csv` files for the courses and allows to add upto 5 courses to the schedule. It also draws a time table for selected courses, suggests additional courses, and creates a `.pdf` of the schedule.
-
 `json-to-csv` parses a `.json` file and creates 2 `csv` files for usage by `scheduler`. The two csv files created are named meetings.csv and section.csv. 
+
+`scheduler.xlsm` searches through these `.csv` files for the courses and allows to add upto 5 courses to the schedule. It also draws a time table for selected courses, suggests additional courses, and creates a `.pdf` of the schedule.
 
 For each section, we store every seperate meeting as a unique ID. These ID's then link to the meetings.csv file where all the required information for the meetings is stored.
 
