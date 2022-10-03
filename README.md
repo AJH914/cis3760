@@ -24,7 +24,7 @@
 
 `json-to-csv` parses a `.json` file and creates 2 `csv` files for usage by `scheduler`. The two csv files created are named meetings.csv and section.csv. 
 
-For each section, we store every seperate meeting as a unique ID. These Id's then link to the meetings.csv file where all the required information for the meetings is stored.
+For each section, we store every seperate meeting as a unique ID. These ID's then link to the meetings.csv file where all the required information for the meetings is stored.
 
 ## Usage
 
@@ -82,14 +82,6 @@ After the initial search, one may make additional searches or exit the program.
 
 ### json-to-csv
 
-`json-to-csv` parses a `.json` file and creates 2 `csv` files for usage by `scheduler`. The two csv files created are named meetings.csv and section.csv.
-
-For each section, we store every seperate meeting as a unique ID. These Id's then link to the meetings.csv file where all the required information for the meetings is stored.
-
-`scheduler.xlsm` searches through these `.csv` files for the courses and allows to add upto 5 courses to the schedule.
-
-**Usage:**
-
 `./json-to-csv [input_json] [output_dir]`
 
 `<input_json>` is the name of the `json` file to be parsed.
@@ -105,21 +97,6 @@ By default, `coursesearch` will use `/data/results.json` and `/data/course_mappi
 Usage of `--html` tag **requires** the `htmlparser` file to be in the same directory as `coursesearch`.
 
 Usage of the `--html` is equivalent of running `htmlparser` prior to `coursesearch`. As a result, the initial search will take longer than normal.
-
-
-# Excel Scheduler
-
-After running json-to-csv, import the 2 csv files into the scheduler.xlsm file by using `=` as the delimiter.  You can do this by clicking "Data" in the menu bar then "From Text/CSV".  Ensure that each csv is imported onto it's own sheet named `sections` and `meetings` as appropriate.
-
-To add courses to the schedule, add the courses with the correct section code in the assigned space on the timetable sheet.
-
-Click on the `Generate Timetable` button on the `timetable` sheet and a timetable will be generated.
-
-To help find conflicts, sections with conflicts will be colored in `red` and courses with no conflicts will be coloured `blue`.
-
-Clear the schedule by clicking on `clear selection` button before generating a new schedule.
-
-**NOTE:** if a course does not exist, a pop up will be displayed saying that the course does not exist.
 
 ### Testing
 
