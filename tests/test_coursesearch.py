@@ -1,8 +1,9 @@
 import sys
 import unittest
 
-sys.path.append('../coursesearch')
 from src.coursesearch.core import CourseSearch
+
+sys.path.append('../coursesearch')
 
 courses_fixture = {
     "CIS3760": [
@@ -104,6 +105,16 @@ class CourseSearchTests(unittest.TestCase):
 
     def test_search_course_asterisks(self):
         result = self.coursesearch.search_course('CIS*3760')
+        
+        self.assertEqual(result, course_fixture)
+
+    def test_search_lowercase(self):
+        result = self.coursesearch.search_course('cis3760')
+        
+        self.assertEqual(result, course_fixture)
+
+    def test_search_lowercase_asterisks(self):
+        result = self.coursesearch.search_course('cis*3760')
         
         self.assertEqual(result, course_fixture)
 

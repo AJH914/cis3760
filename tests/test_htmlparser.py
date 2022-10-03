@@ -1,11 +1,12 @@
 # python3 -m tests.htmlparser_test
 
-import sys
 import json
+import sys
 import unittest
 
-sys.path.append('../htmlparser')
 from src.htmlparser.core import HTMLCourseParser
+
+sys.path.append('../htmlparser')
 
 class HTMLParserTests(unittest.TestCase):
     def test_parse_courses(self):
@@ -40,4 +41,3 @@ class HTMLParserTests(unittest.TestCase):
     
 if __name__ == "__main__":
     unittest.main()
-    

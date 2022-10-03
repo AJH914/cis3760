@@ -1,2 +1,6 @@
 data/results.json
 data/course_mapping.json
+csv/meetings.csv
+csv/sections.csv
+__pycache__/
+.DS_Store
