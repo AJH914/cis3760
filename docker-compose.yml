@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  app:
+    build: ./client
+    ports:
+      - '443:443'
+  api:
+    build: ./server
+    ports:
+      - '5000:5000'
