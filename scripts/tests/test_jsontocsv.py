@@ -3,7 +3,7 @@ import os
 import sys
 import unittest
 
-from src.jsontocsv.core import JSONToCSV
+from scripts.src.jsontocsv.core import JSONToCSV
 
 sys.path.append('../jsontocsv')
 

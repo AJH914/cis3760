@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from src.coursesearch.core import CourseSearch
+from scripts.src.coursesearch.core import CourseSearch
 
 sys.path.append('../coursesearch')
 

@@ -4,7 +4,7 @@ import json
 import sys
 import unittest
 
-from src.htmlparser.core import HTMLCourseParser
+from scripts.src.htmlparser.core import HTMLCourseParser
 
 sys.path.append('../htmlparser')
 
