@@ -12,14 +12,14 @@ class HTMLParserTests(unittest.TestCase):
     def test_parse_courses(self):
         parser = HTMLCourseParser()
 
-        with open('tests/data/courses.html', 'r') as f:
+        with open('scripts/tests/data/courses.html', 'r') as f:
             for line in f:
                 parser.feed(line)
 
         parser.close()
         courses = parser.get_course_dict()
 
-        file = open('tests/data/results.json')
+        file = open('scripts/tests/data/results.json')
         courses_fixture = json.load(file)
         file.close()
         self.assertEqual(courses, courses_fixture)
@@ -27,14 +27,14 @@ class HTMLParserTests(unittest.TestCase):
     def test_parse_mapping(self):
         parser = HTMLCourseParser()
 
-        with open('tests/data/courses.html', 'r') as f:
+        with open('scripts/tests/data/courses.html', 'r') as f:
             for line in f:
                 parser.feed(line)
 
         parser.close()
         courses = parser.get_course_mapping()
 
-        file = open('tests/data/course_mapping.json')
+        file = open('scripts/tests/data/course_mapping.json')
         mapping_fixture = json.load(file)
         file.close()
         self.assertEqual(courses, mapping_fixture)

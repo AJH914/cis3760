@@ -85,10 +85,10 @@ course_fixture = [
 
 class CourseSearchTests(unittest.TestCase):
     def setUp(self):
-        self.coursesearch = CourseSearch('tests/data/example.json', 'tests/data/example_mapping.json')
+        self.coursesearch = CourseSearch('scripts/tests/data/example.json', 'scripts/tests/data/example_mapping.json')
 
     def test_load_courses(self):
-        search = CourseSearch('tests/data/example.json', 'tests/data/example_mapping.json')
+        search = CourseSearch('scripts/tests/data/example.json', 'scripts/tests/data/example_mapping.json')
 
         self.assertEqual(search.courses, courses_fixture)
         self.assertEqual(search.course_mapping, mapping_fixture)

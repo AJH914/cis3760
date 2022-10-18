@@ -9,22 +9,22 @@ sys.path.append('../jsontocsv')
 
 class JSONToCSVTests(unittest.TestCase):
     def setUp(self):
-        self.jsontocsv = JSONToCSV('tests/data/results.json')
+        self.jsontocsv = JSONToCSV('scripts/tests/data/results.json')
 
     @classmethod
     def tearDownClass(cls):
-        os.remove('tests/data/csv/sections.csv')
-        os.remove('tests/data/csv/meetings.csv')
+        os.remove('scripts/tests/data/csv/sections.csv')
+        os.remove('scripts/tests/data/csv/meetings.csv')
 
     def test_generate_sections(self):
-        self.jsontocsv.createSectionsCSV('tests/data/csv/sections.csv')
+        self.jsontocsv.createSectionsCSV('scripts/tests/data/csv/sections.csv')
 
-        self.assertTrue(filecmp.cmp('tests/data/csv/example_sections.csv', 'tests/data/csv/sections.csv'))
+        self.assertTrue(filecmp.cmp('scripts/tests/data/csv/example_sections.csv', 'scripts/tests/data/csv/sections.csv'))
 
     def test_generate_meetings(self):
-        self.jsontocsv.createMeetingsCSV('tests/data/csv/meetings.csv')
+        self.jsontocsv.createMeetingsCSV('scripts/tests/data/csv/meetings.csv')
     
-        self.assertTrue(filecmp.cmp('tests/data/csv/example_meetings.csv', 'tests/data/csv/meetings.csv'))
+        self.assertTrue(filecmp.cmp('scripts/tests/data/csv/example_meetings.csv', 'scripts/tests/data/csv/meetings.csv'))
 
 if __name__ == "__main__":
     unittest.main()
