@@ -1,6 +1,6 @@
-data/results.json
-data/course_mapping.json
-csv/meetings.csv
-csv/sections.csv
+scripts/data/results.json
+scripts/data/course_mapping.json
+scheduler/meetings.csv
+scheduler/sections.csv
 __pycache__/
 .DS_Store

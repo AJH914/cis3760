@@ -20,7 +20,7 @@
 
 `coursesearch` searches a `.json` or an `.html` file for a course. `coursesearch` allows one to search by course code or course name
 
-`json-to-csv` parses a `.json` file and creates 2 `csv` files for usage by `scheduler`. The two csv files created are named meetings.csv and section.csv. 
+`json-to-csv` parses a `.json` file and creates 2 `csv` files for usage by `scheduler`. The two csv files created are named meetings.csv and section.csv.
 
 `scheduler.xlsm` searches through these `.csv` files for the courses and allows to add upto 5 courses to the schedule. It also draws a time table for selected courses, suggests additional courses, and creates a `.pdf` of the schedule.
 
@@ -49,7 +49,6 @@ Open the Developer tab on Excel (This may not be enabled by default), click `Vis
 After running json-to-csv, import the 2 csv files into the scheduler.xlsm file by using `=` as the delimiter.
 
 **NOTE:** if a course does not exist, a pop up will be displayed saying that the course does not exist.
-
 
 ### htmlparser
 
