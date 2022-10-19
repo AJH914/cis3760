@@ -4,7 +4,7 @@ services:
     container_name: app
     build: ./client
     ports:
-      - '443:443'
+      - '80:80'
   api:
     container_name: api
     build: ./server

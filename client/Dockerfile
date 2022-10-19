@@ -1,11 +1,11 @@
-FROM node:10 AS builder
+FROM node:latest AS builder
 
 WORKDIR /src
 
 COPY . .
 
-RUN yarn install
-RUN yarn build
+RUN npm install
+RUN npm run build
 
 FROM nginx:alpine
 
