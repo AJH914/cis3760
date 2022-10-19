@@ -4,3 +4,4 @@ scheduler/meetings.csv
 scheduler/sections.csv
 __pycache__/
 .DS_Store
+client/node_modules
