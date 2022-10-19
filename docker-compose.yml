@@ -12,5 +12,3 @@ services:
   api:
     container_name: api
     build: ./server
-    ports:
-      - '5000:5000'
