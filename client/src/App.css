@@ -19,8 +19,8 @@
   position: fixed !important;
   margin-top: -26%;
   margin-left: 16%;
-
 }
+
 
 .App-header {
   background-color: #000000;
@@ -51,7 +51,7 @@
   -ms-user-select: none;
   user-select: none;
   margin-left: -10%;
-  margin-top: 5%;
+  margin-top: 4%;
 }
 
 .container input {
@@ -102,49 +102,66 @@
 
 /* code for navbar */
 
-#nav {
-  position:fixed;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  left: 0 !important;
-  width: 92%;
-  margin-top: -6.5%;
-  margin-left: 5%;
+ 
+ ul {
+   padding: 0;
+   display: flex;
+   position: fixed;
+   margin-top: -6.5%;
+   margin-left: -45.5%;
+   background-color: #211e1d;
+   width: 93%;
+ }
+ 
+ li {
+   list-style-type: none;
+   padding: 10px 20px;
+ }
+ 
+ a {
+   text-decoration: none;
+   font-size: 20px;
+   color: white;
+   position: relative;
+ }
+ 
+ ul li a:before {
+   content: "";
+   width: 0;
+   height: 5px;
+   background-color: #00bcd4;
+   position: absolute;
+   top: 120%;
+   left: 0;
+   transition: all 0.5s;
+ }
+ 
+ ul li a:after {
+   content: "";
+   width: 0;
+   height: 5px;
+   background-color: #f0f;
+   position: absolute;
+   top: 120%;
+   right: 0;
+   transition: all 0.5s;
+ }
+ 
+ ul li a:hover:before {
+   width: 50%;
+   transform: translateX(100%);
+ }
+ 
+ ul li a:hover:after {
+   width: 50%;
+   transform: translateX(-100%);
+ }
+
+ .active {
+  color: #f0ead6;
 }
 
-#nav ul {
-  font-family:sans-serif;
-  list-style-type: none;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: rgb(255, 255, 255);
-  border: 2px;
-  border-color: #000000
-}
-
-#nav li {
-  float: left;
-}
-
-#nav li a {
-  display: block;
-  color: rgb(0, 0, 0);
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-#nav li a:hover:not(.active) {
-  background-color: #a8a59f;
-}
-
-.active {
-  background-color: #f0ead6;
-}
-
+ 
 /* code for form */
 
 body {
@@ -157,7 +174,7 @@ body {
 
 .form {
   position:fixed;
-  margin-top: 2%;
+  margin-top: 1%;
   margin-left: -45%;
   background-color: #15172b;
   border-radius: 20px;
