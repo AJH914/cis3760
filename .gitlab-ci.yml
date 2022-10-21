@@ -38,6 +38,7 @@ deploy:
     - gcloud config set project $GCP_PROJECT_NAME
     - gcloud config set container/cluster $CLUSTER_NAME
     - gcloud config set compute/zone $CLUSTER_REGION
+    - gcloud components install gke-gcloud-auth-plugin
   script:
     - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_REGION --project $GCP_PROJECT_NAME
     - gcloud builds submit --tag us-east1-docker.pkg.dev/$GCP_PROJECT_NAME/$REGISTRY_REPO/scheduler-api:$CI_COMMIT_SHORT_SHA ./server
