@@ -15,11 +15,9 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 
 # copy nginx conf
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/nginx-prod.conf /etc/nginx/nginx.conf
 
 # copy certs
-COPY ./nginx/localhost.crt /etc/nginx/localhost.crt
-COPY ./nginx/localhost.key /etc/nginx/localhost.key
 COPY ./nginx/gke.crt /etc/nginx/gke.crt
 COPY ./nginx/gke.key /etc/nginx/gke.key
 
