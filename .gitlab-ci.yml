@@ -38,6 +38,7 @@ deploy:
     - gcloud config set project $GCP_PROJECT_NAME
     - gcloud config set container/cluster $CLUSTER_NAME
     - gcloud config set compute/zone $CLUSTER_REGION
+    - sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
     - gcloud components install gke-gcloud-auth-plugin
   script:
     - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_REGION --project $GCP_PROJECT_NAME
