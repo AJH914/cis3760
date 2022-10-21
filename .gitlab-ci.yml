@@ -30,10 +30,9 @@ test:
 
 build-app:
   stage: build
-  image: docker:latest
+  image: docker:19
   services:
-    - name: docker:dind
-      entrypoint: ['dockerd-entrypoint.sh', '--tls=false']
+    - docker:19-dind
   before_script:
     - docker info
     - echo "$GCP_SA_KEY" > key.json
@@ -44,10 +43,9 @@ build-app:
 
 build-api:
   stage: build
-  image: docker:latest
+  image: docker:19
   services:
-    - name: docker:dind
-      entrypoint: ['dockerd-entrypoint.sh', '--tls=false']
+    - docker:19-dind
   before_script:
     - docker info
     - echo "$GCP_SA_KEY" > key.json
