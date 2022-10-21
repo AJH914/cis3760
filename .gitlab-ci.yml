@@ -4,7 +4,7 @@ stages:
   - deploy
 
 variables:
-  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_HOST: tcp://127.0.0.1:2375
   DOCKER_TLS_CERTDIR: ''
   GCP_PROJECT_NAME: cis3760-web-app
   REGISTRY_HOSTNAME: us-east1-docker.pkg.dev/$GCP_PROJECT_NAME
@@ -30,9 +30,10 @@ test:
 
 build-app:
   stage: build
-  image: docker:20.10.16
+  image: docker:latest
   services:
-    - docker:20.10.16-dind
+    - name: docker:dind
+      entrypoint: ['dockerd-entrypoint.sh', '--tls=false']
   before_script:
     - docker info
     - echo "$GCP_SA_KEY" > key.json
@@ -43,9 +44,10 @@ build-app:
 
 build-api:
   stage: build
-  image: docker:20.10.16
+  image: docker:latest
   services:
-    - docker:20.10.16-dind
+    - name: docker:dind
+      entrypoint: ['dockerd-entrypoint.sh', '--tls=false']
   before_script:
     - docker info
     - echo "$GCP_SA_KEY" > key.json
