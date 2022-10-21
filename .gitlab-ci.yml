@@ -1,6 +1,5 @@
 stages:
-  - test
-  - build
+  - test-legacy
   - deploy
 
 variables:
@@ -9,10 +8,12 @@ variables:
   GCP_PROJECT_NAME: cis3760-web-app
   REGISTRY_HOSTNAME: us-east1-docker.pkg.dev/$GCP_PROJECT_NAME
   REGISTRY_REPO: scheduler-repo
+
   CLUSTER_NAME: scheduler-gke
   CLUSTER_REGION: us-east1
 
-test:
+test-legacy:
+  stage: test-legacy
   image: python:latest
   variables:
     PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
@@ -28,41 +29,17 @@ test:
   script:
     - python3 -m unittest discover -s scripts/tests
 
-build-app:
-  stage: build
-  image: docker:19
-  services:
-    - docker:19-dind
-  before_script:
-    - docker info
-    - echo "$GCP_SA_KEY" > key.json
-    - docker login -u _json_key --password-stdin https://gcr.io < key.json
-  script:
-    - docker build --tag $REGISTRY_HOSTNAME/$REGISTRY_REPO/scheduler-app:$CI_COMMIT_SHORT_SHA ./server
-    - docker push $REGISTRY_HOSTNAME/$REGISTRY_REPO/scheduler-app:$CI_COMMIT_SHORT_SHA
-
-build-api:
-  stage: build
-  image: docker:19
-  services:
-    - docker:19-dind
-  before_script:
-    - docker info
-    - echo "$GCP_SA_KEY" > key.json
-    - docker login -u _json_key --password-stdin https://gcr.io < key.json
-  script:
-    - docker build --tag $REGISTRY_HOSTNAME/$REGISTRY_REPO/scheduler-api:$CI_COMMIT_SHORT_SHA ./client
-    - docker push $REGISTRY_HOSTNAME/$REGISTRY_REPO/scheduler-api:$CI_COMMIT_SHORT_SHA
-
 deploy:
   stage: deploy
-  image: google/cloud-sdk
+  image: google/cloud-sdk:latest
+  before_script:
+    - gcloud auth activate-service-account --key-file $GCP_SA_KEY
+    - gcloud config set project $GCP_PROJECT_NAME
+    - gcloud config set container/cluster $CLUSTER_NAME
+    - gcloud config set compute/zone $CLUSTER_REGION
   script:
-    - echo "$GCP_SA_KEY" > key.json
-    - gcloud auth activate-service-account --key-file=key.json
-    - gcloud config set project GCP_PROJECT_NAME
-    - gcloud config set container/cluster CLUSTER_NAME
-    - gcloud config set compute/zone CLUSTER_REGION
-    - gcloud container clusters get-credentials CLUSTER_NAME --zone CLUSTER_REGION --project GCP_PROJECT_NAME
+    - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_REGION --project $GCP_PROJECT_NAME
+    - gcloud builds submit --tag us-east1-docker.pkg.dev/$GCP_PROJECT_NAME/$REGISTRY_REPO/scheduler-api:$CI_COMMIT_SHORT_SHA ./server
+    - gcloud builds submit --tag us-east1-docker.pkg.dev/$GCP_PROJECT_NAME/$REGISTRY_REPO/scheduler-app:$CI_COMMIT_SHORT_SHA ./client
     - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" deployment.yaml
     - kubectl apply -f deployment.yaml
