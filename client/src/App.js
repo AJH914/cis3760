@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios"
 import logo from "./logo.png";
 import myImage from "../src/timetable.png";
 import "./App.css";
 
 function App() {
+  const [course,setCourse] = useState("")
+  const testapi = () => {
+    axios.post("/api/postdata/"+course).then((response) => {
+      axios.get("/api/getdata").then((data) => {
+        console.log(data.data)
+      });
+    });
+  }
+  
+  
   return (
     <div className="App">
       <div className="row">
@@ -66,6 +77,8 @@ function App() {
                   className="form-control"
                   type="text"
                   placeholder=" "
+                  value={course}
+                  onChange={e => setCourse(e.target.value)}
                 />
                 <label for="course1" className="form-label">
                   Course 1
@@ -117,8 +130,9 @@ function App() {
               </div>
             </form>
             <div className="text-center">
-              <button type="button" className="btn btn-secondary">
+              <button type="button" className="btn btn-secondary" onClick={testapi}>
                 Generate Schedule
+
               </button>
             </div>
           </div>
