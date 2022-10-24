@@ -1,5 +1,7 @@
 # CIS3760 - Group 203
 
+# **You can access our production server at https://35.237.83.181**
+
 ## Overview
 
 Our scheduler app allows the user to create a class schedule using data sourced from UofG's WebAdvisor. It is a work-in-progress.
