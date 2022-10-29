@@ -7,8 +7,8 @@ import "./App.css";
 function App() {
   const [course,setCourse] = useState("")
   const testapi = () => {
-    axios.post("/api/postdata/"+course).then((response) => {
-      axios.get("/api/getdata").then((data) => {
+    axios.post("/api/searchcode/"+course).then((response) => {
+      axios.get("/api/searchresults").then((data) => {
         console.log(data.data)
       });
     });
