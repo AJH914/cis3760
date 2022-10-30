@@ -20,11 +20,11 @@ def post_response(coursecode):
     return jsonify(data_list)
 
 @app.get("/searchresults")
-def get_response():
+def get_search():
     return jsonify(search_results)
 
 @app.post("/searchcode/<coursecode>")
-def post_response(coursecode):
+def post_searchcode(coursecode):
     search_results = course_search(coursecode)
     return jsonify(search_results)
 
