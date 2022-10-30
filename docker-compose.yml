@@ -14,7 +14,7 @@ services:
     container_name: api
     build: ./server
     ports:
-      - '5000:5000'
+      - '8080:8080'
     environment:
-      - PORT=5000
-    command: ['python3', '-m', 'flask', 'run', '--host=0.0.0.0', '--port=5000']
+      - PORT=8080
+    command: ['python3', '-m', 'flask', 'run', '--host=0.0.0.0', '--port=8080']

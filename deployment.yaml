@@ -15,12 +15,12 @@ spec:
       containers:
         - name: scheduler-api
           image: us-east1-docker.pkg.dev/cis3760-web-app/scheduler-repo/scheduler-api:<VERSION>
-          # This app listens on port 5000 for web traffic by default.
+          # This app listens on port 8080 for web traffic by default.
           ports:
-            - containerPort: 5000
+            - containerPort: 8080
           env:
             - name: PORT
-              value: '5000'
+              value: '8080 '
         - name: scheduler-app
           image: us-east1-docker.pkg.dev/cis3760-web-app/scheduler-repo/scheduler-app:<VERSION>
           # This app listens on port 443 for web traffic by default.
