@@ -6,12 +6,10 @@ services:
       context: ./client
       dockerfile: Dockerfile.dev
     ports:
-      - '80:80'
       - '443:443'
     volumes:
-      - ./client/nginx/nginx-dev.conf:/etc/nginx/nginx.conf
-      - ./client/nginx/localhost.crt:/etc/nginx/localhost.crt
-      - ./client/nginx/localhost.key:/etc/nginx/localhost.key
+      - ./client:/src
+      - /src/node_modules
   api:
     container_name: api
     build: ./server
@@ -19,4 +17,6 @@ services:
       - API_PREFIX=/api
     ports:
       - '3001:3001'
+    volumes:
+      - ./server:/src
     command: ['flask', '--debug', 'run', '--host', '0.0.0.0', '--port', '3001']
