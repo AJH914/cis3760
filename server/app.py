@@ -6,7 +6,9 @@ app = Flask(__name__)
 with open('data/results.json') as json_file:
     courses = json.load(json_file)
 
-@app.post("/searchcode/<coursecode>")
+api_prefix = os.environ.get('API_PREFIX', '')
+
+@app.post(api_prefix + "/searchcode/<coursecode>")
 def post_searchcode(coursecode):
     if courses.get(coursecode.upper()) is not None:
         return jsonify(courses.get(coursecode.upper()))
@@ -14,5 +16,5 @@ def post_searchcode(coursecode):
     return jsonify([])
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 3001)))
     
