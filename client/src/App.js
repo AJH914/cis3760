@@ -9,7 +9,7 @@ function App() {
   const testapi = () => {
     axios.post("/api/searchcode/"+course).then((response) => {
       axios.get("/api/searchresults").then((data) => {
-        console.log(data.data)
+        console.log(course + data.data)
       });
     });
   }
