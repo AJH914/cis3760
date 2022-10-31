@@ -4,17 +4,21 @@ services:
     container_name: app
     build:
       context: ./client
-      dockerfile: Dockerfile.dev
+      target: 'base'
     ports:
       - '443:443'
     volumes:
       - ./client:/src
       - /src/node_modules
+    environment:
+      - HTTPS=true
+      - PORT=443
+    command: ['npm', 'start']
   api:
     container_name: api
     build: ./server
     environment:
-      - API_PREFIX=/api
+      - FLASK_ENV=development
     ports:
       - '3001:3001'
     volumes:
