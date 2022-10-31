@@ -1,10 +1,11 @@
-FROM node:latest AS builder
+FROM node:latest AS base
 
 WORKDIR /src
-
 COPY . .
-
 RUN npm install
+
+FROM base AS builder
+
 RUN npm run build
 
 FROM nginx:alpine

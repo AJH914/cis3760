@@ -2,19 +2,25 @@ version: '3.9'
 services:
   app:
     container_name: app
-    build: ./client
+    build:
+      context: ./client
+      target: 'base'
     ports:
-      - '80:80'
       - '443:443'
     volumes:
-      - ./client/nginx/nginx-dev.conf:/etc/nginx/nginx.conf
-      - ./client/nginx/localhost.crt:/etc/nginx/localhost.crt
-      - ./client/nginx/localhost.key:/etc/nginx/localhost.key
+      - ./client:/src
+      - /src/node_modules
+    environment:
+      - HTTPS=true
+      - PORT=443
+    command: ['npm', 'start']
   api:
     container_name: api
     build: ./server
-    ports:
-      - '5000:5000'
     environment:
-      - PORT=5000
-    command: ['python3', '-m', 'flask', 'run', '--host=0.0.0.0', '--port=5000']
+      - FLASK_ENV=development
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./server:/src
+    command: ['flask', '--debug', 'run', '--host', '0.0.0.0', '--port', '3001']

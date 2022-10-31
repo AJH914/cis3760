@@ -9,12 +9,14 @@ Our scheduler app allows the user to create a class schedule using data sourced 
 ## Tech
 
 **Frontend**
+
 - React
 - Bootstrap
 - Axios
 - Hosted behind NGINX
 
 **Backend**
+
 - Flask (used as REST API)
 - Hosted behind Gunicorn
 
@@ -25,17 +27,19 @@ In order to run the stack locally, you must have Docker and docker-compose insta
 If you are on a modern flavor of Linux, you can run the `install.sh` script in the project base. This will install and configure Docker + docker-compose.
 
 **To bring up the project, run:**
+
 ```
 docker-compose up
 ```
 
 This will build the `app` and `api` containers, and run them in the foreground (you can append the `-d` flag to run in daemon mode)
 
-You can access the frontend at https://localhost. The Flask API can be reached at https://localhost/api. 
+You can access the frontend at https://localhost. The Flask API can be reached at https://localhost/api.
 
 **To bring down the project, run:**
+
 ```
-docker-compose up
+docker-compose down
 ```
 
 If the stack is running in the foreground, Ctrl+C will work as well.
