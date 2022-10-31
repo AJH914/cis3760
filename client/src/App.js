@@ -5,12 +5,11 @@ import myImage from "../src/timetable.png";
 import "./App.css";
 
 function App() {
+  const [courses,setResult] = useState("")
   const [course,setCourse] = useState("")
   const testapi = () => {
     axios.post("/api/searchcode/"+course).then((response) => {
-      axios.get("/api/searchresults").then((data) => {
-        console.log(course + data.data)
-      });
+          setResult(JSON.stringify(response.data))
     });
   }
   
@@ -45,21 +44,6 @@ function App() {
                       Home
                     </a>
                   </li>
-                  <li className="nav-item">
-                    <a className="nav-link fs-3 mr-3" href="#courses">
-                      Courses
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link fs-3 mr-3" href="getdata">
-                      Placeholder 1
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link fs-3 mr-3" href="#about">
-                      Placeholder 2
-                    </a>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -81,61 +65,23 @@ function App() {
                   onChange={e => setCourse(e.target.value)}
                 />
                 <label for="course1" className="form-label">
-                  Course 1
-                </label>
-              </div>
-              <div className="mb-3">
-                <input
-                  id="course2"
-                  className="form-control"
-                  type="text"
-                  placeholder=" "
-                />
-                <label for="course2" className="form-label">
-                  Course 2
-                </label>
-              </div>
-              <div className="mb-3">
-                <input
-                  id="course3"
-                  className="form-control"
-                  type="text"
-                  placeholder=" "
-                />
-                <label for="course3" className="form-label">
-                  Course 3
-                </label>
-              </div>
-              <div className="mb-3">
-                <input
-                  id="course4"
-                  className="form-control"
-                  type="text"
-                  placeholder=" "
-                />
-                <label for="course4" className="form-label">
-                  Course 4
-                </label>
-              </div>
-              <div className="mb-3">
-                <input
-                  id="course5"
-                  className="form-control"
-                  type="text"
-                  placeholder=" "
-                />
-                <label for="course5" className="form-label">
-                  Course 5
+                  Enter Course
                 </label>
               </div>
             </form>
             <div className="text-center">
               <button type="button" className="btn btn-secondary" onClick={testapi}>
-                Generate Schedule
-
+                Find Course
+              </button>
+            </div>
+            <br></br>
+            <div className="text-center">
+              <button type="button" className="btn btn-secondary">
+               Generate Schedule
               </button>
             </div>
           </div>
+          <pre>{courses}</pre>
         </div>
         <div className="col-xl">
           <div className="checkboxes mt-4 ms-5">
