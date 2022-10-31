@@ -6,11 +6,11 @@ import './App.css';
 
 function App() {
   const [courses, setResult] = useState('');
-  const [course, setCourse] = useState('');
-  const testapi = () => {
-    axios.post('/api/searchcode/' + course).then((response) => {
-      setResult(JSON.stringify(response.data));
-    });
+  const [query, setQuery] = useState('');
+
+  const searchCourse = async () => {
+    const res = await axios.get('/api/searchcode', { params: { q: query } });
+    setResult(JSON.stringify(res.data));
   };
 
   return (
@@ -51,14 +51,14 @@ function App() {
             <div className='fs-3 mt-4'>Enter Desired Courses</div>
             <form className='mt-2'>
               <div className='mb-3'>
-                <input id='course1' className='form-control' type='text' placeholder=' ' value={course} onChange={(e) => setCourse(e.target.value)} />
+                <input id='course1' className='form-control' type='text' placeholder=' ' value={query} onChange={(e) => setQuery(e.target.value)} />
                 <label for='course1' className='form-label'>
                   Enter Course
                 </label>
               </div>
             </form>
             <div className='text-center'>
-              <button type='button' className='btn btn-secondary' onClick={testapi}>
+              <button type='button' className='btn btn-secondary' onClick={searchCourse}>
                 Find Course
               </button>
             </div>

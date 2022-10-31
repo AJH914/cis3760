@@ -1,19 +1,25 @@
 import os
-from flask import Flask, jsonify, json
+from flask import Flask, jsonify, json, request
+
+ENV = os.environ.get('FLASK_ENV', 'development')
+PORT = int(os.environ.get('PORT', 3001))
 
 app = Flask(__name__)
 
 with open('data/results.json') as json_file:
     courses = json.load(json_file)
 
-api_prefix = os.environ.get('API_PREFIX', '')
+api_prefix = '/api' if ENV == 'development' else ''
 
-@app.post(api_prefix + "/searchcode/<coursecode>")
-def post_searchcode(coursecode):
-    if courses.get(coursecode.upper()) is not None:
-        return jsonify(courses.get(coursecode.upper()))
+@app.get(api_prefix + "/searchcode")
+def get_searchcode():
+    args = request.args
+    courseCode = args.get('q')
+
+    if courses.get(courseCode.upper()) is not None:
+        return jsonify(courses.get(courseCode.upper()))
 
     return jsonify([])
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 3001)))
+    app.run(debug=True, host='0.0.0.0', port=PORT)
