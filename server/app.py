@@ -1,7 +1,7 @@
 import os
 from flask import Flask, jsonify, json, request
 
-ENV = os.environ.get('FLASK_ENV', 'development')
+ENV = os.environ.get('FLASK_ENV', 'production')
 PORT = int(os.environ.get('PORT', 3001))
 
 app = Flask(__name__)
