@@ -29,11 +29,11 @@ function App() {
     {
       id: 2,
       html: 'CIS*3110 - Lecture<br />ROZH 205',
-      start: date + 'T016:00:00',
+      start: date + 'T16:00:00',
       end: date + 'T17:50:00',
       barColor: '#fcb711',
       resource: 'tues'
-    },
+    }
   ]);
 
   const searchCourse = async () => {
