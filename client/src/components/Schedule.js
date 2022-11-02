@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { DayPilotCalendar } from '@daypilot/daypilot-lite-react';
 
-const Schedule = ({ events, config }) => {
+const Schedule = ({ meetings, config }) => {
   const calendarRef = useRef(null);
 
   const calendarConfig = {
@@ -31,12 +31,12 @@ const Schedule = ({ events, config }) => {
   };
 
   useEffect(() => {
-    updateCalendarData(events);
+    updateCalendarData(meetings);
   });
 
-  const updateCalendarData = (events) => {
+  const updateCalendarData = (meetings) => {
     calendarRef.current.control.update({
-      events: events.map((e) => ({ ...e, ...eventConfig }))
+      events: meetings.map((e) => ({ ...e, ...eventConfig }))
     });
   };
 

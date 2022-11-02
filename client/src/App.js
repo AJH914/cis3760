@@ -9,7 +9,7 @@ function App() {
   const [query, setQuery] = useState('');
 
   const date = new Date().toJSON().slice(0, 10);
-  const [sections, setSections] = useState([
+  const [meetings, setMeetings] = useState([
     {
       id: 1,
       html: 'CIS*3760 - Lecture<br />ROZH 203',
@@ -158,7 +158,7 @@ function App() {
           */}
           <div className='col-xl-8'>
             <div className='mt-4 me-4'>
-              <Schedule events={sections}></Schedule>
+              <Schedule meetings={meetings}></Schedule>
             </div>
           </div>
         </div>
