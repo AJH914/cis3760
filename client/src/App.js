@@ -8,15 +8,32 @@ function App() {
   const [courses, setResult] = useState('');
   const [query, setQuery] = useState('');
 
+  const date = new Date().toJSON().slice(0, 10);
   const [sections, setSections] = useState([
     {
       id: 1,
       html: 'CIS*3760 - Lecture<br />ROZH 203',
-      start: '2022-11-01T08:30:00',
-      end: '2022-11-01T09:50:00',
+      start: date + 'T08:30:00',
+      end: date + 'T09:50:00',
       barColor: '#fcb711',
       resource: 'mon'
-    }
+    },
+    {
+      id: 2,
+      html: 'CIS*2520 - Lecture<br />ROZH 204',
+      start: date + 'T09:30:00',
+      end: date + 'T10:20:00',
+      barColor: '#fcb711',
+      resource: 'mon'
+    },
+    {
+      id: 2,
+      html: 'CIS*3110 - Lecture<br />ROZH 205',
+      start: date + 'T016:00:00',
+      end: date + 'T17:50:00',
+      barColor: '#fcb711',
+      resource: 'tues'
+    },
   ]);
 
   const searchCourse = async () => {
