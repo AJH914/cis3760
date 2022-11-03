@@ -6,7 +6,7 @@ const SearchResults = ({ id, results }) => {
     <>
       <div className='accordion' id={`${id}-accordion`}>
         {results.map((result) => (
-          <CourseResult key={result.num} accordion={id} data={result} />
+          <CourseResult key={result.id} accordion={id} data={result} />
         ))}
       </div>
     </>
