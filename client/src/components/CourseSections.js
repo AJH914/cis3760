@@ -1,19 +1,29 @@
 import React, { useContext } from 'react';
+import { ScheduleContext } from '../contexts/ScheduleContext';
 
 const CourseSections = ({ sections }) => {
-  const selectSection = (e) => {
-    e.currentTarget.classList.toggle('btn-outline-primary');
-    e.currentTarget.classList.toggle('btn-primary');
+  const { schedule, addSection, removeSection } = useContext(ScheduleContext);
+
+  const isSelected = (section) => {
+    return schedule.filter((s) => s.num == section.num).length === 1;
+  };
+
+  const makeSelection = (section) => {
+    if (!isSelected(section)) {
+      addSection(section);
+    } else {
+      removeSection(section);
+    }
   };
 
   return (
     <div className='list-group'>
       {sections.map((section) => (
-        <li className='list-group-item p-3'>
+        <li key={section.num} className='list-group-item p-3'>
           <h5 className='mb-0'>
             {section.section}
-            <button type='button' className='btn btn-outline-primary float-end' data-bs-toggle='button' onClick={selectSection}>
-              <i className='bi bi-check-lg'></i>
+            <button type='button' className={`btn btn-${!isSelected(section) ? 'outline-success' : 'danger'} float-end`} onClick={() => makeSelection(section)}>
+              <i className={`bi bi-${isSelected(section) ? 'x' : 'check'}-lg`}></i>
             </button>
           </h5>
           <br />
@@ -26,14 +36,12 @@ const CourseSections = ({ sections }) => {
           <strong>Availability</strong>: {section.available} / {section.capacity}
           <br />
           <ul className='list-group list-group-flush'>
-            {section.meeting.map((meeting) => (
-              <>
-                <li className='list-group-item px-1'>
-                  <small>{meeting.meeting_type}</small>
-                  <br />
-                  {meeting.meeting_day} {meeting.start_time}-{meeting.end_time} ({meeting.building} {meeting.room})
-                </li>
-              </>
+            {section.meeting.map((meeting, i) => (
+              <li key={`meeting-${section.num}-${i}`} className='list-group-item px-1'>
+                <small>{meeting.meeting_type}</small>
+                <br />
+                {meeting.meeting_day} {meeting.start_time}-{meeting.end_time} ({meeting.building} {meeting.room})
+              </li>
             ))}
           </ul>
         </li>

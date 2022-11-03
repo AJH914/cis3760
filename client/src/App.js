@@ -4,8 +4,10 @@ import logo from './logo.png';
 import './App.css';
 import Schedule from './components/Schedule';
 import SearchResults from './components/SearchResults';
+import { ScheduleContextProvider } from './contexts/ScheduleContext';
 
 function App() {
+  const [schedule, setSchedule] = useState([]);
   const [results, setResult] = useState([]);
   const [query, setQuery] = useState('');
 
@@ -52,6 +54,7 @@ function App() {
   };
 
   return (
+    <ScheduleContextProvider>
     <div className='App'>
       <div className='container-fluid'>
         <div className='row'>
@@ -153,6 +156,7 @@ function App() {
         </div>
       </div>
     </div>
+    </ScheduleContextProvider>
   );
 }
 
