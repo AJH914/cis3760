@@ -47,25 +47,52 @@ def formatCourses():
     return newCourses
 
 def courseSearch (searchTerm):
+    searchTerm = searchTerm.replace("*", " ")
     terms = searchTerm.split()
     allCourses = formatCourses()
     resp = allCourses
     for term in terms:
         # every time only search from the courses that have been choosen by the last term
         temp = []
+        found = 0
         for course in resp:
             if term.upper() in course.get('course'):
+
                 temp.append(course)
+                found = 1
             elif term.upper() in course.get('courseName').upper():
+
                 temp.append(course)
+                found = 1
+
+        if found == 0:
+
+            for course in resp:
+                courseCpy = course.copy()
+                sections = course.get('sections')
+                courseCpy.pop('sections')
+                courseCpy['sections'] = []
+                for section in sections:
+
+                    if term  in str(section.get("section")):
+                        courseCpy.get('sections').append(section)
+                
+                if courseCpy.get('sections'):
+                    temp.append(courseCpy)
+
+               
 
         resp.clear()
         resp = temp
 
+
+
     return resp
 
-
-
+# print(courseSearch("Software*0101"))
+# obj = json.dumps(courseSearch("CIS Software"), indent = 4)
+# with open("search2.json", "w") as outfile:
+#     outfile.write(obj)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)
