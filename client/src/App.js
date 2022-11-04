@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from './logo.png';
 import './App.css';
 import Schedule from './components/Schedule';
+import SearchResults from './components/SearchResults';
+import { ScheduleContextProvider } from './contexts/ScheduleContext';
 
 function App() {
-  const [courses, setResult] = useState('');
+  const [results, setResult] = useState([]);
   const [query, setQuery] = useState('');
 
   const date = new Date().toJSON().slice(0, 10);
@@ -36,71 +38,60 @@ function App() {
     }
   ]);
 
-  const searchCourse = async () => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      searchCourses();
+    }, 500);
+
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
+  const searchCourses = async () => {
     const res = await axios.get('/api/searchcode', { params: { q: query } });
-    setResult(JSON.stringify(res.data));
+    setResult(res.data);
   };
 
   return (
+    <ScheduleContextProvider>
     <div className='App'>
       <div className='container-fluid'>
         <div className='row'>
           <div className='col'>
-            <img src={logo} className='img-fluid' alt='logo' />
-            <br></br>
-            <nav className='navbar navbar-expand-lg bg-light'>
-              <div className='container-fluid'>
-                <button
-                  className='navbar-toggler'
-                  type='button'
-                  data-bs-toggle='collapse'
-                  data-bs-target='#navbarNav'
-                  aria-controls='navbarNav'
-                  aria-expanded='false'
-                  aria-label='Toggle navigation'
-                >
-                  <span className='navbar-toggler-icon'></span>
-                </button>
-                <div className='collapse navbar-collapse' id='navbarNav'>
-                  <ul className='navbar-nav'>
-                    <li className='nav-item'>
-                      <a className='nav-link active fs-3 mr-3' aria-current='page' href='#home'>
-                        Home
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </nav>
+            <a href='#home'>
+              <img src={logo} className='img-fluid' alt='logo' />
+            </a>
           </div>
         </div>
       </div>
       <div className='container-fluid'>
         <div className='row'>
           <div className='col-xl-4'>
-            <div className='mt-4 ms-4 px-5 py-4 rounded-4 courses'>
-              <div className='fs-3 mt-4'>Enter Desired Courses</div>
+            <div className='mt-4 ms-4 px-4 py-4 rounded-4 courses'>
+              <div className='fs-3'>Search Courses</div>
               <form className='mt-2'>
                 <div className='mb-3'>
-                  <input id='course1' className='form-control' type='text' placeholder=' ' value={query} onChange={(e) => setQuery(e.target.value)} />
-                  <label htmlFor='course1' className='form-label'>
-                    Enter Course
-                  </label>
+                  <div className='input-group mb-3'>
+                    <input
+                      type='text'
+                      className='form-control'
+                      placeholder='Enter a course'
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      id='search'
+                    />
+                    <button className='btn btn-primary' type='button' onClick={searchCourses}>
+                      <i className='bi bi-search'></i>
+                    </button>
+                  </div>
                 </div>
               </form>
-              <div className='text-center'>
-                <button type='button' className='btn btn-secondary' onClick={searchCourse}>
-                  Find Course
-                </button>
-              </div>
-              <br></br>
-              <div className='text-center'>
-                <button type='button' className='btn btn-secondary'>
-                  Generate Schedule
-                </button>
-              </div>
             </div>
-            <pre>{courses}</pre>
+            {results.length > 0 && (
+                <div className='mt-4 ms-4 courseResults'>
+                <SearchResults id='results' results={results} />
+              </div>
+            )}
           </div>
           {/*
           <div className='col-xl'>
@@ -158,12 +149,13 @@ function App() {
           */}
           <div className='col-xl-8'>
             <div className='mt-4 me-4'>
-              <Schedule meetings={meetings}></Schedule>
+                <Schedule meetings={meetings} />
             </div>
           </div>
         </div>
       </div>
     </div>
+    </ScheduleContextProvider>
   );
 }
 
