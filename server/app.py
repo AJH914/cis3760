@@ -16,17 +16,58 @@ def get_searchcode():
     args = request.args
     courseCode = args.get('q')
 
-    # if courses.get(courseCode.upper()) is not None:
-    #     return jsonify(courses.get(courseCode.upper()))
-
-    # return jsonify([])
-    courseCodes = courseCode.split()
-    resp = []
-    for code in courseCodes:
-
-        resp.append(dict(filter(lambda item: code in item[0], courses.items())))
-    print(resp)
+    resp = courseSearch(courseCode)
     return jsonify(resp)
+
+
+
+def formatCourses():
+    newCourses = []
+    keys = list(courses.keys())
+    values = list(courses.values())
+    i = 0
+
+    for key in keys:
+        course = {}
+        course['id'] = i+1
+        course['course'] = key
+        course['courseCode'] = values[i][0].get('courseCode')
+        course['courseName'] = values[i][0].get('courseName')
+        course['credits'] = values[i][0].get('credits')
+        course['academicLevel'] = values[i][0].get('academicLevel')
+        course['department'] = values[i][0].get('department')
+        course['sections'] = []
+        for val in values[i]:
+            
+            course['sections'].append(val)
+
+        newCourses.append(course)
+        i = i+1
+    
+    return newCourses
+
+def courseSearch (searchTerm):
+    terms = searchTerm.split()
+    allCourses = formatCourses()
+    resp = allCourses
+    for term in terms:
+        # every time only search from the courses that have been choosen by the last term
+        temp = []
+        for course in resp:
+            if term.upper() in course.get('course'):
+                temp.append(course)
+            elif term.upper() in course.get('courseName').upper():
+                temp.append(course)
+
+        resp.clear()
+        resp = temp
+
+    return resp
+
+
+obj = json.dumps(courseSearch("CIS Software"), indent = 4)
+with open("search2.json", "w") as outfile:
+    outfile.write(obj)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)
