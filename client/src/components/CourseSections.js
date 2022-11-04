@@ -38,7 +38,9 @@ const CourseSections = ({ sections }) => {
           <ul className='list-group list-group-flush'>
             {section.meeting.map((meeting, i) => (
               <li key={`meeting-${section.num}-${i}`} className='list-group-item px-1'>
-                <small>{meeting.meeting_type}</small>
+                <small>
+                  <strong>{meeting.meeting_type}</strong>
+                </small>
                 <br />
                 {meeting.meeting_day} {meeting.start_time}-{meeting.end_time} ({meeting.building} {meeting.room})
               </li>

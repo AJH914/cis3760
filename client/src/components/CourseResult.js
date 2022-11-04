@@ -13,7 +13,9 @@ const CourseResult = ({ accordion, data }) => {
           aria-expanded='false'
           aria-controls={`#collapse-${data.id}`}
         >
-          {data.department}*{data.courseCode} - {data.courseName}
+          <span className='text-truncate'>
+            {data.department}*{data.courseCode} - {data.courseName}
+          </span>
         </button>
       </h2>
       <div id={`collapse-${data.id}`} className='accordion-collapse collapse' data-bs-parent={`#${accordion}-accordion`}>

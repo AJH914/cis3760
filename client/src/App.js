@@ -7,7 +7,6 @@ import SearchResults from './components/SearchResults';
 import { ScheduleContextProvider } from './contexts/ScheduleContext';
 
 function App() {
-  const [schedule, setSchedule] = useState([]);
   const [results, setResult] = useState([]);
   const [query, setQuery] = useState('');
 
@@ -89,7 +88,7 @@ function App() {
               </form>
             </div>
             {results.length > 0 && (
-              <div className='mt-4 ms-4 px-4 py-4 rounded-4 courseResults'>
+                <div className='mt-4 ms-4 courseResults'>
                 <SearchResults id='results' results={results} />
               </div>
             )}

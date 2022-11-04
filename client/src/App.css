@@ -9,7 +9,10 @@
 }
 
 .courseResults {
-  background-color: #303245;
   height: 450px;
   overflow-y: scroll;
+}
+
+.accordion-header span {
+  max-width: 90%;
 }
