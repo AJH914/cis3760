@@ -65,9 +65,7 @@ def courseSearch (searchTerm):
     return resp
 
 
-obj = json.dumps(courseSearch("CIS Software"), indent = 4)
-with open("search2.json", "w") as outfile:
-    outfile.write(obj)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)
