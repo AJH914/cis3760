@@ -1,30 +1,14 @@
-import React, { useContext } from 'react';
-import { ScheduleContext } from '../contexts/ScheduleContext';
+import React from 'react';
+import SectionToggle from './SectionToggle';
 
 const CourseSections = ({ sections }) => {
-  const { schedule, addSection, removeSection } = useContext(ScheduleContext);
-
-  const isSelected = (section) => {
-    return schedule.filter((s) => s.num == section.num).length === 1;
-  };
-
-  const makeSelection = (section) => {
-    if (!isSelected(section)) {
-      addSection(section);
-    } else {
-      removeSection(section);
-    }
-  };
-
   return (
     <div className='list-group'>
       {sections.map((section) => (
         <li key={section.num} className='list-group-item p-3'>
           <h5 className='mb-0'>
             {section.section}
-            <button type='button' className={`btn btn-${!isSelected(section) ? 'outline-success' : 'danger'} float-end`} onClick={() => makeSelection(section)}>
-              <i className={`bi bi-${isSelected(section) ? 'x' : 'check'}-lg`}></i>
-            </button>
+            <SectionToggle section={section} />
           </h5>
           <br />
           <strong>Term</strong>: {section.term}

@@ -55,46 +55,46 @@ function App() {
 
   return (
     <ScheduleContextProvider>
-    <div className='App'>
-      <div className='container-fluid'>
-        <div className='row'>
-          <div className='col'>
-            <a href='#home'>
-              <img src={logo} className='img-fluid' alt='logo' />
-            </a>
+      <div className='App'>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col'>
+              <a href='#home'>
+                <img src={logo} className='img-fluid' alt='logo' />
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div className='container-fluid'>
-        <div className='row'>
-          <div className='col-xl-4'>
-            <div className='mt-4 ms-4 px-4 py-4 rounded-4 courses'>
-              <div className='fs-3'>Search Courses</div>
-              <form className='mt-2'>
-                <div className='mb-3'>
-                  <div className='input-group mb-3'>
-                    <input
-                      type='text'
-                      className='form-control'
-                      placeholder='Enter a course'
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      id='search'
-                    />
-                    <button className='btn btn-primary' type='button' onClick={searchCourses}>
-                      <i className='bi bi-search'></i>
-                    </button>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col-xl-4'>
+              <div className='mt-4 ms-4 px-4 py-4 rounded-4 courses'>
+                <div className='fs-3'>Search Courses</div>
+                <form className='mt-2'>
+                  <div className='mb-3'>
+                    <div className='input-group mb-3'>
+                      <input
+                        type='text'
+                        className='form-control'
+                        placeholder='Enter a course'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        id='search'
+                      />
+                      <button className='btn btn-primary' type='button' onClick={searchCourses}>
+                        <i className='bi bi-search'></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-            </div>
-            {results.length > 0 && (
-              <div className='mt-4 ms-4 px-4 py-4 rounded-4 courseResults'>
-                <SearchResults id='results' results={results} />
+                </form>
               </div>
-            )}
-          </div>
-          {/*
+              {results.length > 0 && (
+                <div className='mt-4 ms-4 courseResults'>
+                  <SearchResults id='results' results={results} />
+                </div>
+              )}
+            </div>
+            {/*
           <div className='col-xl'>
             <div className='checkboxes mt-4 ms-5'>
               <div className='form-check mb-4'>
@@ -148,14 +148,14 @@ function App() {
             </div>
           </div>
           */}
-          <div className='col-xl-8'>
-            <div className='mt-4 me-4'>
-                <Schedule meetings={meetings} />
+            <div className='col-xl-8'>
+              <div className='mt-4 me-4'>
+                <Schedule />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </ScheduleContextProvider>
   );
 }
