@@ -10,34 +10,6 @@ function App() {
   const [results, setResult] = useState([]);
   const [query, setQuery] = useState('');
 
-  const date = new Date().toJSON().slice(0, 10);
-  const [meetings, setMeetings] = useState([
-    {
-      id: 1,
-      html: 'CIS*3760 - Lecture<br />ROZH 203',
-      start: date + 'T08:30:00',
-      end: date + 'T09:50:00',
-      barColor: '#fcb711',
-      resource: 'mon'
-    },
-    {
-      id: 2,
-      html: 'CIS*2520 - Lecture<br />ROZH 204',
-      start: date + 'T09:30:00',
-      end: date + 'T10:20:00',
-      barColor: '#fcb711',
-      resource: 'mon'
-    },
-    {
-      id: 2,
-      html: 'CIS*3110 - Lecture<br />ROZH 205',
-      start: date + 'T16:00:00',
-      end: date + 'T17:50:00',
-      barColor: '#fcb711',
-      resource: 'tues'
-    }
-  ]);
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       searchCourses();
@@ -48,52 +20,52 @@ function App() {
   }, [query]);
 
   const searchCourses = async () => {
-    const res = await axios.get('/api/searchcode', { params: { q: query } });
+    const res = await axios.get('/api/search', { params: { q: query } });
     setResult(res.data);
   };
 
   return (
     <ScheduleContextProvider>
-    <div className='App'>
-      <div className='container-fluid'>
-        <div className='row'>
-          <div className='col'>
-            <a href='#home'>
-              <img src={logo} className='img-fluid' alt='logo' />
-            </a>
+      <div className='App'>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col'>
+              <a href='#home'>
+                <img src={logo} className='img-fluid' alt='logo' />
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div className='container-fluid'>
-        <div className='row'>
-          <div className='col-xl-4'>
-            <div className='mt-4 ms-4 px-4 py-4 rounded-4 courses'>
-              <div className='fs-3'>Search Courses</div>
-              <form className='mt-2'>
-                <div className='mb-3'>
-                  <div className='input-group mb-3'>
-                    <input
-                      type='text'
-                      className='form-control'
-                      placeholder='Enter a course'
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      id='search'
-                    />
-                    <button className='btn btn-primary' type='button' onClick={searchCourses}>
-                      <i className='bi bi-search'></i>
-                    </button>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col-xl-4'>
+              <div className='mt-4 ms-4 px-4 py-4 rounded-4 courses'>
+                <div className='fs-3'>Search Courses</div>
+                <form className='mt-2'>
+                  <div className='mb-3'>
+                    <div className='input-group mb-3'>
+                      <input
+                        type='text'
+                        className='form-control'
+                        placeholder='Enter a course'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        id='search'
+                      />
+                      <button className='btn btn-primary' type='button' onClick={searchCourses}>
+                        <i className='bi bi-search'></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-            </div>
-            {results.length > 0 && (
-                <div className='mt-4 ms-4 courseResults'>
-                <SearchResults id='results' results={results} />
+                </form>
               </div>
-            )}
-          </div>
-          {/*
+              {results.length > 0 && (
+                <div className='mt-4 ms-4 courseResults'>
+                  <SearchResults id='results' results={results} />
+                </div>
+              )}
+            </div>
+            {/*
           <div className='col-xl'>
             <div className='checkboxes mt-4 ms-5'>
               <div className='form-check mb-4'>
@@ -147,14 +119,14 @@ function App() {
             </div>
           </div>
           */}
-          <div className='col-xl-8'>
-            <div className='mt-4 me-4'>
+            <div className='col-xl-8'>
+              <div className='mt-4 me-4'>
                 <Schedule meetings={meetings} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </ScheduleContextProvider>
   );
 }
