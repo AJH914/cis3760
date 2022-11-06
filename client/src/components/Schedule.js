@@ -60,8 +60,11 @@ const Schedule = ({ config }) => {
     let meetings = [];
     sections.forEach((s) => {
       s.meeting.forEach((meeting) => {
+        if (meeting.meeting_type === 'Distance') return;
+        if (meeting.meeting_type === 'EXAM') return;
+
         const days = meeting.meeting_day.split(',');
-        console.log(date + 'T' + convertTime(meeting.start_time));
+
         days.forEach((day) => {
           meetings.push({
             id: meetings.length + 1,
