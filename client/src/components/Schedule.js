@@ -3,7 +3,7 @@ import { DayPilotCalendar } from '@daypilot/daypilot-lite-react';
 import { ScheduleContext } from '../contexts/ScheduleContext';
 
 const Schedule = ({ config }) => {
-  const { schedule, removeSection } = useContext(ScheduleContext);
+  const { schedule, removeSection, isConflict } = useContext(ScheduleContext);
 
   const calendarRef = useRef(null);
 
@@ -26,7 +26,7 @@ const Schedule = ({ config }) => {
   };
 
   const eventConfig = {
-    clickDisabled: true,
+    clickDisabled: false,
     deleteDisabled: false,
     doubleClickDisabled: true,
     moveDisabled: true,
@@ -66,15 +66,22 @@ const Schedule = ({ config }) => {
         const days = meeting.meeting_day.split(',');
 
         days.forEach((day) => {
-          meetings.push({
+          let toAdd = {
             id: meetings.length + 1,
+            sectionNum: s.num,
             html: `${s.department}*${s.courseCode} - ${meeting.meeting_type}<br />${meeting.building} ${meeting.room}`,
             start: date + 'T' + convertTime(meeting.start_time),
             end: date + 'T' + convertTime(meeting.end_time),
             barColor: '#fcb711',
             resource: day.toLowerCase(),
             ...eventConfig
-          });
+          };
+
+          if (isConflict(s)) {
+            toAdd.backColor = 'rgba(250, 75, 35, 0.64)';
+          }
+
+          meetings.push(toAdd);
         });
       });
     });
@@ -82,6 +89,12 @@ const Schedule = ({ config }) => {
     calendarRef.current.control.update({
       events: meetings
     });
+
+    calendarRef.current.control.onEventClicked = (args) => {
+      if (window.confirm('Are you sure you want to remove this section?')) {
+        removeSection(args.e.data.sectionNum);
+      }
+    };
   };
 
   return (

@@ -13,7 +13,7 @@ const SectionToggle = ({ section }) => {
     if (!isSelected(section)) {
       addSection(section);
     } else {
-      removeSection(section);
+      removeSection(section.num);
     }
   };
 
