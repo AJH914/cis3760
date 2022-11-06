@@ -9,7 +9,7 @@ function App() {
   const [query, setQuery] = useState('');
 
   const searchCourse = async () => {
-    const res = await axios.get('/api/searchcode', { params: { q: query } });
+    const res = await axios.get('/api/search', { params: { q: query } });
     setResult(JSON.stringify(res.data));
   };
 

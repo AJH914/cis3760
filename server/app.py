@@ -1,98 +1,51 @@
 import os
 from flask import Flask, jsonify, json, request
+from functions import formatCourses
 
 ENV = os.environ.get('FLASK_ENV', 'development')
 PORT = int(os.environ.get('PORT', 3001))
+API_PREFIX = '/api' if ENV == 'development' else ''
 
 app = Flask(__name__)
 
+inputData = {}
 with open('data/results.json') as json_file:
-    courses = json.load(json_file)
+    inputData = json.load(json_file)
 
-api_prefix = '/api' if ENV == 'development' else ''
+# generate output dictionary
+courses = formatCourses(inputData)
 
-@app.get(api_prefix + "/searchcode")
-def get_searchcode():
+@app.get(API_PREFIX + "/search")
+def get_search():
     args = request.args
-    courseCode = args.get('q')
+    q = args.get('q')
 
-    resp = courseSearch(courseCode)
-    return jsonify(resp)
+    res = search(q, courses)
+    return jsonify(res)
 
+def search(query, data):
+    # treat * as space
+    query = query.replace("*", " ")
+    query = query.upper()
+    terms = query.split()
 
-
-def formatCourses():
-    newCourses = []
-    keys = list(courses.keys())
-    values = list(courses.values())
-    i = 0
-
-    for key in keys:
-        course = {}
-        course['id'] = i+1
-        course['course'] = key
-        course['courseCode'] = values[i][0].get('courseCode')
-        course['courseName'] = values[i][0].get('courseName')
-        course['credits'] = values[i][0].get('credits')
-        course['academicLevel'] = values[i][0].get('academicLevel')
-        course['department'] = values[i][0].get('department')
-        course['sections'] = []
-        for val in values[i]:
-            
-            course['sections'].append(val)
-
-        newCourses.append(course)
-        i = i+1
-    
-    return newCourses
-
-def courseSearch (searchTerm):
-    searchTerm = searchTerm.replace("*", " ")
-    terms = searchTerm.split()
-    allCourses = formatCourses()
-    resp = allCourses
+    out = data
     for term in terms:
-        # every time only search from the courses that have been choosen by the last term
-        temp = []
-        found = 0
-        for course in resp:
-            if term.upper() in course.get('course'):
-
-                temp.append(course)
-                found = 1
-            elif term.upper() in course.get('courseName').upper():
-
-                temp.append(course)
-                found = 1
-
-        if found == 0:
-
-            for course in resp:
-                courseCpy = course.copy()
-                sections = course.get('sections')
-                courseCpy.pop('sections')
-                courseCpy['sections'] = []
+        # every time only search from the courses that have been chosen by the last term
+        matches = []
+        for course in out:
+            if term in course['course'] or term in course['courseName'].upper():
+                matches.append(course)
+            else:
+                sections = course['sections']
                 for section in sections:
+                    sectionId = section['section'].strip()
+                    if term in sectionId:
+                        matches.append(course)
 
-                    if term  in str(section.get("section")):
-                        courseCpy.get('sections').append(section)
-                
-                if courseCpy.get('sections'):
-                    temp.append(courseCpy)
+        out = matches
 
-               
-
-        resp.clear()
-        resp = temp
-
-
-
-    return resp
-
-# print(courseSearch("Software*0101"))
-# obj = json.dumps(courseSearch("CIS Software"), indent = 4)
-# with open("search2.json", "w") as outfile:
-#     outfile.write(obj)
+    return out
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)
