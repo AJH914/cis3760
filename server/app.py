@@ -20,6 +20,9 @@ def get_search():
     args = request.args
     q = args.get('q')
 
+    if len(q) == 0:
+        return jsonify([])
+
     res = search(q, courses)
     return jsonify(res)
 

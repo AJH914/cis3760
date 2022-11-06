@@ -121,7 +121,7 @@ function App() {
           */}
             <div className='col-xl-8'>
               <div className='mt-4 me-4'>
-                <Schedule meetings={meetings} />
+                <Schedule />
               </div>
             </div>
           </div>
