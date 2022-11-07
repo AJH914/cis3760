@@ -58,10 +58,16 @@ def search(query, data):
                 out = matches
             
             queryResults.extend(out)
-            #queryResults = list(set(queryResults) | set(out))
             
-            
-    return queryResults
+    # remove duplicate courses
+    seen = set()
+    uniqueResults = []
+    for course in queryResults:
+        if course['course'] not in seen:
+            seen.add(course['course'])
+            uniqueResults.append(course)
+
+    return uniqueResults
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)
