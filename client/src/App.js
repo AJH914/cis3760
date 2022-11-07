@@ -5,6 +5,7 @@ import './App.css';
 import Schedule from './components/Schedule';
 import SearchResults from './components/SearchResults';
 import { ScheduleContextProvider } from './contexts/ScheduleContext';
+import SelectedSections from './components/SelectedSections';
 
 function App() {
   const [results, setResult] = useState([]);
@@ -41,7 +42,7 @@ function App() {
             <div className='col-xl-4'>
               <div className='mt-4 ms-4 px-4 py-4 rounded-4 courses'>
                 <div className='fs-3'>Search Courses</div>
-                <form className='mt-2'>
+                <form className='mt-2' onSubmit={(e) => e.preventDefault()}>
                   <div className='mb-3'>
                     <div className='input-group mb-3'>
                       <input
@@ -52,16 +53,24 @@ function App() {
                         onChange={(e) => setQuery(e.target.value)}
                         id='search'
                       />
-                      <button className='btn btn-primary' type='button' onClick={searchCourses}>
-                        <i className='bi bi-search'></i>
+                      <button
+                        className={`btn btn-${query.length > 0 ? 'danger' : 'primary'}`}
+                        type='button'
+                        onClick={query.length === 0 ? searchCourses : () => setQuery('')}
+                      >
+                        <i className={`bi bi-${query.length > 0 ? 'x-lg' : 'search'}`}></i>
                       </button>
                     </div>
                   </div>
                 </form>
               </div>
-              {results.length > 0 && (
+              {results.length > 0 ? (
                 <div className='mt-4 ms-4 courseResults'>
                   <SearchResults id='results' results={results} />
+                </div>
+              ) : (
+                <div className='mt-4 ms-4 courseResults'>
+                  <SelectedSections />
                 </div>
               )}
             </div>

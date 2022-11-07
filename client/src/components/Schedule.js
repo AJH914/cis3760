@@ -62,6 +62,7 @@ const Schedule = ({ config }) => {
       s.meeting.forEach((meeting) => {
         if (meeting.meeting_type === 'Distance') return;
         if (meeting.meeting_type === 'EXAM') return;
+        if (meeting.meeting_day.includes('TBA')) return;
 
         const days = meeting.meeting_day.split(',');
 

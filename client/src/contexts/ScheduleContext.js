@@ -23,6 +23,23 @@ export const ScheduleContextProvider = (props) => {
     return `${hours}:${minutes}:00`;
   };
 
+  const getMeetingTimes = (meeting) => {
+    const today = new Date().toJSON().slice(0, 10);
+
+    const start = new Date(`${today}T${convertTime(meeting.start_time)}`);
+    const end = new Date(`${today}T${convertTime(meeting.end_time)}`);
+
+    return [start, end];
+  };
+
+  const isInvalidMeeting = (meeting) => {
+    if (meeting.meeting_type === 'EXAM') return true;
+    if (meeting.meeting_type === 'Distance') return true;
+    if (meeting.meeting_day.includes('TBA')) return true;
+
+    return false;
+  };
+
   const addSection = (section) => {
     setSchedule([...schedule, section]);
   };
@@ -32,23 +49,18 @@ export const ScheduleContextProvider = (props) => {
   };
 
   const isConflict = (section) => {
-    const today = new Date().toJSON().slice(0, 10);
     for (let meeting of section.meeting) {
-      if (meeting.meeting_type === 'EXAM') continue;
-      if (meeting.meeting_type === 'Distance') continue;
+      if (isInvalidMeeting(meeting)) continue;
 
-      const start = new Date(`${today}T${convertTime(meeting.start_time)}`);
-      const end = new Date(`${today}T${convertTime(meeting.end_time)}`);
+      const [start, end] = getMeetingTimes(meeting);
 
       for (let sSection of schedule) {
         if (sSection.num === section.num) continue;
 
         for (let sMeeting of sSection.meeting) {
-          if (sMeeting.meeting_type === 'EXAM') continue;
-          if (sMeeting.meeting_type === 'Distance') continue;
+          if (isInvalidMeeting(sMeeting)) continue;
 
-          const sStart = new Date(`${today}T${convertTime(sMeeting.start_time)}`);
-          const sEnd = new Date(`${today}T${convertTime(sMeeting.end_time)}`);
+          const [sStart, sEnd] = getMeetingTimes(sMeeting);
 
           // check time intersection
           if ((start >= sStart && start <= sEnd) || (end >= sStart && end <= sEnd)) {
