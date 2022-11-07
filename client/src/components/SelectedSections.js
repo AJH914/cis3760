@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { ScheduleContext } from '../contexts/ScheduleContext';
-import CourseResult from './CourseResult';
 import SectionToggle from './SectionToggle';
 
 const SelectedSections = () => {
@@ -9,7 +8,7 @@ const SelectedSections = () => {
   return (
     <ul className='list-group'>
       {schedule.map((section) => (
-        <li className='list-group-item p-3'>
+        <li key={section.num} className='list-group-item p-3'>
           <h5>
             {section.department}*{section.courseCode} {section.courseName}
             <SectionToggle section={section} />
