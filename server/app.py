@@ -45,6 +45,7 @@ def search(query, data):
                     sectionId = section['section'].strip()
                     if term in sectionId:
                         matches.append(course)
+                        break
 
         out = matches
 
