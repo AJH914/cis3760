@@ -25,6 +25,11 @@ function App() {
     setResult(res.data);
   };
 
+  const clearSearch = () => {
+    setResult([]);
+    setQuery('');
+  };
+
   return (
     <ScheduleContextProvider>
       <div className='App'>
@@ -56,7 +61,7 @@ function App() {
                       <button
                         className={`btn btn-${query.length > 0 ? 'danger' : 'primary'}`}
                         type='button'
-                        onClick={query.length === 0 ? searchCourses : () => setQuery('')}
+                        onClick={query.length === 0 ? searchCourses : () => clearSearch()}
                       >
                         <i className={`bi bi-${query.length > 0 ? 'x-lg' : 'search'}`}></i>
                       </button>
