@@ -29,7 +29,7 @@ In order to run the stack locally, you must have Docker and docker-compose insta
 If you are on a modern flavor of Linux, you can run the `install.sh` script in the project base. This will install and configure Docker + docker-compose.
 
 **To bring up the project, run:**
-
+test
 ```
 docker-compose up
 ```
