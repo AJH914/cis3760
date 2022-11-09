@@ -2,8 +2,6 @@
 
 # **You can access our production server at https://35.237.83.181**
 
-test test
-
 ## Overview
 
 Our scheduler app allows the user to create a class schedule using data sourced from UofG's WebAdvisor. It is a work-in-progress.
@@ -29,7 +27,7 @@ In order to run the stack locally, you must have Docker and docker-compose insta
 If you are on a modern flavor of Linux, you can run the `install.sh` script in the project base. This will install and configure Docker + docker-compose.
 
 **To bring up the project, run:**
-test
+
 ```
 docker-compose up
 ```
