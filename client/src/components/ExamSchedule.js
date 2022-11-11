@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { DayPilot, DayPilotMonth } from '@daypilot/daypilot-lite-react';
+import { DayPilotMonth } from '@daypilot/daypilot-lite-react';
 import { ScheduleContext } from '../contexts/ScheduleContext';
 
 const ExamSchedule = ({ config }) => {
-  const { schedule, removeSection, isConflict } = useContext(ScheduleContext);
+  const { schedule, removeSection } = useContext(ScheduleContext);
 
   const calendarRef = useRef(null);
 
