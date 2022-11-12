@@ -37,14 +37,14 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: cypress/screenshots
+          path: client/cypress/screenshots
 
       - name: Upload result videos
         uses: actions/upload-artifact@v2
         if: always()
         with:
           name: cypress-videos
-          path: cypress/videos
+          path: client/cypress/videos
 
   # setup-build-publish-deploy:
   #   name: Setup, Build, Publish, and Deploy
