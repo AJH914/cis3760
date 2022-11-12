@@ -24,7 +24,7 @@ jobs:
 
       - name: Start Docker containers
         run: |-
-          docker-compose -f docker-compose.yml up --build --detach
+          docker-compose -f docker-compose.test.yml up --build --detach
 
       - name: Run cypress e2e tests
         uses: cypress-io/github-action@v4
