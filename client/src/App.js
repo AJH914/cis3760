@@ -6,10 +6,13 @@ import Schedule from './components/Schedule';
 import SearchResults from './components/SearchResults';
 import { ScheduleContextProvider } from './contexts/ScheduleContext';
 import SelectedSections from './components/SelectedSections';
+import ExamSchedule from './components/ExamSchedule';
 
 function App() {
   const [results, setResult] = useState([]);
   const [query, setQuery] = useState('');
+
+  const [examView, setExamView] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -135,7 +138,12 @@ function App() {
           */}
             <div className='col-xl-8'>
               <div className='mt-4 me-4'>
-                <Schedule />
+                {!examView ? <Schedule /> : <ExamSchedule />}
+                <div className='d-grid'>
+                  <button className='btn btn-primary' type='button' onClick={() => setExamView(!examView)}>
+                    {!examView ? 'View Exam Schedule' : 'View Course Schedule'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
