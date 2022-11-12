@@ -3,7 +3,7 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - main
+      - sprint7
 
 env:
   PROJECT_ID: cis3760-web-app
