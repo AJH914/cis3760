@@ -24,7 +24,7 @@ Our scheduler app allows the user to create a class schedule using data sourced 
 
 In order to run the stack locally, you must have Docker and docker-compose installed and configured.
 
-If you are on a modern flavor of Linux, you can run the `install.sh` script in the project base. This will install and configure Docker + docker-compose.
+If you are on a modern flavor of Linux, you can run the `install.sh` script in the project base. This will install and configure Docker + docker-compose
 
 **To bring up the project, run:**
 
