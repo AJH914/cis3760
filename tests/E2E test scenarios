@@ -1,0 +1,50 @@
+install script
+- npm install cypress -D
+- npm install cypress-xpath
+- npx cypress open
+
+Test1: Check the liveness of the server
+
+Open Prod Server at - https://35.237.83.181/ and make sure it is up and live.
+
+Test2 : Search a course and check the correct value
+
+Open Prod Server at - https://35.237.83.181/ 
+Type a course (cis3760) on the search bar
+Assert true the return value is CIS*3760 - Software Engineering
+
+Test3 : Add a section of a course to schedule and check the timing is correct
+
+Open Prod Server at - https://35.237.83.181/ 
+Type a course (cis3760) on the search bar
+Assert true the return value is CIS*3760 - Software Engineering
+Click on the accordion button containing return value CIS*3760 - Software Engineering
+Add first section to the course schedule
+Assert true the tuesday meeting timings.
+
+Test4 : Add a section, check the timing and then remove the section
+
+Open Prod Server at - https://35.237.83.181/ 
+Type a course (cis3760) on the search bar
+Assert true the return value is CIS*3760 - Software Engineering
+Click on the accordion button containing return value CIS*3760 - Software Engineering
+Add first section to the course schedule
+Assert true the tuesday meeting timings.
+Clicks on the cross button on search bar.
+Removes the selection by clicking on the cross button on the course selection.
+Asserts true the section is removed.
+
+Test5 : Add 2 sections of 2 different courses
+
+Open Prod Server at - https://35.237.83.181/ 
+Type a course (cis3760) on the search bar
+Assert true the return value is CIS*3760 - Software Engineering
+Click on the accordion button containing return value CIS*3760 - Software Engineering
+Add first section to the course schedule
+Assert true the tuesday meeting timings.
+Clicks on the cross button on search bar.
+Type another course (acct1220) on the search bar
+Add first section to the course schedule
+Assert true the friday meeting timings.
+
+
