@@ -30,7 +30,7 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           working-directory: client
-          wait-on: 'https://localhost'
+          wait-on: 'http://localhost:3000/'
 
   # setup-build-publish-deploy:
   #   name: Setup, Build, Publish, and Deploy
