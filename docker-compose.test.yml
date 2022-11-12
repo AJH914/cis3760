@@ -6,12 +6,11 @@ services:
       context: ./client
       target: 'base'
     ports:
-      - '443:443'
+      - '3000:3000'
     volumes:
       - ./client:/src
     environment:
-      - HTTPS=true
-      - PORT=443
+      - PORT=3000
     command: ['npm', 'start']
   api:
     container_name: api
