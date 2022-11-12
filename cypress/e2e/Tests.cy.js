@@ -1,12 +1,12 @@
 describe('Test1', () => {
   it('passes', () => {
-    cy.visit('https://localhost/');
+    cy.visit('http://localhost/');
   });
 });
 
 describe('Test2', () => {
   it('passes', () => {
-    cy.visit('https://localhost/');
+    cy.visit('http://localhost/');
     cy.get('input.form-control').type('cis3760');
     cy.xpath('//*[@id="results-accordion"]/div/h2/button'); //xpath for course result
     cy.contains('CIS*3760 - Software Engineering');
@@ -15,7 +15,7 @@ describe('Test2', () => {
 
 describe('Test3', () => {
   it('passes', () => {
-    cy.visit('https://localhost/');
+    cy.visit('http://localhost/');
     cy.get('input.form-control').type('cis3760');
     cy.xpath('//*[@id="results-accordion"]/div/h2/button').click(); //xpath for course result
     cy.xpath('//*[@id="collapse-225"]/div/div/li[1]/h5/button').click(); //xpath for section
@@ -26,7 +26,7 @@ describe('Test3', () => {
 
 describe('Test4', () => {
   it('passes', () => {
-    cy.visit('https://localhost/');
+    cy.visit('http://localhost/');
     cy.get('input.form-control').type('cis3760');
     cy.xpath('//*[@id="results-accordion"]/div/h2/button').click(); //xpath for course result
     cy.xpath('//*[@id="collapse-225"]/div/div/li[1]/h5/button').click(); //xpath for section
@@ -39,7 +39,7 @@ describe('Test4', () => {
 
 describe('Test5', () => {
   it('passes', () => {
-    cy.visit('https://localhost/');
+    cy.visit('http://localhost/');
     cy.get('input.form-control').type('cis3760');
     cy.xpath('//*[@id="results-accordion"]/div/h2/button').click(); //xpath for course result
     cy.xpath('//*[@id="collapse-225"]/div/div/li[1]/h5/button').click(); //xpath for section
