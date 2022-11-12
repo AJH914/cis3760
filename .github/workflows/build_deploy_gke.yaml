@@ -29,6 +29,7 @@ jobs:
       - name: Run cypress e2e tests
         uses: cypress-io/github-action@v4
         with:
+          working-directory: client
           wait-on: 'https://localhost'
 
   # setup-build-publish-deploy:
