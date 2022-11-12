@@ -31,18 +31,20 @@ jobs:
         with:
           working-directory: client
           wait-on: 'http://localhost:3000/'
-          
-        - uses: actions/upload-artifact@v2
-          if: failure()
-          with:
-            name: cypress-screenshots
-            path: cypress/screenshots
-            
-        - uses: actions/upload-artifact@v2
-          if: always()
-          with:
-            name: cypress-videos
-            path: cypress/videos
+
+      - name: Upload failure images
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload result videos
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
 
   # setup-build-publish-deploy:
   #   name: Setup, Build, Publish, and Deploy
