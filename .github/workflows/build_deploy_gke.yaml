@@ -14,40 +14,54 @@ env:
   REGISTRY_REPO: scheduler-repo
 
 jobs:
-  test:
-    name: E2E Tests
+  lint:
+    name: Linting
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Start Docker containers
+      - name: Run ESLint
         run: |-
-          docker-compose -f docker-compose.test.yml up --build --detach
+          cd client
+          npm install
+          eslint . --ext .js,.jsx,.ts,.tsx
 
-      - name: Run cypress e2e tests
-        uses: cypress-io/github-action@v4
-        with:
-          working-directory: client
-          wait-on: 'http://localhost:3000/'
+  # test:
+  #   name: Tests
+  #   runs-on: ubuntu-latest
 
-      - name: Upload failure images
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: client/cypress/screenshots
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Upload result videos
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: cypress-videos
-          path: client/cypress/videos
+  #     - name: Start Docker containers
+  #       run: |-
+  #         docker-compose -f docker-compose.test.yml up --build --detach
+
+  #     - name: Run cypress e2e tests
+  #       uses: cypress-io/github-action@v4
+  #       with:
+  #         working-directory: client
+  #         wait-on: 'http://localhost:3000/'
+
+  #     - name: Upload failure images
+  #       uses: actions/upload-artifact@v2
+  #       if: failure()
+  #       with:
+  #         name: cypress-screenshots
+  #         path: client/cypress/screenshots
+
+  #     - name: Upload result videos
+  #       uses: actions/upload-artifact@v2
+  #       if: always()
+  #       with:
+  #         name: cypress-videos
+  #         path: client/cypress/videos
 
   # setup-build-publish-deploy:
-  #   name: Setup, Build, Publish, and Deploy
+  #   name: Build, Publish, and Deploy
   #   runs-on: ubuntu-latest
 
   #   steps:
