@@ -24,13 +24,13 @@ jobs:
 
       - name: Start Docker containers
         run: |-
-          docker-compose -f docker-compose.test.yml up
+          docker-compose -f docker-compose.test.yml up --build --detach
 
       - name: Run cypress e2e tests
         uses: cypress-io/github-action@v4
         with:
           working-directory: client
-          # wait-on: 'http://localhost:3000/'
+          wait-on: 'http://localhost:3000/'
 
   # setup-build-publish-deploy:
   #   name: Setup, Build, Publish, and Deploy
