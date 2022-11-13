@@ -3,19 +3,19 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - main
+      - sprint*
 
 env:
   PROJECT_ID: cis3760-web-app
-  GKE_CLUSTER: scheduler-gke # Add your cluster name here.
-  GKE_ZONE: us-east1 # Add your cluster zone here.
-  DEPLOYMENT_NAME: scheduler-gke # Add your deployment name here.
+  GKE_CLUSTER: scheduler-gke
+  GKE_ZONE: us-east1
+  DEPLOYMENT_NAME: scheduler-gke
   REGISTRY_HOST: us-east1-docker.pkg.dev
   REGISTRY_REPO: scheduler-repo
 
 jobs:
   setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+    name: Build, Publish, and Deploy
     runs-on: ubuntu-latest
 
     steps:
