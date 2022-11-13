@@ -3,118 +3,72 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - sprint7-e2e-cicd
+      - sprint*
 
 env:
   PROJECT_ID: cis3760-web-app
-  GKE_CLUSTER: scheduler-gke # Add your cluster name here.
-  GKE_ZONE: us-east1 # Add your cluster zone here.
-  DEPLOYMENT_NAME: scheduler-gke # Add your deployment name here.
+  GKE_CLUSTER: scheduler-gke
+  GKE_ZONE: us-east1
+  DEPLOYMENT_NAME: scheduler-gke
   REGISTRY_HOST: us-east1-docker.pkg.dev
   REGISTRY_REPO: scheduler-repo
 
 jobs:
-  lint:
-    name: Linting
+  setup-build-publish-deploy:
+    name: Build, Publish, and Deploy
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Run ESLint
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          token_format: 'access_token'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Docker configuration
         run: |-
-          cd client
-          npm install
-          npx eslint . --ext .js,.jsx,.ts,.tsx
+          echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$REGISTRY_HOST
 
-  # test:
-  #   name: Tests
-  #   runs-on: ubuntu-latest
+      # Get the GKE credentials so we can deploy to the cluster
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+      # Build the Docker images
+      - name: Build API
+        run: |-
+          docker build \
+            --tag "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-api:$GITHUB_SHA" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" \
+            ./server
 
-  #     - name: Start Docker containers
-  #       run: |-
-  #         docker-compose -f docker-compose.test.yml up --build --detach
+      - name: Build Frontend
+        run: |-
+          docker build \
+            --tag "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-app:$GITHUB_SHA" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" \
+            ./client
 
-  #     - name: Run cypress e2e tests
-  #       uses: cypress-io/github-action@v4
-  #       with:
-  #         working-directory: client
-  #         wait-on: 'http://localhost:3000/'
+      # Push the Docker images to Google Container Registry
+      - name: Publish API
+        run: |-
+          docker push "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-api:$GITHUB_SHA"
 
-  #     - name: Upload failure images
-  #       uses: actions/upload-artifact@v2
-  #       if: failure()
-  #       with:
-  #         name: cypress-screenshots
-  #         path: client/cypress/screenshots
+      - name: Publish Frontend
+        run: |-
+          docker push "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-app:$GITHUB_SHA"
 
-  #     - name: Upload result videos
-  #       uses: actions/upload-artifact@v2
-  #       if: always()
-  #       with:
-  #         name: cypress-videos
-  #         path: client/cypress/videos
-
-  # setup-build-publish-deploy:
-  #   name: Build, Publish, and Deploy
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - id: 'auth'
-  #       uses: 'google-github-actions/auth@v1'
-  #       with:
-  #         token_format: 'access_token'
-  #         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-  #     - name: Docker configuration
-  #       run: |-
-  #         echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$REGISTRY_HOST
-
-  #     # Get the GKE credentials so we can deploy to the cluster
-  #     - name: Set up GKE credentials
-  #       uses: google-github-actions/get-gke-credentials@v0
-  #       with:
-  #         cluster_name: ${{ env.GKE_CLUSTER }}
-  #         location: ${{ env.GKE_ZONE }}
-
-  #     # Build the Docker images
-  #     - name: Build API
-  #       run: |-
-  #         docker build \
-  #           --tag "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-api:$GITHUB_SHA" \
-  #           --build-arg GITHUB_SHA="$GITHUB_SHA" \
-  #           --build-arg GITHUB_REF="$GITHUB_REF" \
-  #           ./server
-
-  #     - name: Build Frontend
-  #       run: |-
-  #         docker build \
-  #           --tag "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-app:$GITHUB_SHA" \
-  #           --build-arg GITHUB_SHA="$GITHUB_SHA" \
-  #           --build-arg GITHUB_REF="$GITHUB_REF" \
-  #           ./client
-
-  #     # Push the Docker images to Google Container Registry
-  #     - name: Publish API
-  #       run: |-
-  #         docker push "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-api:$GITHUB_SHA"
-
-  #     - name: Publish Frontend
-  #       run: |-
-  #         docker push "$REGISTRY_HOST/$PROJECT_ID/$REGISTRY_REPO/scheduler-app:$GITHUB_SHA"
-
-  #     # Deploy the Docker image to the GKE cluster
-  #     - name: Deploy
-  #       run: |-
-  #         sed -i "s/<VERSION>/${GITHUB_SHA}/g" deployment.yaml
-  #         kubectl apply -f deployment.yaml
-  #         kubectl rollout status deployment/$DEPLOYMENT_NAME
-  #         kubectl get services -o wide
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy
+        run: |-
+          sed -i "s/<VERSION>/${GITHUB_SHA}/g" deployment.yaml
+          kubectl apply -f deployment.yaml
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide
