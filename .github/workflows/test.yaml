@@ -9,6 +9,7 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
+    container: cypress/browsers:node14.19.0-chrome100-ff99-edge
 
     steps:
       - name: Checkout
@@ -21,6 +22,8 @@ jobs:
       - name: Run cypress e2e tests
         uses: cypress-io/github-action@v4
         with:
+          browser: chrome
+          record: true
           working-directory: client
           wait-on: 'http://localhost:3000/'
 
