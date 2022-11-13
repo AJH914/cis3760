@@ -30,7 +30,7 @@ services:
     environment:
       - CYPRESS_baseUrl=http://app:3000
       - CYPRESS_VIDEO=true
-    command: npx cypress run --browser chrome
+    command: wait-on http://app:3000 && npx cypress run --browser chrome
     volumes:
       - ./e2e/cypress:/app/cypress
       - ./e2e/cypress.config.js:/app/cypress.config.js
