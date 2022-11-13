@@ -1,10 +1,10 @@
-describe('Test1', () => {
+describe('Check the liveness of the server', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/');
   });
 });
 
-describe('Test2', () => {
+describe('Search a course and check the correct value', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/');
     cy.get('input.form-control').type('cis3760');
@@ -13,7 +13,7 @@ describe('Test2', () => {
   });
 });
 
-describe('Test3', () => {
+describe('Add a section of a course to schedule and check the timing is correct', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/');
     cy.get('input.form-control').type('cis3760');
@@ -24,7 +24,7 @@ describe('Test3', () => {
   });
 });
 
-describe('Test4', () => {
+describe('Add a section, check the timing and then remove the section', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/');
     cy.get('input.form-control').type('cis3760');
@@ -37,7 +37,7 @@ describe('Test4', () => {
   });
 });
 
-describe('Test5', () => {
+describe('Add 2 sections of 2 different courses', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/');
     cy.get('input.form-control').type('cis3760');
