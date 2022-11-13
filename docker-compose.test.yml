@@ -20,3 +20,17 @@ services:
     volumes:
       - ./server:/src
     command: ['flask', '--app', 'app', '--debug', 'run', '--host', '0.0.0.0', '--port', '3001']
+  e2e:
+    image: cypress
+    build: ./e2e
+    container_name: cypress
+    depends_on:
+      - app
+      - api
+    environment:
+      - CYPRESS_baseUrl=http://app:3000
+      - CYPRESS_VIDEO=true
+    command: npx cypress run --browser chrome
+    volumes:
+      - ./e2e/cypress:/app/cypress
+      - ./e2e/cypress.config.js:/app/cypress.config.js

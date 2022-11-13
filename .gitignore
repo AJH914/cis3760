@@ -5,3 +5,4 @@ scheduler/sections.csv
 __pycache__/
 .DS_Store
 client/node_modules
+e2e/node_modules
