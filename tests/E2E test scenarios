@@ -17,7 +17,6 @@ Test3 : Add a section of a course to schedule and check the timing is correct
 
 Open Localhost at - http://localhost:3000/
 Type a course (cis3760) on the search bar
-Assert true the return value is CIS*3760 - Software Engineering
 Click on the accordion button containing return value CIS*3760 - Software Engineering
 Add first section to the course schedule
 Assert true the tuesday meeting timings.
@@ -26,7 +25,6 @@ Test4 : Add a section, check the timing and then remove the section
 
 Open Localhost at - http://localhost:3000/
 Type a course (cis3760) on the search bar
-Assert true the return value is CIS*3760 - Software Engineering
 Click on the accordion button containing return value CIS*3760 - Software Engineering
 Add first section to the course schedule
 Assert true the tuesday meeting timings.
@@ -38,7 +36,6 @@ Test5 : Add 2 sections of 2 different courses
 
 Open Localhost at - http://localhost:3000/
 Type a course (cis3760) on the search bar
-Assert true the return value is CIS*3760 - Software Engineering
 Click on the accordion button containing return value CIS*3760 - Software Engineering
 Add first section to the course schedule
 Assert true the tuesday meeting timings.
@@ -46,5 +43,15 @@ Clicks on the cross button on search bar.
 Type another course (acct1220) on the search bar
 Add first section to the course schedule
 Assert true the friday meeting timings.
+
+Test6 : Add a section and check if the final exam was added correctly
+
+Open Localhost at - http://localhost:3000/
+Type a course (acct1220) on the search bar
+Click on the accordion button containing return value ACCT*1220 
+Add first section to the course schedule
+Assert true the monday meeting timings
+Click on view exam schedule button
+Assert true the exam date on 6th December
 
 
