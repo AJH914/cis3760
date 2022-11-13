@@ -3,7 +3,7 @@ install script
 - npm install cypress-xpath
 - npx cypress open
 
-Test1: Check the liveness of the server
+Test1: Check the liveness of the server.
 
 Open Prod Server at - https://localhost/ and make sure it is up and live.
 

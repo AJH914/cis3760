@@ -9,7 +9,7 @@ describe('Test2', () => {
     cy.visit('https://localhost/')
     cy.get('input.form-control') 
     .type('cis3760')
-    cy.xpath('//*[@id="results-accordion"]/div/h2/button') //xpath for course result
+    cy.xpath('//*[@id="results-accordion"]/div/h2/button') //xpath for course result.
     cy.contains('CIS*3760 - Software Engineering')
   })
 })
