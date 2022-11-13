@@ -16,8 +16,7 @@ jobs:
 
       - name: Start services and test
         run: |-
-          docker-compose build -f docker-compose.test.yml
-          docker-compose -f docker-compose.test.yml up --abort-on-container-exit --exit-code-from e2e
+          docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from e2e
 
       - name: Upload failure images
         uses: actions/upload-artifact@v2
