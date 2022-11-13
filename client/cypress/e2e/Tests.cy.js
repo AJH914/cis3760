@@ -49,8 +49,23 @@ describe('Add 2 sections of 2 different courses', () => {
     cy.get('input.form-control').type('acct1220');
     cy.xpath('//*[@id="results-accordion"]/div/h2/button').click(); //xpath for course result
     cy.xpath('//*[@id="collapse-1"]/div/div/li[1]/h5/button/i').click(); //xpath for section
-    cy.xpath(' //*[@id="root"]/div/div[2]/div/div[2]/div/div/div/div[2]/div/table/tbody/tr/td[2]/div/table[2]/tbody/tr/td[5]/div[1]/div/div[1]'); //xpath for cross to close search bar
+    cy.xpath('//*[@id="root"]/div/div[2]/div/div[2]/div/div/div/div[2]/div/table/tbody/tr/td[2]/div/table[2]/tbody/tr/td[5]/div[1]/div/div[1]'); 
     cy.contains('ACCT*1220 - LEC');
-    cy.xpath('//*[@id="root"]/div/div[2]/div/div[1]/div[1]/form/div/div/button').click();
+    cy.xpath('//*[@id="root"]/div/div[2]/div/div[1]/div[1]/form/div/div/button').click(); //xpath for cross to close search bar
+  });
+});
+
+describe('Add a section and check if the final exam was added correctly', () => {
+  it('passes', () => {
+    cy.visit('http://localhost:3000/');
+    cy.get('input.form-control').type('acct1220');
+    cy.xpath('//*[@id="results-accordion"]/div/h2/button').click(); //xpath for course result
+    cy.xpath('//*[@id="collapse-1"]/div/div/li[1]/h5/button/i').click(); //xpath for section
+    cy.xpath('//*[@id="root"]/div/div[2]/div/div[2]/div/div/div/div[2]/div/table/tbody/tr/td[2]/div/table[2]/tbody/tr/td[5]/div[1]/div/div[1]'); 
+    cy.contains('ACCT*1220 - LEC');
+    cy.xpath('//*[@id="root"]/div/div[2]/div/div[1]/div[1]/form/div/div/button').click(); //xpath for cross to close search bar
+    cy.xpath('//*[@id="root"]/div/div[2]/div/div[2]/div/div[2]/button').click(); //xpath for view exam
+    cy.xpath('//*[@id="root"]/div/div[2]/div/div[2]/div/div[1]'); //xpath for exam table
+    cy.contains('ACCT*1220 - EXAM');
   });
 });
