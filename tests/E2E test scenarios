@@ -5,17 +5,17 @@ install script
 
 Test1: Check the liveness of the server
 
-Open Prod Server at - https://35.237.83.181/ and make sure it is up and live.
+Open Prod Server at - https://localhost/ and make sure it is up and live.
 
 Test2 : Search a course and check the correct value
 
-Open Prod Server at - https://35.237.83.181/ 
+Open Prod Server at - https://localhost/
 Type a course (cis3760) on the search bar
 Assert true the return value is CIS*3760 - Software Engineering
 
 Test3 : Add a section of a course to schedule and check the timing is correct
 
-Open Prod Server at - https://35.237.83.181/ 
+Open Prod Server at - https://localhost/
 Type a course (cis3760) on the search bar
 Assert true the return value is CIS*3760 - Software Engineering
 Click on the accordion button containing return value CIS*3760 - Software Engineering
@@ -24,7 +24,7 @@ Assert true the tuesday meeting timings.
 
 Test4 : Add a section, check the timing and then remove the section
 
-Open Prod Server at - https://35.237.83.181/ 
+Open Prod Server at - https://localhost/
 Type a course (cis3760) on the search bar
 Assert true the return value is CIS*3760 - Software Engineering
 Click on the accordion button containing return value CIS*3760 - Software Engineering
@@ -36,7 +36,7 @@ Asserts true the section is removed.
 
 Test5 : Add 2 sections of 2 different courses
 
-Open Prod Server at - https://35.237.83.181/ 
+Open Prod Server at - https://localhost/
 Type a course (cis3760) on the search bar
 Assert true the return value is CIS*3760 - Software Engineering
 Click on the accordion button containing return value CIS*3760 - Software Engineering

@@ -1,12 +1,12 @@
 describe('Test1', () => {
   it('passes', () => {
-    cy.visit('https://35.237.83.181/')
+    cy.visit('https://localhost/')
   })
 })
 
 describe('Test2', () => {
   it('passes', () => {
-    cy.visit('https://35.237.83.181/')
+    cy.visit('https://localhost/')
     cy.get('input.form-control') 
     .type('cis3760')
     cy.xpath('//*[@id="results-accordion"]/div/h2/button') //xpath for course result
@@ -16,7 +16,7 @@ describe('Test2', () => {
 
 describe('Test3', () => {
   it('passes', () => {
-    cy.visit('https://35.237.83.181/')
+    cy.visit('https://localhost/')
     cy.get('input.form-control') 
     .type('cis3760')
     cy.xpath('//*[@id="results-accordion"]/div/h2/button').click() //xpath for course result
@@ -28,7 +28,7 @@ describe('Test3', () => {
 
 describe('Test4', () => {
   it('passes', () => {
-    cy.visit('https://35.237.83.181/')
+    cy.visit('https://localhost/')
     cy.get('input.form-control') 
     .type('cis3760')
     cy.xpath('//*[@id="results-accordion"]/div/h2/button').click() //xpath for course result
@@ -42,7 +42,7 @@ describe('Test4', () => {
 
 describe('Test5', () => {
   it('passes', () => {
-    cy.visit('https://35.237.83.181/')
+    cy.visit('https://localhost/')
     cy.get('input.form-control') 
     .type('cis3760')
     cy.xpath('//*[@id="results-accordion"]/div/h2/button').click() //xpath for course result
