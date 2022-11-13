@@ -9,7 +9,14 @@ services:
       - '3000:3000'
     environment:
       - PORT=3000
+    depends_on:
+      - api
     command: ['npm', 'start']
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000']
+      interval: 30s
+      timeout: 10s
+      retries: 5
   api:
     container_name: api
     build: ./server
@@ -25,12 +32,12 @@ services:
     build: ./e2e
     container_name: cypress
     depends_on:
-      - app
-      - api
+      app:
+        condition: service_healthy
     environment:
       - CYPRESS_baseUrl=http://app:3000
       - CYPRESS_VIDEO=true
-    command: npx wait-on http://127.0.0.1:3000 && npx cypress run --browser chrome
+    command: npx cypress run --browser chrome
     volumes:
       - ./e2e/cypress:/app/cypress
       - ./e2e/cypress.config.js:/app/cypress.config.js
