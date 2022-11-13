@@ -1,4 +1,4 @@
-FROM cypress/base:14
+FROM cypress/browsers:node14.19.0-chrome100-ff99-edge
 WORKDIR /app
 
 COPY package.json .
