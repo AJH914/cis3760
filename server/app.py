@@ -1,6 +1,6 @@
 import os
 from flask import Flask, jsonify, json, request
-from functions import formatCourses
+from functions import format_courses
 
 ENV = os.environ.get('FLASK_ENV', 'production')
 PORT = int(os.environ.get('PORT', 3001))
@@ -8,34 +8,34 @@ API_PREFIX = '/api' if ENV == 'development' else ''
 
 app = Flask(__name__)
 
-inputData = {}
-with open('data/results.json') as json_file:
-    inputData = json.load(json_file)
+input_data = {}
+with open('data/results.json', encoding='utf-8') as json_file:
+    input_data = json.load(json_file)
 
 # generate output dictionary
-courses = formatCourses(inputData)
+courses = format_courses(input_data)
 
 @app.get(API_PREFIX + "/search")
 def get_search():
     args = request.args
-    q = args.get('q')
+    temp = args.get('q')
 
-    if len(q) == 0:
+    if len(temp) == 0:
         return jsonify([])
 
-    res = search(q, courses)
+    res = search(temp, courses)
     return jsonify(res)
 
 def search(query, data):
     # treat * as space
-    
+
     queries = query.split(";")
-    queryResults = []
-    for q in queries:
-        if q.strip() != "":
-            tempQuery = q.replace("*", " ")
-            tempQuery = tempQuery.upper()
-            terms = tempQuery.split()
+    query_results = []
+    for temp in queries:
+        if temp.strip() != "":
+            temp_query = temp.replace("*", " ")
+            temp_query = temp_query.upper()
+            terms = temp_query.split()
 
             out = data
             for term in terms:
@@ -47,27 +47,27 @@ def search(query, data):
                     else:
                         sections = course['sections']
                         for section in sections:
-                            sectionId = section['section'].strip()
-                            if term in sectionId:
+                            section_id = section['section'].strip()
+                            if term in section_id:
                                 matches.append(course)
                                 break
-                            elif term in section['faculty'].strip().upper():
+                            if term in section['faculty'].strip().upper():
                                 matches.append(course)
                                 break
 
                 out = matches
-            
-            queryResults.extend(out)
-            
+
+            query_results.extend(out)
+
     # remove duplicate courses
     seen = set()
-    uniqueResults = []
-    for course in queryResults:
+    unique_results = []
+    for course in query_results:
         if course['course'] not in seen:
             seen.add(course['course'])
-            uniqueResults.append(course)
+            unique_results.append(course)
 
-    return uniqueResults
+    return unique_results
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)

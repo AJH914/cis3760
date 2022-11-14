@@ -1,12 +1,12 @@
-def formatCourses(courses):
+def format_courses(courses):
     out = []
 
-    for courseCode, sections in courses.items():
+    for course_code, sections in courses.items():
         section = sections[0]
 
         course = {
           'id': len(out)+1,
-          'course': courseCode,
+          'course': course_code,
           'courseName': section['courseName'],
           'department': section['department'],
           'courseCode': section['courseCode'],
@@ -16,5 +16,6 @@ def formatCourses(courses):
         }
 
         out.append(course)
-    
+
     return out
+    
