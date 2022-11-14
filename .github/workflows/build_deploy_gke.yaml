@@ -1,4 +1,4 @@
-name: Build and Deploy to GKE
+name: Deployment
 
 on:
   push:
@@ -14,8 +14,11 @@ env:
   REGISTRY_REPO: scheduler-repo
 
 jobs:
-  setup-build-publish-deploy:
+  build-publish-deploy:
     name: Build, Publish, and Deploy
+    environment:
+      name: production
+      url: https://35.237.83.181
     runs-on: ubuntu-latest
 
     steps:
