@@ -20,7 +20,7 @@ jobs:
           npm install
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
-      - name: Run PyLint (frontend)
+      - name: Run PyLint (backend)
         run: |-
           cd server
           pip install pylint
