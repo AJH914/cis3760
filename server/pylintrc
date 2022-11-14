@@ -1,0 +1,4 @@
+[tool.pylint."messages control"]
+disable=missing-module-docstring,
+        too-many-nested-blocks,
+        missing-function-docstring
