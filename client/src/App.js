@@ -40,7 +40,7 @@ function App() {
           <div className='row'>
             <div className='col'>
               <a href='#home'>
-                <img src={logo} className='img-fluid' alt='logo' />
+                <img src={logo} className='mt-3 img-fluid' alt='logo' />
               </a>
             </div>
           </div>
