@@ -56,7 +56,7 @@ function App() {
                       <input
                         type='text'
                         className='form-control'
-                        placeholder='Enter a course'
+                        placeholder='Enter a course here.'
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         id='search'
