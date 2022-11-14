@@ -1,4 +1,4 @@
-name: Testing
+name: Lint + Test
 
 on:
   pull_request:
@@ -6,6 +6,26 @@ on:
       - sprint*
 
 jobs:
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run ESLint (frontend)
+        run: |-
+          cd client
+          npm install
+          npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: Run PyLint (backend)
+        run: |-
+          cd server
+          pip install -r requirements.txt
+          pylint *.py --rcfile pylintrc
+
   test:
     name: Tests
     runs-on: ubuntu-latest
