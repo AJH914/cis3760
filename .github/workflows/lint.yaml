@@ -14,8 +14,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Run ESLint
+      - name: Run ESLint (frontend)
         run: |-
           cd client
           npm install
           npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: Run PyLint (frontend)
+        run: |-
+          cd server
+          pip install pylint
+          pylint *.py --rcfile pylintrc
