@@ -72,7 +72,7 @@ function App() {
                   </div>
                 </form>
               </div>
-              {results.length > 0 ? (
+              {results.length > 0 || query.length !== 0 ? (
                 <div className='mt-4 ms-4 courseResults'>
                   <SearchResults id='results' results={results} />
                 </div>
