@@ -30,7 +30,10 @@ services:
     container_name: db
     image: postgres:latest
     restart: unless-stopped
+    logging:
+      driver: none
     environment:
+      - POSTGRES_DB=scheduler
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
