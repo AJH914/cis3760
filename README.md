@@ -34,7 +34,7 @@ docker-compose up
 
 This will build the `app`, `api`, and `db` containers, and run them in the foreground (you can append the `-d` flag to run in daemon mode)
 
-You can access the frontend at https://localhost. The Flask API can be reached at https://localhost/api.
+You can access the frontend at https://localhost. The Flask API can be reached at http://localhost:3001/api.
 
 **Seeding the database:**
 
