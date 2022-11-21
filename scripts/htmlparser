@@ -36,7 +36,6 @@ except IOError:
 parser.close()
 
 # create either .sql or .json output
-
 if sys.argv[2] == '--create-seed':
     # produce sql output
 
@@ -91,13 +90,14 @@ if sys.argv[2] == '--create-seed':
                 f.write(f'INSERT INTO sections (section_id, department, course_code, course_name, section, sem, status, faculty, location, available, capacity, credits, academic_level) VALUES ({section["num"]}, \'{section["department"]}\', \'{section["courseCode"]}\', \'{course_name}\', \'{section["section"]}\', \'{semester}\', \'{section["status"]}\', \'{faculty}\', \'{section["location"]}\', {section["available"]}, {section["capacity"]}, \'{section["credits"]}\', \'{section["academicLevel"]}\');\n')
 
                 for meeting in section['meeting']:
-                    start_time = f'TO_TIMESTAMP(\'{meeting["start_time"]}\', \'HH:MI\\\AM\')::TIME' if 'TBA' not in meeting['start_time'] else 'NULL'
-                    end_time = f'TO_TIMESTAMP(\'{meeting["end_time"]}\', \'HH:MI\\\AM\')::TIME' if 'TBA' not in meeting['end_time'] else 'NULL'
+                    # to_char(to_timestamp('04:30PM', 'HH12:MIAM'), 'HH24:MI:SS')::TIME
+                    start_time = f'TO_CHAR(TO_TIMESTAMP(\'{meeting["start_time"]}\', \'HH12:MIAM\'), \'HH24:MI:SS\')::TIME' if 'TBA' not in meeting['start_time'] else 'NULL'
+                    end_time = f'TO_CHAR(TO_TIMESTAMP(\'{meeting["end_time"]}\', \'HH12:MIAM\'), \'HH24:MI:SS\')::TIME' if 'TBA' not in meeting['end_time'] else 'NULL'
 
                     exam_date = "NULL"
                     if meeting['meeting_type'] == "EXAM":
                         tokens = meeting['end_time'].split(" ")
-                        end_time = f'TO_TIMESTAMP(\'{tokens[0]}\', \'HH:MI\\\AM\')::TIME'
+                        end_time = f'TO_CHAR(TO_TIMESTAMP(\'{tokens[0]}\', \'HH12:MIAM\'), \'HH24:MI:SS\')::TIME'
                         exam_date = "TO_TIMESTAMP(\'" + tokens[1][1:-1] + "\', \'YYYY/MM/DD\')" # takes parentheses out of the date
                     f.write(f'INSERT INTO meetings (section_id, sem, meeting_type, meeting_day, start_time, end_time, building, room, exam_date) VALUES ({section["num"]}, \'{semester}\', \'{meeting["meeting_type"]}\', \'{meeting["meeting_day"]}\', {start_time}, {end_time}, \'{meeting["building"]}\', \'{meeting["room"]}\', {exam_date});\n')
             f.write('\n')
