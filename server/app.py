@@ -34,6 +34,7 @@ def search(search_terms, semester):
     semester = semester.upper()
 
     selects = []
+    params = []
     queries = search_terms.split(";")
 
     # select courses
@@ -46,15 +47,16 @@ def search(search_terms, semester):
         query = query.upper()
         terms = query.split()
         for term in terms:
-            selects.append(f"(SELECT course_name FROM sections "
-                   f"WHERE ((department || course_code) LIKE %s "
-                   f"OR course_name LIKE %s "
-                   f"OR faculty LIKE %s) "
-                   f"AND sem = %s "
-                   f"GROUP BY course_name)", (f'%{term}%', f'%{term}%', f'%{term}%', semester))
+            selects.append("(SELECT course_name FROM sections "
+                   "WHERE ((department || course_code) LIKE %s "
+                   "OR course_name LIKE %s "
+                   "OR faculty LIKE %s) "
+                   "AND sem = %s "
+                   "GROUP BY course_name)")
+            params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester])
 
     # union all the selects
-    cursor.execute(' UNION '.join(selects))
+    cursor.execute(' UNION '.join(selects), tuple(params))
     courses = cursor.fetchall()
 
     # select sections and meetings for each course found
@@ -66,8 +68,9 @@ def search(search_terms, semester):
         courses[i]['courseName'] = course_name
         courses[i].pop('course_name', None)
 
-        cursor.execute(f"SELECT * FROM sections "
-                       f"WHERE course_name = %s AND sem = %s", (course_name, semester))
+        cursor.execute("SELECT * FROM sections "
+                       "WHERE course_name = %s AND sem = %s", (course_name, semester))
+                       
         sections = cursor.fetchall()
 
         # add sections to course
@@ -87,8 +90,8 @@ def search(search_terms, semester):
                 courses[i]['academicLevel'] = section['academic_level']
 
             # add meetings to section
-            cursor.execute(f"SELECT * FROM meetings "
-                           f"WHERE section_id = %s AND sem = %s", (section_id, semester))
+            cursor.execute("SELECT * FROM meetings "
+                           "WHERE section_id = %s AND sem = %s", (section_id, semester))
             meetings = cursor.fetchall()
 
             sections[j]['meeting'] = meetings
