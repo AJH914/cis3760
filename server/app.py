@@ -39,6 +39,8 @@ def search(search_terms, semester):
 
     # select courses
     for query in queries:
+        query_selects = []
+
         if query.strip() == "":
             continue
 
@@ -47,13 +49,18 @@ def search(search_terms, semester):
         query = query.upper()
         terms = query.split()
         for term in terms:
-            selects.append("(SELECT department, course_code FROM sections "
+            if term.strip() == "":
+                continue
+            
+            query_selects.append("(SELECT department, course_code FROM sections "
                    "WHERE ((department || course_code) LIKE %s "
-                   "OR course_name LIKE %s "
-                   "OR faculty LIKE %s) "
+                   "OR UPPER(course_name) LIKE %s "
+                   "OR UPPER(faculty) LIKE %s) "
                    "AND sem = %s "
                    "GROUP BY department, course_code)")
             params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester])
+
+        selects.append(' INTERSECT '.join(query_selects))
 
     # union all the selects
     cursor.execute(' UNION '.join(selects), tuple(params))
