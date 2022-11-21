@@ -11,6 +11,10 @@ const Search = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
+    clearSearch();
+  }, [currentSem]);
+
+  useEffect(() => {
     const timeout = setTimeout(() => {
       searchCourses();
     }, 500);

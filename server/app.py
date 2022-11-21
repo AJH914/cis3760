@@ -7,15 +7,9 @@ from flask import Flask, jsonify, json, request
 ENV = os.environ.get('FLASK_ENV', 'production')
 PORT = int(os.environ.get('PORT', 3001))
 API_PREFIX = '/api' if ENV == 'development' else ''
+DB_PASS = os.environ.get('DB_PASS', 'postgres')
 
 app = Flask(__name__)
-
-DB_PASS = os.environ.get('DB_PASS', 'postgres')
-db = psycopg2.connect(database="scheduler",
-                        host="db" if ENV == 'development' else "localhost",
-                        user="postgres",
-                        password=DB_PASS,
-                        port="5432")
 
 @app.get(API_PREFIX + "/search")
 def get_search():
@@ -30,6 +24,12 @@ def get_search():
     return json.dumps(res, indent=4, sort_keys=True, default=str)
 
 def search(search_terms, semester):
+    db = psycopg2.connect(database="scheduler",
+                        host="db" if ENV == 'development' else "localhost",
+                        user="postgres",
+                        password=DB_PASS,
+                        port="5432")
+
     cursor = db.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
     semester = semester.upper()
 
@@ -99,10 +99,17 @@ def search(search_terms, semester):
         courses[i]['sections'] = sections
 
     db.commit()
+    db.close()
     return courses
 
 @app.get(API_PREFIX + "/semesters")
 def get_semesters():
+    db = psycopg2.connect(database="scheduler",
+                        host="db" if ENV == 'development' else "localhost",
+                        user="postgres",
+                        password=DB_PASS,
+                        port="5432")
+                        
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM semesters")
@@ -120,6 +127,8 @@ def get_semesters():
     alpha = 'WSF'
     response.sort(key=lambda x: (x['sem'][1:], alpha.index(x['sem'][0])))
 
+    db.commit()
+    db.close()
     return jsonify(response)
 
 if __name__ == "__main__":
