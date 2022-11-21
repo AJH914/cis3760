@@ -47,11 +47,11 @@ def search(search_terms, semester):
         terms = query.split()
         for term in terms:
             selects.append(f"(SELECT course_name FROM sections "
-                   f"WHERE ((department || course_code) LIKE '%{term}%' "
-                   f"OR course_name LIKE '%{term}%' "
-                   f"OR faculty LIKE '%{term}%') "
-                   f"AND sem = '{semester}' "
-                   f"GROUP BY course_name)")
+                   f"WHERE ((department || course_code) LIKE %s "
+                   f"OR course_name LIKE %s "
+                   f"OR faculty LIKE %s) "
+                   f"AND sem = %s "
+                   f"GROUP BY course_name)", (f'%{term}%', f'%{term}%', f'%{term}%', semester))
 
     # union all the selects
     cursor.execute(' UNION '.join(selects))
@@ -67,7 +67,7 @@ def search(search_terms, semester):
         courses[i].pop('course_name', None)
 
         cursor.execute(f"SELECT * FROM sections "
-                       f"WHERE course_name = '{course_name}' AND sem = '{semester}'")
+                       f"WHERE course_name = %s AND sem = %s", (course_name, semester))
         sections = cursor.fetchall()
 
         # add sections to course
@@ -88,7 +88,7 @@ def search(search_terms, semester):
 
             # add meetings to section
             cursor.execute(f"SELECT * FROM meetings "
-                           f"WHERE section_id = '{section_id}' AND sem = '{semester}'")
+                           f"WHERE section_id = %s AND sem = %s", (section_id, semester))
             meetings = cursor.fetchall()
 
             sections[j]['meeting'] = meetings
