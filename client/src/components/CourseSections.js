@@ -11,7 +11,7 @@ const CourseSections = ({ sections }) => {
             <SectionToggle section={section} />
           </h5>
           <br />
-          <strong>Term</strong>: {section.term}
+          <strong>Term</strong>: {section.sem}
           <br />
           <strong>Status</strong>: {section.status}
           <br />
@@ -20,15 +20,16 @@ const CourseSections = ({ sections }) => {
           <strong>Availability</strong>: {section.available} / {section.capacity}
           <br />
           <ul className='list-group list-group-flush'>
-            {section.meeting.map((meeting, i) => (
-              <li key={`meeting-${section.num}-${i}`} className='list-group-item px-1'>
-                <small>
-                  <strong>{meeting.meeting_type}</strong>
-                </small>
-                <br />
-                {meeting.meeting_day} {meeting.start_time}-{meeting.end_time} ({meeting.building} {meeting.room})
-              </li>
-            ))}
+            {section.meeting &&
+              section.meeting.map((meeting, i) => (
+                <li key={`meeting-${section.num}-${i}`} className='list-group-item px-1'>
+                  <small>
+                    <strong>{meeting.meeting_type}</strong>
+                  </small>
+                  <br />
+                  {meeting.meeting_day} {meeting.start_time}-{meeting.end_time} {meeting.exam_date} ({meeting.building} {meeting.room})
+                </li>
+              ))}
           </ul>
         </li>
       ))}

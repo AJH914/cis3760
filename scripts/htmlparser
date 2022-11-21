@@ -91,8 +91,8 @@ if sys.argv[2] == '--create-seed':
                 f.write(f'INSERT INTO sections (section_id, department, course_code, course_name, section, sem, status, faculty, location, available, capacity, credits, academic_level) VALUES ({section["num"]}, \'{section["department"]}\', \'{section["courseCode"]}\', \'{course_name}\', \'{section["section"]}\', \'{semester}\', \'{section["status"]}\', \'{faculty}\', \'{section["location"]}\', {section["available"]}, {section["capacity"]}, \'{section["credits"]}\', \'{section["academicLevel"]}\');\n')
 
                 for meeting in section['meeting']:
-                    start_time = meeting['start_time'] if 'TBA' not in meeting['start_time'] else ''
-                    end_time = meeting['end_time'] if 'TBA' not in meeting['end_time'] else ''
+                    start_time = f'TO_TIMESTAMP(\'{meeting["start_time"]}\', \'HH:MI\\\AM\')::TIME' if 'TBA' not in meeting['start_time'] else ''
+                    end_time = f'TO_TIMESTAMP(\'{meeting["end_time"]}\', \'HH:MI\\\AM\')::TIME' if 'TBA' not in meeting['end_time'] else ''
 
                     exam_date = "NULL"
                     if meeting['meeting_type'] == "EXAM":

@@ -1,10 +1,15 @@
 import React, { useState, createContext } from 'react';
 
-// export const ScheduleContext = createContext({ addSection, removeSection, schedule });
 export const ScheduleContext = createContext({});
 
 export const ScheduleContextProvider = (props) => {
   const [schedule, setSchedule] = useState([]);
+  const [semesters, setSemesters] = useState([]);
+  const [currentSem, setCurrentSem] = useState(0);
+
+  const getSchedule = () => {
+    return schedule.filter((section) => section.sem === semesters[currentSem].sem);
+  };
 
   const convertTime = (str) => {
     let [hours, minutes] = str.split(':');
@@ -79,5 +84,9 @@ export const ScheduleContextProvider = (props) => {
     return false;
   };
 
-  return <ScheduleContext.Provider value={{ schedule, addSection, removeSection, isConflict }}>{props.children}</ScheduleContext.Provider>;
+  return (
+    <ScheduleContext.Provider value={{ getSchedule, schedule, semesters, setSemesters, currentSem, setCurrentSem, addSection, removeSection, isConflict }}>
+      {props.children}
+    </ScheduleContext.Provider>
+  );
 };

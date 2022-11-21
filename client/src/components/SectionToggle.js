@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import { ScheduleContext } from '../contexts/ScheduleContext';
 
 const SectionToggle = ({ section }) => {
-  const { schedule, addSection, removeSection } = useContext(ScheduleContext);
+  const { getSchedule, addSection, removeSection } = useContext(ScheduleContext);
   const [isHovering, setHovering] = useState(false);
 
   const isSelected = (section) => {
-    return schedule.filter((s) => s.num === section.num).length === 1;
+    return getSchedule().filter((s) => s.num === section.num).length === 1;
   };
 
   const makeSelection = (section) => {

@@ -1,7 +1,8 @@
 import os
 import psycopg2
+import psycopg2.extras
+
 from flask import Flask, jsonify, json, request
-from functions import format_courses
 
 ENV = os.environ.get('FLASK_ENV', 'production')
 PORT = int(os.environ.get('PORT', 3001))
@@ -16,66 +17,86 @@ db = psycopg2.connect(database="scheduler",
                         password=DB_PASS,
                         port="5432")
 
-input_data = {}
-with open('data/results.json', encoding='utf-8') as json_file:
-    input_data = json.load(json_file)
-
-# generate output dictionary
-courses = format_courses(input_data)
-
 @app.get(API_PREFIX + "/search")
 def get_search():
     args = request.args
-    temp = args.get('q')
+    query = args.get('q')
+    sem = args.get('sem').upper()
 
-    if len(temp) == 0:
+    if len(query) == 0:
         return jsonify([])
 
-    res = search(temp, courses)
-    return jsonify(res)
+    res = search(query, sem)
+    return json.dumps(res, indent=4, sort_keys=True, default=str)
 
-def search(query, data):
-    # treat * as space
+def search(search_terms, semester):
+    cursor = db.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+    semester = semester.upper()
 
-    queries = query.split(";")
-    query_results = []
-    for temp in queries:
-        if temp.strip() != "":
-            temp_query = temp.replace("*", " ")
-            temp_query = temp_query.upper()
-            terms = temp_query.split()
+    selects = []
+    queries = search_terms.split(";")
 
-            out = data
-            for term in terms:
-                # every time only search from the courses that have been chosen by the last term
-                matches = []
-                for course in out:
-                    if term in course['course'] or term in course['courseName'].upper():
-                        matches.append(course)
-                    else:
-                        sections = course['sections']
-                        for section in sections:
-                            section_id = section['section'].strip()
-                            if term in section_id:
-                                matches.append(course)
-                                break
-                            if term in section['faculty'].strip().upper():
-                                matches.append(course)
-                                break
+    # select courses
+    for query in queries:
+        if query.strip() == "":
+            continue
 
-                out = matches
+        # perform query for each search term
+        query = query.replace("*", " ")
+        query = query.upper()
+        terms = query.split()
+        for term in terms:
+            selects.append(f"(SELECT course_name FROM sections "
+                   f"WHERE ((department || course_code) LIKE '%{term}%' "
+                   f"OR course_name LIKE '%{term}%' "
+                   f"OR faculty LIKE '%{term}%') "
+                   f"AND sem = '{semester}' "
+                   f"GROUP BY course_name)")
 
-            query_results.extend(out)
+    # union all the selects
+    cursor.execute(' UNION '.join(selects))
+    courses = cursor.fetchall()
 
-    # remove duplicate courses
-    seen = set()
-    unique_results = []
-    for course in query_results:
-        if course['course'] not in seen:
-            seen.add(course['course'])
-            unique_results.append(course)
+    # select sections and meetings for each course found
+    for i in range(len(courses)):
+        course = courses[i]
+        course_name = course['course_name']
 
-    return unique_results
+        courses[i]['id'] = i+1
+        courses[i]['courseName'] = course_name
+        courses[i].pop('course_name', None)
+
+        cursor.execute(f"SELECT * FROM sections "
+                       f"WHERE course_name = '{course_name}' AND sem = '{semester}'")
+        sections = cursor.fetchall()
+
+        # add sections to course
+        for j in range(len(sections)):
+            section = sections[j]
+            section_id = section['section_id']
+
+            sections[j]['courseCode'] = section['course_code']
+            sections[j]['courseName'] = section['course_name']
+            sections[j]['num'] = section['section_id']
+
+            if j == 0:
+                courses[i]['course'] = section['department'] + section['course_code']
+                courses[i]['department'] = section['department']
+                courses[i]['courseCode'] = section['course_code']
+                courses[i]['credits'] = section['credits']
+                courses[i]['academicLevel'] = section['academic_level']
+
+            # add meetings to section
+            cursor.execute(f"SELECT * FROM meetings "
+                           f"WHERE section_id = '{section_id}' AND sem = '{semester}'")
+            meetings = cursor.fetchall()
+
+            sections[j]['meeting'] = meetings
+
+        courses[i]['sections'] = sections
+
+    db.commit()
+    return courses
 
 @app.get(API_PREFIX + "/semesters")
 def get_semesters():
