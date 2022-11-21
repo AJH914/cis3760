@@ -11,28 +11,11 @@ export const ScheduleContextProvider = (props) => {
     return schedule.filter((section) => section.sem === semesters[currentSem].sem);
   };
 
-  const convertTime = (str) => {
-    let [hours, minutes] = str.split(':');
-    const modifier = minutes.slice(-2);
-    minutes = minutes.replace('AM', '');
-    minutes = minutes.replace('PM', '');
-
-    if (hours === '12') {
-      hours = '00';
-    }
-
-    if (modifier === 'PM') {
-      hours = parseInt(hours) + 12;
-    }
-
-    return `${hours}:${minutes}:00`;
-  };
-
   const getMeetingTimes = (meeting) => {
     const today = new Date().toJSON().slice(0, 10);
 
-    const start = new Date(`${today}T${convertTime(meeting.start_time)}`);
-    const end = new Date(`${today}T${convertTime(meeting.end_time)}`);
+    const start = new Date(`${today}T${meeting.start_time}`);
+    const end = new Date(`${today}T${meeting.end_time}`);
 
     return [start, end];
   };
@@ -63,6 +46,7 @@ export const ScheduleContextProvider = (props) => {
         if (sSection.num === section.num) continue;
 
         for (let sMeeting of sSection.meeting) {
+          if (meeting.sem != sMeeting.sem) continue;
           if (isInvalidMeeting(sMeeting)) continue;
 
           const [sStart, sEnd] = getMeetingTimes(sMeeting);

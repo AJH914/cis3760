@@ -47,12 +47,12 @@ def search(search_terms, semester):
         query = query.upper()
         terms = query.split()
         for term in terms:
-            selects.append("(SELECT course_name FROM sections "
+            selects.append("(SELECT department, course_code FROM sections "
                    "WHERE ((department || course_code) LIKE %s "
                    "OR course_name LIKE %s "
                    "OR faculty LIKE %s) "
                    "AND sem = %s "
-                   "GROUP BY course_name)")
+                   "GROUP BY department, course_code)")
             params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester])
 
     # union all the selects
@@ -62,15 +62,12 @@ def search(search_terms, semester):
     # select sections and meetings for each course found
     for i in range(len(courses)):
         course = courses[i]
-        course_name = course['course_name']
-
         courses[i]['id'] = i+1
-        courses[i]['courseName'] = course_name
-        courses[i].pop('course_name', None)
 
         cursor.execute("SELECT * FROM sections "
-                       "WHERE course_name = %s AND sem = %s", (course_name, semester))
-                       
+                       "WHERE department = %s AND course_code = %s AND sem = %s", 
+                       (course['department'], course['course_code'], semester))
+
         sections = cursor.fetchall()
 
         # add sections to course
@@ -84,6 +81,7 @@ def search(search_terms, semester):
 
             if j == 0:
                 courses[i]['course'] = section['department'] + section['course_code']
+                courses[i]['courseName'] = section['course_name']
                 courses[i]['department'] = section['department']
                 courses[i]['courseCode'] = section['course_code']
                 courses[i]['credits'] = section['credits']
@@ -109,7 +107,7 @@ def get_semesters():
                         user="postgres",
                         password=DB_PASS,
                         port="5432")
-                        
+
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM semesters")

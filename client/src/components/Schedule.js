@@ -39,23 +39,6 @@ const Schedule = ({ config }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schedule, currentSem]);
 
-  const convertTime = (str) => {
-    let [hours, minutes] = str.split(':');
-    const modifier = minutes.slice(-2);
-    minutes = minutes.replace('AM', '');
-    minutes = minutes.replace('PM', '');
-
-    if (hours === '12') {
-      hours = '00';
-    }
-
-    if (modifier === 'PM') {
-      hours = parseInt(hours) + 12;
-    }
-
-    return `${hours}:${minutes}:00`;
-  };
-
   const updateCalendarData = (sections) => {
     let meetings = [];
     sections.forEach((s) => {
@@ -71,8 +54,8 @@ const Schedule = ({ config }) => {
             id: meetings.length + 1,
             sectionNum: s.num,
             html: `${s.department}*${s.courseCode} - ${meeting.meeting_type}<br />${meeting.building} ${meeting.room}`,
-            start: date + 'T' + convertTime(meeting.start_time),
-            end: date + 'T' + convertTime(meeting.end_time),
+            start: date + 'T' + meeting.start_time,
+            end: date + 'T' + meeting.end_time,
             barColor: '#fcb711',
             resource: day.toLowerCase(),
             ...eventConfig
