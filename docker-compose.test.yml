@@ -22,7 +22,8 @@ services:
     container_name: api
     build: ./server
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - FLASK_ENV=development
     ports:
@@ -35,12 +36,20 @@ services:
     image: postgres:latest
     restart: unless-stopped
     environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=scheduler
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
     volumes:
-      - db:/var/lib/postgresql/data
+      - ./test/sql/seed_f22.sql:/docker-entrypoint-initdb.d/seed_f22.sql
+      - ./test/sql/seed_w23.sql:/docker-entrypoint-initdb.d/seed_w23.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 60s
+      retries: 5
   e2e:
     image: cypress
     build: ./e2e
@@ -55,6 +64,3 @@ services:
     volumes:
       - ./e2e/cypress:/app/cypress
       - ./e2e/cypress.config.js:/app/cypress.config.js
-volumes:
-  db:
-    driver: local

@@ -1,4 +1,5 @@
 import os
+import psycopg2
 from flask import Flask, jsonify, json, request
 from functions import format_courses
 
@@ -7,6 +8,13 @@ PORT = int(os.environ.get('PORT', 3001))
 API_PREFIX = '/api' if ENV == 'development' else ''
 
 app = Flask(__name__)
+
+DB_PASS = os.environ.get('DB_PASS', 'postgres')
+db = psycopg2.connect(database="scheduler",
+                        host="db" if ENV == 'development' else "localhost",
+                        user="postgres",
+                        password=DB_PASS,
+                        port="5432")
 
 input_data = {}
 with open('data/results.json', encoding='utf-8') as json_file:
@@ -68,6 +76,27 @@ def search(query, data):
             unique_results.append(course)
 
     return unique_results
+
+@app.get(API_PREFIX + "/semesters")
+def get_semesters():
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM semesters")
+    semesters = cursor.fetchall()
+    db.commit()
+
+    response = []
+    for data in semesters:
+        response.append({
+            "sem": data[0],
+            "name": data[1]
+        })
+
+    # sort response by year then semester (winter, summer, fall)
+    alpha = 'WSF'
+    response.sort(key=lambda x: (x['sem'][1:], alpha.index(x['sem'][0])))
+
+    return jsonify(response)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)

@@ -18,7 +18,7 @@ jobs:
         run: |-
           cd client
           npm install
-          npx eslint . --ext .js,.jsx,.ts,.tsx
+          npm run lint
 
       - name: Run PyLint (backend)
         run: |-

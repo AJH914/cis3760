@@ -60,7 +60,7 @@ if sys.argv[2] == '--create-seed':
             f'PRIMARY KEY (section_id, sem));\n\n'
         ))
 
-        f.write(f'CREATE INDEX idx_section_search ON sections(department, course_code, course_name, section, sem, faculty);\n\n')
+        f.write(f'CREATE INDEX IF NOT EXISTS idx_section_search ON sections(department, course_code, course_name, section, sem, faculty);\n\n')
 
         f.write((
             f'CREATE TABLE IF NOT EXISTS meetings ('
