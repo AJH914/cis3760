@@ -48,30 +48,3 @@ spec:
             requests:
               memory: '8Mi'
               cpu: '100m'
-        - name: postgres
-          image: postgres:10
-          imagePullPolicy: Always
-          resources:
-            limits:
-              cpu: '100m'
-              memory: '128Mi'
-            requests:
-              cpu: '100m'
-              memory: '32Mi'
-          ports:
-            - containerPort: 5433
-          env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-password
-                  key: password
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
-          volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: postgredb
-      volumes:
-        - name: postgredb
-          persistentVolumeClaim:
-            claimName: postgresql-pv
