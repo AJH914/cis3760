@@ -4,12 +4,26 @@ import psycopg2.extras
 
 from flask import Flask, jsonify, json, request
 
+# api config
 ENV = os.environ.get('FLASK_ENV', 'production')
 PORT = int(os.environ.get('PORT', 3001))
 API_PREFIX = '/api' if ENV == 'development' else ''
+
+# db config
+DB_HOST = 'db' if ENV == 'development' else 'postgres'
+DB_USER = 'postgres'
 DB_PASS = os.environ.get('DB_PASS', 'postgres')
+DB_DATABASE = 'scheduler'
+DB_PORT = 5432
 
 app = Flask(__name__)
+
+def connect_db():
+    return psycopg2.connect(database=DB_DATABASE,
+                        host=DB_HOST,
+                        user=DB_USER,
+                        password=DB_PASS,
+                        port=DB_PORT)
 
 @app.get(API_PREFIX + "/search")
 def get_search():
@@ -24,11 +38,7 @@ def get_search():
     return json.dumps(res, indent=4, sort_keys=True, default=str)
 
 def search(search_terms, semester):
-    db = psycopg2.connect(database="scheduler",
-                        host="db" if ENV == 'development' else "localhost",
-                        user="postgres",
-                        password=DB_PASS,
-                        port="5432")
+    db = connect_db()
 
     cursor = db.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
     semester = semester.upper()
@@ -109,11 +119,7 @@ def search(search_terms, semester):
 
 @app.get(API_PREFIX + "/semesters")
 def get_semesters():
-    db = psycopg2.connect(database="scheduler",
-                        host="db" if ENV == 'development' else "localhost",
-                        user="postgres",
-                        password=DB_PASS,
-                        port="5432")
+    db = connect_db()
 
     cursor = db.cursor()
 
