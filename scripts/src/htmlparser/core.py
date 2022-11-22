@@ -28,7 +28,9 @@ class HTMLCourseParser(HTMLParser):
 
         # dictionary for each class section and each meeting time
         self.section_dict = {
-            'meeting': []
+            'meeting': [],
+            'available': 0,
+            'capacity': 0
         }
 
         self.meeting_dict = {}
@@ -182,7 +184,9 @@ class HTMLCourseParser(HTMLParser):
             self.course_mappings[self.section_dict['courseName'].upper()] = coursekey
 
             self.section_dict = {
-                'meeting': []
+                'meeting': [],
+                'available': 0,
+                'capacity': 0
             }
 
             self.current_data = ''

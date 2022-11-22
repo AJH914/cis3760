@@ -1,37 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import logo from './logo5.png';
 import './App.css';
 import Schedule from './components/Schedule';
-import SearchResults from './components/SearchResults';
 import { ScheduleContextProvider } from './contexts/ScheduleContext';
-import SelectedSections from './components/SelectedSections';
 import ExamSchedule from './components/ExamSchedule';
+import SemesterSelector from './components/SemesterSelector';
+import Search from './components/Search';
 
 function App() {
-  const [results, setResult] = useState([]);
-  const [query, setQuery] = useState('');
-
   const [examView, setExamView] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      searchCourses();
-    }, 500);
-
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
-  const searchCourses = async () => {
-    const res = await axios.get('/api/search', { params: { q: query } });
-    setResult(res.data);
-  };
-
-  const clearSearch = () => {
-    setResult([]);
-    setQuery('');
-  };
 
   return (
     <ScheduleContextProvider>
@@ -48,39 +25,7 @@ function App() {
         <div className='container-fluid'>
           <div className='row'>
             <div className='col-xl-4'>
-              <div className='mt-4 ms-4 px-4 py-4 rounded-4 courses'>
-                <div className='fs-3'>Search Courses</div>
-                <form className='mt-2' onSubmit={(e) => e.preventDefault()}>
-                  <div className='mb-3'>
-                    <div className='input-group mb-3'>
-                      <input
-                        type='text'
-                        className='form-control'
-                        placeholder='Enter a course'
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        id='search'
-                      />
-                      <button
-                        className={`btn btn-${query.length > 0 ? 'danger' : 'primary'}`}
-                        type='button'
-                        onClick={query.length === 0 ? searchCourses : () => clearSearch()}
-                      >
-                        <i className={`bi bi-${query.length > 0 ? 'x-lg' : 'search'}`}></i>
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              {results.length > 0 || query.length !== 0 ? (
-                <div className='mt-4 ms-4 courseResults'>
-                  <SearchResults id='results' results={results} />
-                </div>
-              ) : (
-                <div className='mt-4 ms-4 courseResults'>
-                  <SelectedSections />
-                </div>
-              )}
+              <Search />
             </div>
             {/*
           <div className='col-xl'>
@@ -136,7 +81,10 @@ function App() {
             </div>
           </div>
           */}
+
             <div className='col-xl-8'>
+              <SemesterSelector />
+
               <div className='mt-4 me-4'>
                 {!examView ? <Schedule /> : <ExamSchedule />}
                 <div className='d-grid'>

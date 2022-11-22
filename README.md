@@ -32,9 +32,23 @@ If you are on a modern flavor of Linux, you can run the `install.sh` script in t
 docker-compose up
 ```
 
-This will build the `app` and `api` containers, and run them in the foreground (you can append the `-d` flag to run in daemon mode)
+This will build the `app`, `api`, and `db` containers, and run them in the foreground (you can append the `-d` flag to run in daemon mode)
 
-You can access the frontend at https://localhost. The Flask API can be reached at https://localhost/api.
+You can access the frontend at https://localhost. The Flask API can be reached at http://localhost:3001/api.
+
+**Seeding the database:**
+
+When running the project locally for the first time, you must seed the database
+so that it is populated with course information. Run the following:
+
+```
+cd scripts
+pip3 install -r requirements.txt
+chmod 755 htmlparser seed_db
+python3 htmlparser data/f22.html --create-seed f22
+python3 htmlparser data/w23.html --create-seed w23
+python3 seed_db
+```
 
 **To bring down the project, run:**
 

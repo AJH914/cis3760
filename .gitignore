@@ -1,5 +1,7 @@
 scripts/data/results.json
 scripts/data/course_mapping.json
+scripts/data/seeds/*.sql
+scripts/venv
 scheduler/meetings.csv
 scheduler/sections.csv
 __pycache__/

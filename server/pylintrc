@@ -2,4 +2,5 @@
 disable=missing-module-docstring,
         too-many-nested-blocks,
         missing-function-docstring,
-        too-many-locals
+        too-many-locals,
+        consider-using-enumerate

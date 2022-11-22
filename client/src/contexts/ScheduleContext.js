@@ -1,33 +1,21 @@
 import React, { useState, createContext } from 'react';
 
-// export const ScheduleContext = createContext({ addSection, removeSection, schedule });
 export const ScheduleContext = createContext({});
 
 export const ScheduleContextProvider = (props) => {
   const [schedule, setSchedule] = useState([]);
+  const [semesters, setSemesters] = useState([]);
+  const [currentSem, setCurrentSem] = useState(0);
 
-  const convertTime = (str) => {
-    let [hours, minutes] = str.split(':');
-    const modifier = minutes.slice(-2);
-    minutes = minutes.replace('AM', '');
-    minutes = minutes.replace('PM', '');
-
-    if (hours === '12') {
-      hours = '00';
-    }
-
-    if (modifier === 'PM') {
-      hours = parseInt(hours) + 12;
-    }
-
-    return `${hours}:${minutes}:00`;
+  const getSchedule = () => {
+    return schedule.filter((section) => section.sem === semesters[currentSem].sem);
   };
 
   const getMeetingTimes = (meeting) => {
     const today = new Date().toJSON().slice(0, 10);
 
-    const start = new Date(`${today}T${convertTime(meeting.start_time)}`);
-    const end = new Date(`${today}T${convertTime(meeting.end_time)}`);
+    const start = new Date(`${today}T${meeting.start_time}`);
+    const end = new Date(`${today}T${meeting.end_time}`);
 
     return [start, end];
   };
@@ -58,6 +46,7 @@ export const ScheduleContextProvider = (props) => {
         if (sSection.num === section.num) continue;
 
         for (let sMeeting of sSection.meeting) {
+          if (meeting.sem != sMeeting.sem) continue;
           if (isInvalidMeeting(sMeeting)) continue;
 
           const [sStart, sEnd] = getMeetingTimes(sMeeting);
@@ -79,5 +68,9 @@ export const ScheduleContextProvider = (props) => {
     return false;
   };
 
-  return <ScheduleContext.Provider value={{ schedule, addSection, removeSection, isConflict }}>{props.children}</ScheduleContext.Provider>;
+  return (
+    <ScheduleContext.Provider value={{ getSchedule, schedule, semesters, setSemesters, currentSem, setCurrentSem, addSection, removeSection, isConflict }}>
+      {props.children}
+    </ScheduleContext.Provider>
+  );
 };

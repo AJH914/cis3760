@@ -3,7 +3,7 @@ import { DayPilotMonth } from '@daypilot/daypilot-lite-react';
 import { ScheduleContext } from '../contexts/ScheduleContext';
 
 const ExamSchedule = ({ config }) => {
-  const { schedule, removeSection } = useContext(ScheduleContext);
+  const { schedule, getSchedule, currentSem, removeSection } = useContext(ScheduleContext);
 
   const calendarRef = useRef(null);
 
@@ -22,26 +22,9 @@ const ExamSchedule = ({ config }) => {
   };
 
   useEffect(() => {
-    updateCalendarData(schedule);
+    updateCalendarData(getSchedule());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schedule]);
-
-  const convertTime = (str) => {
-    let [hours, minutes] = str.split(':');
-    const modifier = minutes.slice(-2);
-    minutes = minutes.replace('AM', '');
-    minutes = minutes.replace('PM', '');
-
-    if (hours === '12') {
-      hours = '00';
-    }
-
-    if (modifier === 'PM') {
-      hours = parseInt(hours) + 12;
-    }
-
-    return `${hours}:${minutes}:00`;
-  };
+  }, [schedule, currentSem]);
 
   const updateCalendarData = (sections) => {
     let exams = [];
@@ -51,16 +34,15 @@ const ExamSchedule = ({ config }) => {
       s.meeting.forEach((meeting) => {
         if (meeting.meeting_type !== 'EXAM') return;
 
-        const segments = meeting.end_time.split(' ');
-        const date = new Date(segments[1].slice(1, -1)).toJSON().slice(0, 10);
+        const date = meeting.exam_date;
         month = date.slice(0, 7);
 
         exams.push({
           id: exams.length + 1,
           sectionNum: s.num,
           html: `${s.department}*${s.courseCode} - ${meeting.meeting_type}`,
-          start: date + 'T' + convertTime(meeting.start_time),
-          end: date + 'T' + convertTime(segments[0]),
+          start: date + 'T' + meeting.start_time,
+          end: date + 'T' + meeting.end_time,
           ...eventConfig
         });
       });

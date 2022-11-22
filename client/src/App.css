@@ -9,8 +9,8 @@
 }
 
 .courseResults {
-  height: 495px;
-  overflow-y: scroll;
+  max-height: 495px;
+  overflow-y: auto;
 }
 
 .accordion-header span {
