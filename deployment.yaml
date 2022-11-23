@@ -29,11 +29,11 @@ spec:
                   key: password
           resources:
             limits:
-              memory: '128Mi'
-              cpu: '100m'
+              memory: '496Mi'
+              cpu: '150m'
             requests:
-              memory: '64Mi'
-              cpu: '100m'
+              memory: '496Mi'
+              cpu: '150m'
         - name: scheduler-app
           image: us-east1-docker.pkg.dev/cis3760-web-app/scheduler-repo/scheduler-app:<VERSION>
           imagePullPolicy: Always
@@ -43,8 +43,8 @@ spec:
             - containerPort: 443
           resources:
             limits:
-              memory: '64Mi'
+              memory: '16Mi'
               cpu: '100m'
             requests:
-              memory: '8Mi'
+              memory: '16Mi'
               cpu: '100m'
