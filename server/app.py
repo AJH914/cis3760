@@ -95,6 +95,7 @@ def search(search_terms, semester):
             sections[j]['courseCode'] = section['course_code']
             sections[j]['courseName'] = section['course_name']
             sections[j]['num'] = section['section_id']
+            sections[j]['section'] = section['section'].strip()
 
             if j == 0:
                 courses[i]['course'] = section['department'] + section['course_code']

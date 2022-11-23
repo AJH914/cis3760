@@ -40,7 +40,7 @@ const ExamSchedule = ({ config }) => {
         exams.push({
           id: exams.length + 1,
           sectionNum: s.num,
-          html: `${s.department}*${s.courseCode} - ${meeting.meeting_type}`,
+          html: `${s.department}*${s.courseCode}*${s.section} - ${meeting.meeting_type}`,
           start: date + 'T' + meeting.start_time,
           end: date + 'T' + meeting.end_time,
           ...eventConfig

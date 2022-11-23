@@ -1,24 +1,26 @@
 import React from 'react';
 import CourseSections from './CourseSections';
 
-const CourseResult = ({ accordion, data }) => {
+const CourseResult = ({ accordion, data, opened }) => {
   return (
     <div className='accordion-item'>
-      <h2 className='accordion-header'>
-        <button
-          className='accordion-button collapsed'
-          type='button'
-          data-bs-toggle='collapse'
-          data-bs-target={`#collapse-${data.id}`}
-          aria-expanded='false'
-          aria-controls={`#collapse-${data.id}`}
-        >
-          <span className='text-truncate'>
-            {data.department}*{data.courseCode} - {data.courseName}
-          </span>
-        </button>
-      </h2>
-      <div id={`collapse-${data.id}`} className='accordion-collapse collapse' data-bs-parent={`#${accordion}-accordion`}>
+      {!opened && (
+        <h2 className='accordion-header'>
+          <button
+            className='accordion-button collapsed'
+            type='button'
+            data-bs-toggle='collapse'
+            data-bs-target={`#collapse-${data.id}`}
+            aria-expanded='false'
+            aria-controls={`#collapse-${data.id}`}
+          >
+            <span className='text-truncate'>
+              {data.department}*{data.courseCode} - {data.courseName}
+            </span>
+          </button>
+        </h2>
+      )}
+      <div id={`collapse-${data.id}`} className={`accordion-collapse collapse ${opened && 'show'}`} data-bs-parent={`#${accordion}-accordion`}>
         <div className='accordion-body'>
           <h4>{data.courseName}</h4>
           <strong>Course Code</strong>: {data.department}*{data.courseCode}

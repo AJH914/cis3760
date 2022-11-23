@@ -53,7 +53,7 @@ const Schedule = ({ config }) => {
           let toAdd = {
             id: meetings.length + 1,
             sectionNum: s.num,
-            html: `${s.department}*${s.courseCode} - ${meeting.meeting_type}<br />${meeting.building} ${meeting.room}`,
+            html: `${s.department}*${s.courseCode}*${s.section} - ${meeting.meeting_type}<br />${meeting.building} ${meeting.room}`,
             start: date + 'T' + meeting.start_time,
             end: date + 'T' + meeting.end_time,
             barColor: '#fcb711',

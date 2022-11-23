@@ -12,7 +12,7 @@ const SelectedSections = () => {
       {schedule.map((section) => (
         <li key={section.num} className='list-group-item p-3'>
           <h5>
-            {section.department}*{section.courseCode} {section.courseName} - {section.section}
+            {section.department}*{section.courseCode}*{section.section}: {section.courseName}
             <SectionToggle section={section} />
           </h5>
         </li>
