@@ -39,8 +39,8 @@ const Search = () => {
 
   return (
     <>
-      <div className='ms-4 px-4 py-4 rounded-4 courses'>
-        <div className='fs-3'>Search Courses</div>
+      <div className='px-4 py-4 rounded-4 courses'>
+        <h3>Search Courses</h3>
         <form className='mt-2' onSubmit={(e) => e.preventDefault()}>
           <div className='mb-3'>
             <div className='input-group mb-3'>
@@ -57,11 +57,11 @@ const Search = () => {
         </form>
       </div>
       {results.length > 0 || query.length !== 0 ? (
-        <div className='mt-4 ms-4 courseResults'>
+        <div className='my-4 courseResults flex-grow-1'>
           <SearchResults id='results' results={results} />
         </div>
       ) : (
-        <div className='mt-4 ms-4 courseResults'>
+        <div className='my-4 courseResults flex-grow-1'>
           <SelectedSections />
         </div>
       )}

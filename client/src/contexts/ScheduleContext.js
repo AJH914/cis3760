@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 
 export const ScheduleContext = createContext({});
 
@@ -6,6 +6,37 @@ export const ScheduleContextProvider = (props) => {
   const [schedule, setSchedule] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [currentSem, setCurrentSem] = useState(0);
+
+  // load from local storage on mount
+  useEffect(() => {
+    const localSchedule = JSON.parse(localStorage.getItem('schedule'));
+    if (localSchedule) {
+      setSchedule(localSchedule);
+    }
+
+    const localSemesters = JSON.parse(localStorage.getItem('semesters'));
+    if (localSemesters) {
+      setSemesters(localSemesters);
+    }
+
+    const localCurrentSem = JSON.parse(localStorage.getItem('currentSem'));
+    if (localCurrentSem) {
+      setCurrentSem(localCurrentSem);
+    }
+  }, []);
+
+  // save to local storage on update
+  useEffect(() => {
+    if (schedule.length > 0) {
+      localStorage.setItem('schedule', JSON.stringify(schedule));
+    }
+
+    if (semesters.length > 0) {
+      localStorage.setItem('semesters', JSON.stringify(semesters));
+    }
+
+    localStorage.setItem('currentSem', JSON.stringify(currentSem));
+  }, [schedule, semesters, currentSem]);
 
   const getSchedule = () => {
     return schedule.filter((section) => section.sem === semesters[currentSem].sem);
@@ -34,6 +65,10 @@ export const ScheduleContextProvider = (props) => {
 
   const removeSection = (sectionNum) => {
     setSchedule(schedule.filter((s) => s.num !== sectionNum));
+  };
+
+  const clearSchedule = () => {
+    setSchedule(schedule.filter((section) => section.sem !== semesters[currentSem].sem));
   };
 
   const isConflict = (section) => {
@@ -69,7 +104,9 @@ export const ScheduleContextProvider = (props) => {
   };
 
   return (
-    <ScheduleContext.Provider value={{ getSchedule, schedule, semesters, setSemesters, currentSem, setCurrentSem, addSection, removeSection, isConflict }}>
+    <ScheduleContext.Provider
+      value={{ getSchedule, schedule, semesters, setSemesters, currentSem, setCurrentSem, addSection, removeSection, clearSchedule, isConflict }}
+    >
       {props.children}
     </ScheduleContext.Provider>
   );

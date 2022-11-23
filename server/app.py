@@ -38,9 +38,9 @@ def get_search():
     return json.dumps(res, indent=4, sort_keys=True, default=str)
 
 def search(search_terms, semester):
-    db = connect_db()
+    db_conn = connect_db()
 
-    cursor = db.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+    cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
     semester = semester.upper()
 
     selects = []
@@ -61,7 +61,7 @@ def search(search_terms, semester):
         for term in terms:
             if term.strip() == "":
                 continue
-            
+
             query_selects.append("(SELECT department, course_code FROM sections "
                    "WHERE ((department || course_code) LIKE %s "
                    "OR UPPER(course_name) LIKE %s "
@@ -82,7 +82,7 @@ def search(search_terms, semester):
         courses[i]['id'] = i+1
 
         cursor.execute("SELECT * FROM sections "
-                       "WHERE department = %s AND course_code = %s AND sem = %s", 
+                       "WHERE department = %s AND course_code = %s AND sem = %s",
                        (course['department'], course['course_code'], semester))
 
         sections = cursor.fetchall()
@@ -113,19 +113,19 @@ def search(search_terms, semester):
 
         courses[i]['sections'] = sections
 
-    db.commit()
-    db.close()
+    db_conn.commit()
+    db_conn.close()
     return courses
 
 @app.get(API_PREFIX + "/semesters")
 def get_semesters():
-    db = connect_db()
+    db_conn = connect_db()
 
-    cursor = db.cursor()
+    cursor = db_conn.cursor()
 
     cursor.execute("SELECT * FROM semesters")
     semesters = cursor.fetchall()
-    db.commit()
+    db_conn.commit()
 
     response = []
     for data in semesters:
@@ -138,8 +138,8 @@ def get_semesters():
     alpha = 'WSF'
     response.sort(key=lambda x: (x['sem'][1:], alpha.index(x['sem'][0])))
 
-    db.commit()
-    db.close()
+    db_conn.commit()
+    db_conn.close()
     return jsonify(response)
 
 if __name__ == "__main__":
