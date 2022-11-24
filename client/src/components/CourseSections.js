@@ -5,7 +5,7 @@ const CourseSections = ({ sections }) => {
   return (
     <div className='list-group'>
       {sections.map((section) => (
-        <li key={section.num} className='list-group-item p-3'>
+        <li key={section.section_id} className='list-group-item p-3'>
           <h5 className='mb-0'>
             {section.section}
             <SectionToggle section={section} />
@@ -20,9 +20,9 @@ const CourseSections = ({ sections }) => {
           <strong>Availability</strong>: {section.available} / {section.capacity}
           <br />
           <ul className='list-group list-group-flush'>
-            {section.meeting &&
-              section.meeting.map((meeting, i) => (
-                <li key={`meeting-${section.num}-${i}`} className='list-group-item px-1'>
+            {section.meetings &&
+              section.meetings.map((meeting, i) => (
+                <li key={`meeting-${section.section_id}-${i}`} className='list-group-item px-1'>
                   <small>
                     <strong>{meeting.meeting_type}</strong>
                   </small>

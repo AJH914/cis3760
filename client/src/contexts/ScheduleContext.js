@@ -63,8 +63,8 @@ export const ScheduleContextProvider = (props) => {
     setSchedule([...schedule, section]);
   };
 
-  const removeSection = (sectionNum) => {
-    setSchedule(schedule.filter((s) => s.num !== sectionNum));
+  const removeSection = (sectionId) => {
+    setSchedule(schedule.filter((s) => s.section_id !== sectionId));
   };
 
   const clearSchedule = () => {
@@ -72,15 +72,15 @@ export const ScheduleContextProvider = (props) => {
   };
 
   const isConflict = (section) => {
-    for (let meeting of section.meeting) {
+    for (let meeting of section.meetings) {
       if (isInvalidMeeting(meeting)) continue;
 
       const [start, end] = getMeetingTimes(meeting);
 
       for (let sSection of schedule) {
-        if (sSection.num === section.num) continue;
+        if (sSection.section_id === section.section_id) continue;
 
-        for (let sMeeting of sSection.meeting) {
+        for (let sMeeting of sSection.meetings) {
           if (meeting.sem != sMeeting.sem) continue;
           if (isInvalidMeeting(sMeeting)) continue;
 

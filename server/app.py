@@ -47,7 +47,7 @@ def search(search_terms, semester):
     params = []
     queries = search_terms.split(";")
 
-    # select courses
+    # select sections
     for query in queries:
         query_selects = []
 
@@ -62,61 +62,50 @@ def search(search_terms, semester):
             if term.strip() == "":
                 continue
 
-            query_selects.append("(SELECT department, course_code FROM sections "
+            query_selects.append("(SELECT * FROM sections "
                    "WHERE ((department || course_code) LIKE %s "
                    "OR UPPER(course_name) LIKE %s "
                    "OR UPPER(faculty) LIKE %s) "
                    "AND sem = %s "
-                   "GROUP BY department, course_code)")
+                   ")")
             params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester])
 
         selects.append(' INTERSECT '.join(query_selects))
 
     # union all the selects
     cursor.execute(' UNION '.join(selects), tuple(params))
-    courses = cursor.fetchall()
+    sections = cursor.fetchall()
 
-    # select sections and meetings for each course found
-    for i in range(len(courses)):
-        course = courses[i]
-        courses[i]['id'] = i+1
+    # group by course and select meetings for each section found
+    courses = {}
+    for i in range(len(sections)):
+        course_id = sections[i]['department'] + sections[i]['course_code']
+        section = sections[i]
 
-        cursor.execute("SELECT * FROM sections "
-                       "WHERE department = %s AND course_code = %s AND sem = %s",
-                       (course['department'], course['course_code'], semester))
+        if course_id not in courses:
+            courses[course_id] = {
+                'id': len(courses) + 1,
+                'course': sections[i]['department'] + sections[i]['course_code'],
+                'department': sections[i]['department'],
+                'course_code': sections[i]['course_code'],
+                'course_name': sections[i]['course_name'],
+                'academic_level': sections[i]['academic_level'],
+                'credits': sections[i]['credits'],
+                'sections': []
+            }
 
-        sections = cursor.fetchall()
+        # add meetings to section
+        cursor.execute("SELECT * FROM meetings "
+                        "WHERE section_id = %s AND sem = %s", (section['section_id'], semester))
 
-        # add sections to course
-        for j in range(len(sections)):
-            section = sections[j]
-            section_id = section['section_id']
+        meetings = cursor.fetchall()
 
-            sections[j]['courseCode'] = section['course_code']
-            sections[j]['courseName'] = section['course_name']
-            sections[j]['num'] = section['section_id']
-            sections[j]['section'] = section['section'].strip()
-
-            if j == 0:
-                courses[i]['course'] = section['department'] + section['course_code']
-                courses[i]['courseName'] = section['course_name']
-                courses[i]['department'] = section['department']
-                courses[i]['courseCode'] = section['course_code']
-                courses[i]['credits'] = section['credits']
-                courses[i]['academicLevel'] = section['academic_level']
-
-            # add meetings to section
-            cursor.execute("SELECT * FROM meetings "
-                           "WHERE section_id = %s AND sem = %s", (section_id, semester))
-            meetings = cursor.fetchall()
-
-            sections[j]['meeting'] = meetings
-
-        courses[i]['sections'] = sections
+        section['meetings'] = meetings
+        courses[course_id]['sections'].append(section)
 
     db_conn.commit()
     db_conn.close()
-    return courses
+    return list(courses.values())
 
 @app.get(API_PREFIX + "/semesters")
 def get_semesters():

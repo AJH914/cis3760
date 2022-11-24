@@ -31,7 +31,7 @@ const ExamSchedule = ({ config }) => {
     let month = false;
 
     sections.forEach((s) => {
-      s.meeting.forEach((meeting) => {
+      s.meetings.forEach((meeting) => {
         if (meeting.meeting_type !== 'EXAM') return;
 
         const date = meeting.exam_date;
@@ -39,8 +39,8 @@ const ExamSchedule = ({ config }) => {
 
         exams.push({
           id: exams.length + 1,
-          sectionNum: s.num,
-          html: `${s.department}*${s.courseCode}*${s.section} - ${meeting.meeting_type}`,
+          sectionId: s.section_id,
+          html: `${s.department}*${s.course_code}*${s.section} - ${meeting.meeting_type}`,
           start: date + 'T' + meeting.start_time,
           end: date + 'T' + meeting.end_time,
           ...eventConfig
@@ -60,7 +60,7 @@ const ExamSchedule = ({ config }) => {
 
     calendarRef.current.control.onEventClicked = (args) => {
       if (window.confirm('Are you sure you want to remove this section?')) {
-        removeSection(args.e.data.sectionNum);
+        removeSection(args.e.data.sectionId);
       }
     };
   };

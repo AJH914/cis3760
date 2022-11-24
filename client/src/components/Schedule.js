@@ -42,7 +42,7 @@ const Schedule = ({ config }) => {
   const updateCalendarData = (sections) => {
     let meetings = [];
     sections.forEach((s) => {
-      s.meeting.forEach((meeting) => {
+      s.meetings.forEach((meeting) => {
         if (meeting.meeting_type === 'Distance') return;
         if (meeting.meeting_type === 'EXAM') return;
         if (meeting.meeting_day.includes('TBA')) return;
@@ -52,8 +52,8 @@ const Schedule = ({ config }) => {
         days.forEach((day) => {
           let toAdd = {
             id: meetings.length + 1,
-            sectionNum: s.num,
-            html: `${s.department}*${s.courseCode}*${s.section} - ${meeting.meeting_type}<br />${meeting.building} ${meeting.room}`,
+            sectionId: s.section_id,
+            html: `${s.department}*${s.course_code}*${s.section} - ${meeting.meeting_type}<br />${meeting.building} ${meeting.room}`,
             start: date + 'T' + meeting.start_time,
             end: date + 'T' + meeting.end_time,
             barColor: '#fcb711',
@@ -76,7 +76,7 @@ const Schedule = ({ config }) => {
 
     calendarRef.current.control.onEventClicked = (args) => {
       if (window.confirm('Are you sure you want to remove this section?')) {
-        removeSection(args.e.data.sectionNum);
+        removeSection(args.e.data.sectionId);
       }
     };
   };

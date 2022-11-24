@@ -3,4 +3,5 @@ disable=missing-module-docstring,
         too-many-nested-blocks,
         missing-function-docstring,
         too-many-locals,
-        consider-using-enumerate
+        consider-using-enumerate,
+        import-error

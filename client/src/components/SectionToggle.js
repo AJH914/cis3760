@@ -6,14 +6,14 @@ const SectionToggle = ({ section }) => {
   const [isHovering, setHovering] = useState(false);
 
   const isSelected = (section) => {
-    return getSchedule().filter((s) => s.num === section.num).length === 1;
+    return getSchedule().filter((s) => s.section_id === section.section_id).length === 1;
   };
 
   const makeSelection = (section) => {
     if (!isSelected(section)) {
       addSection(section);
     } else {
-      removeSection(section.num);
+      removeSection(section.section_id);
     }
   };
 
