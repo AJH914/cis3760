@@ -18,12 +18,12 @@ function App() {
             <img src={logo} className='mt-3 img-fluid' alt='logo' />
           </a>
           <div className='container-fluid flex-grow-1'>
-            <div className='row p-4 h-100'>
-              <div className='col-xl-4 col-xxl-3 d-flex flex-column'>
+            <div className='row p-3'>
+              <div className='col-xl-4 col-xxl-3'>
                 <Search />
               </div>
 
-              <div className='col-xl-8 col-xxl-9'>
+              <div className='col-xl-8 col-xxl-9 flex-row-1'>
                 <SemesterSelector />
 
                 <div className='mt-4'>

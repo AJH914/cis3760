@@ -57,11 +57,11 @@ const Search = () => {
         </form>
       </div>
       {results.length > 0 || query.length !== 0 ? (
-        <div className='my-4 courseResults flex-grow-1'>
+        <div className='my-4 courseResults'>
           <SearchResults id='results' results={results} />
         </div>
       ) : (
-        <div className='my-4 courseResults flex-grow-1'>
+        <div className='my-4 selectedSections courseResults'>
           <SelectedSections />
         </div>
       )}
