@@ -39,8 +39,8 @@ def get_search():
 
 def search(search_terms, semester):
     db_conn = connect_db()
-
     cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+
     semester = semester.upper()
 
     selects = []
@@ -110,7 +110,6 @@ def search(search_terms, semester):
 @app.get(API_PREFIX + "/semesters")
 def get_semesters():
     db_conn = connect_db()
-
     cursor = db_conn.cursor()
 
     cursor.execute("SELECT * FROM semesters")
@@ -131,6 +130,23 @@ def get_semesters():
     db_conn.commit()
     db_conn.close()
     return jsonify(response)
+
+@app.get(API_PREFIX + "/departments")
+def get_departments():
+    db_conn = connect_db()
+    cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+
+    cursor.execute("SELECT department FROM sections GROUP BY department")
+    departments = cursor.fetchall()
+
+    out = []
+    for department in departments:
+        out.append(department['department'])
+
+    db_conn.commit()
+    db_conn.close()
+
+    return jsonify(out)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)
