@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+
 import SearchResults from './SearchResults';
 import SelectedSections from './SelectedSections';
-import axios from 'axios';
 import { ScheduleContext } from '../contexts/ScheduleContext';
+import Departments from './departments/Departments';
 
 const Search = () => {
   const { semesters, currentSem } = useContext(ScheduleContext);
 
   const [results, setResult] = useState([]);
   const [query, setQuery] = useState('');
+
+  const [deptView, setDeptView] = useState(false);
 
   useEffect(() => {
     clearSearch();
@@ -37,33 +41,55 @@ const Search = () => {
     setQuery('');
   };
 
+  const toggleDeptView = () => {
+    setDeptView(!deptView);
+  };
+
   return (
     <>
-      <div className='px-4 py-4 rounded-4 courses'>
-        <h3>Search Courses</h3>
-        <form className='mt-2' onSubmit={(e) => e.preventDefault()}>
-          <div className='mb-3'>
-            <div className='input-group mb-3'>
-              <input type='text' className='form-control' placeholder='Enter a course' value={query} onChange={(e) => setQuery(e.target.value)} id='search' />
-              <button
-                className={`btn btn-${query.length > 0 ? 'danger' : 'primary'}`}
-                type='button'
-                onClick={query.length === 0 ? searchCourses : () => clearSearch()}
-              >
-                <i className={`bi bi-${query.length > 0 ? 'x-lg' : 'search'}`}></i>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-      {results.length > 0 || query.length !== 0 ? (
-        <div className='my-4 courseResults'>
-          <SearchResults id='results' results={results} />
-        </div>
+      {deptView ? (
+        <Departments backFn={toggleDeptView} />
       ) : (
-        <div className='my-4 selectedSections courseResults'>
-          <SelectedSections />
-        </div>
+        <>
+          <div className='px-4 py-4 rounded-4 courses'>
+            <h3>Search Courses</h3>
+            <form className='mt-2' onSubmit={(e) => e.preventDefault()}>
+              <div className='mb-3'>
+                <div className='input-group'>
+                  <input
+                    type='text'
+                    className='form-control rounded-0 rounded-top'
+                    placeholder='Enter a course'
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    id='search'
+                  />
+                  <button
+                    className={`btn btn-${query.length > 0 ? 'danger' : 'primary'} rounded-0 rounded-end`}
+                    type='button'
+                    onClick={query.length === 0 ? searchCourses : () => clearSearch()}
+                  >
+                    <i className={`bi bi-${query.length > 0 ? 'x-lg' : 'search'}`}></i>
+                  </button>
+                </div>
+                <div className='d-grid'>
+                  <button className='btn btn-sm btn-navy rounded-0 rounded-bottom' onClick={() => toggleDeptView()}>
+                    View Departments
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {results.length > 0 || query.length !== 0 ? (
+            <div className='my-4 courseResults'>
+              <SearchResults id='results' results={results} />
+            </div>
+          ) : (
+            <div className='my-4 selectedSections courseResults'>
+              <SelectedSections />
+            </div>
+          )}
+        </>
       )}
     </>
   );
