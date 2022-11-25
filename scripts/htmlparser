@@ -87,7 +87,7 @@ if sys.argv[2] == '--create-seed':
                 course_name = section['courseName'].replace("'", r"''")
                 faculty = section['faculty'].replace("'", r"''")
 
-                f.write(f'INSERT INTO sections (section_id, department, course_code, course_name, section, sem, status, faculty, location, available, capacity, credits, academic_level) VALUES ({section["num"]}, \'{section["department"]}\', \'{section["courseCode"]}\', \'{course_name}\', \'{section["section"]}\', \'{semester}\', \'{section["status"]}\', \'{faculty}\', \'{section["location"]}\', {section["available"]}, {section["capacity"]}, \'{section["credits"]}\', \'{section["academicLevel"]}\');\n')
+                f.write(f'INSERT INTO sections (section_id, department, course_code, course_name, section, sem, status, faculty, location, available, capacity, credits, academic_level) VALUES ({section["num"]}, \'{section["department"]}\', \'{section["courseCode"]}\', \'{course_name}\', \'{section["section"]}\', \'{semester}\', \'{section["status"]}\', \'{faculty}\', \'{section["location"]}\', {section["available"]}, {section["capacity"]}, \'{section["credits"]}\', \'{section["academicLevel"]}\') ON CONFLICT ON CONSTRAINT sections_pkey DO NOTHING;\n')
 
                 for meeting in section['meeting']:
                     # to_char(to_timestamp('04:30PM', 'HH12:MIAM'), 'HH24:MI:SS')::TIME
@@ -99,11 +99,11 @@ if sys.argv[2] == '--create-seed':
                         tokens = meeting['end_time'].split(" ")
                         end_time = f'TO_CHAR(TO_TIMESTAMP(\'{tokens[0]}\', \'HH12:MIAM\'), \'HH24:MI:SS\')::TIME'
                         exam_date = "TO_TIMESTAMP(\'" + tokens[1][1:-1] + "\', \'YYYY/MM/DD\')" # takes parentheses out of the date
-                    f.write(f'INSERT INTO meetings (section_id, sem, meeting_type, meeting_day, start_time, end_time, building, room, exam_date) VALUES ({section["num"]}, \'{semester}\', \'{meeting["meeting_type"]}\', \'{meeting["meeting_day"]}\', {start_time}, {end_time}, \'{meeting["building"]}\', \'{meeting["room"]}\', {exam_date});\n')
+                    f.write(f'INSERT INTO meetings (section_id, sem, meeting_type, meeting_day, start_time, end_time, building, room, exam_date) VALUES ({section["num"]}, \'{semester}\', \'{meeting["meeting_type"]}\', \'{meeting["meeting_day"]}\', {start_time}, {end_time}, \'{meeting["building"]}\', \'{meeting["room"]}\', {exam_date}) ON CONFLICT ON CONSTRAINT meetings_pkey DO NOTHING;\n')
             f.write('\n')
 
         for sem, sem_name in semesters.items():
-            f.write(f'INSERT INTO semesters (sem, semester_name) VALUES (\'{sem}\', \'{sem_name}\');\n\n')
+            f.write(f'INSERT INTO semesters (sem, semester_name) VALUES (\'{sem}\', \'{sem_name}\') ON CONFLICT ON CONSTRAINT semesters_pkey DO NOTHING;\n\n')
 
 else:
     with open('data/results.json', 'w') as f:
