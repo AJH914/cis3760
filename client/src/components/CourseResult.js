@@ -20,7 +20,7 @@ const CourseResult = ({ accordion, data, opened }) => {
           </button>
         </h2>
       )}
-      <div id={`collapse-${data.id}`} className={`accordion-collapse collapse ${opened && 'show'}`} data-bs-parent={`#${accordion}-accordion`}>
+      <div id={`collapse-${data.id}`} className={`accordion-collapse collapse ${opened ? 'show' : ''}`} data-bs-parent={`#${accordion}-accordion`}>
         <div className='accordion-body'>
           <h4>{data.course_name}</h4>
           <strong>Course Code</strong>: {data.department}*{data.course_code}

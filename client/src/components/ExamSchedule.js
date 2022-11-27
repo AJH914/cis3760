@@ -3,7 +3,7 @@ import { DayPilotMonth } from '@daypilot/daypilot-lite-react';
 import { ScheduleContext } from '../contexts/ScheduleContext';
 
 const ExamSchedule = ({ config }) => {
-  const { schedule, getSchedule, currentSem, removeSection } = useContext(ScheduleContext);
+  const { schedule, getSchedule, currentSem, semesters, removeSection } = useContext(ScheduleContext);
 
   const calendarRef = useRef(null);
 
@@ -24,7 +24,7 @@ const ExamSchedule = ({ config }) => {
   useEffect(() => {
     updateCalendarData(getSchedule());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schedule, currentSem]);
+  }, [schedule, currentSem, semesters]);
 
   const updateCalendarData = (sections) => {
     let exams = [];

@@ -36,7 +36,7 @@ const Departments = ({ backFn }) => {
               Back
             </button>
           </div>
-          <div className='departmentsList list-group rounded-0 rounded-bottom'>
+          <div className='departmentsList list-group list-group-flush rounded-bottom'>
             {departments.map((dept) => (
               <a href='#' className='list-group-item list-group-item-action' key={dept.name} onClick={() => setDepartment(dept.name)}>
                 {dept.name} <span className='badge rounded-pill text-bg-secondary float-end'>{dept.count}</span>

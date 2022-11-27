@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
+import Tooltip from './elements/Tooltip';
 import SearchResults from './SearchResults';
 import SelectedSections from './SelectedSections';
 import { ScheduleContext } from '../contexts/ScheduleContext';
@@ -52,21 +53,28 @@ const Search = () => {
       ) : (
         <>
           <div className='px-4 py-4 rounded-4 courses'>
-            <h3>Search Courses</h3>
+            <h3>
+              Search Courses
+              <Tooltip text='Use semi-colon to search multiple courses at once'>
+                <i className='helpTooltip bi bi-info-circle'></i>
+              </Tooltip>
+            </h3>
             <form className='mt-2' onSubmit={(e) => e.preventDefault()}>
               <div className='mb-3'>
                 <div className='input-group'>
                   <input
+                    id='search'
                     type='text'
-                    className='form-control rounded-0 rounded-top'
+                    className='form-control'
                     placeholder='Enter a course'
                     value={query}
+                    style={{ borderRadius: '0.375rem 0 0 0' }}
                     onChange={(e) => setQuery(e.target.value)}
-                    id='search'
                   />
                   <button
-                    className={`btn btn-${query.length > 0 ? 'danger' : 'primary'} rounded-0 rounded-end`}
+                    className={`btn btn-${query.length > 0 ? 'danger' : 'primary'}`}
                     type='button'
+                    style={{ borderRadius: '0 0.375rem 0 0' }}
                     onClick={query.length === 0 ? searchCourses : () => clearSearch()}
                   >
                     <i className={`bi bi-${query.length > 0 ? 'x-lg' : 'search'}`}></i>
@@ -81,7 +89,7 @@ const Search = () => {
             </form>
           </div>
           {results.length > 0 || query.length !== 0 ? (
-            <div className='my-4 courseResults'>
+            <div className='my-4 courseResults rounded'>
               <SearchResults id='results' results={results} />
             </div>
           ) : (

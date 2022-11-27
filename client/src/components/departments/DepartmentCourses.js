@@ -26,7 +26,7 @@ const DepartmentCourses = ({ dept, backFn }) => {
         </button>
       </div>
       {courses.length > 0 && (
-        <div className='courseResults'>
+        <div className='courseResults rounded-bottom'>
           <SearchResults id='dept_results' results={courses} />
         </div>
       )}

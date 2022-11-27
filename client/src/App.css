@@ -39,3 +39,9 @@ body {
 .btn-navy:hover {
   background-color: #6d718a;
 }
+
+.helpTooltip {
+  font-size: 25px;
+  float: right;
+  line-height: 40px;
+}
