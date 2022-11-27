@@ -36,7 +36,7 @@ def get_search():
     if len(query) == 0:
         return jsonify([])
 
-    res = search(query, sem,["Fri"],[[time(8,30,00),time(10,00,00)]],[True,True,True,True,True,False])
+    res = search(query, sem,["Fri"],[[time(8,30,00),time(10,00,00)]],[True,True,True,True,False])
     return json.dumps(res, indent=4, sort_keys=True, default=str)
 
 def search(search_terms, semester,days,times,courseLevel):
@@ -49,30 +49,21 @@ def search(search_terms, semester,days,times,courseLevel):
     params = []
     queries = search_terms.split(";")
 
-    cLevel = ""
-    if courseLevel[0]:
-        cLevel = "AND ("
-        if courseLevel[1]:
-            if cLevel != "AND (":
-                cLevel = cLevel + " OR "
-            cLevel = cLevel + "LEFT(course_code, 1) = '1' "
-        if courseLevel[2]:
-            if cLevel != "AND (":
-                cLevel = cLevel + " OR "
-            cLevel = cLevel + "LEFT(course_code, 1) = '2' "
-        if courseLevel[3]:
-            if cLevel != "AND (":
-                cLevel = cLevel + " OR "
-            cLevel = cLevel + "LEFT(course_code, 1) = '3' "
-        if courseLevel[4]:
-            if cLevel != "AND (":
-                cLevel = cLevel + " OR "
-            cLevel = cLevel + "LEFT(course_code, 1) = '4' OR LEFT(course_code, 1) = '5' "
-        if courseLevel[5]:
-            if cLevel != "AND (":
-                cLevel = cLevel + " OR "
-            cLevel = cLevel + "LEFT(course_code, 1) = '6' OR LEFT(course_code, 1) = '7' OR LEFT(course_code, 1) = '8'"
-        cLevel = cLevel + ")"
+    cLevel = ["1","2","3","4","5","6","7","8"]
+         
+    if not courseLevel[0]:
+        cLevel[0] = "0"
+    if not courseLevel[1]:
+        cLevel[1] = "0"
+    if not courseLevel[2]:
+        cLevel[2] = "0"
+    if not courseLevel[3]:
+        cLevel[3] = "0"
+        cLevel[4] = "0"
+    if not courseLevel[4]:
+        cLevel[5] = "0"
+        cLevel[6] = "0"
+        cLevel[7] = "0"
     
     # select sections
     for query in queries:
@@ -94,9 +85,16 @@ def search(search_terms, semester,days,times,courseLevel):
                    "OR UPPER(course_name) LIKE %s "
                    "OR UPPER(faculty) LIKE %s) "
                    "AND sem = %s "
-                   "%s"
+                   "AND (LEFT(course_code, 1) = %s"
+                   "OR LEFT(course_code, 1) = %s"
+                   "OR LEFT(course_code, 1) = %s"
+                   "OR LEFT(course_code, 1) = %s"
+                   "OR LEFT(course_code, 1) = %s"
+                   "OR LEFT(course_code, 1) = %s"
+                   "OR LEFT(course_code, 1) = %s"
+                   "OR LEFT(course_code, 1) = %s)"
                    ")")
-            params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester,cLevel])
+            params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester,cLevel[0],cLevel[1],cLevel[2],cLevel[3],cLevel[4],cLevel[5],cLevel[6],cLevel[7]])
 
         selects.append(' INTERSECT '.join(query_selects))
 
