@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "./logo5.png";
+//import logo from "./logo5.png";
 import "./App.css";
 import Schedule from "./components/Schedule";
 import { ScheduleContextProvider } from "./contexts/ScheduleContext";
@@ -32,8 +32,11 @@ function App() {
     <ScheduleContextProvider>
       <div className="App container-fluid" data-theme={theme}>
         <div className="d-flex flex-column h-100">
-          <a href="#home">
-            <img src={logo} className="mt-3 img-fluid" alt="logo" />
+          <a className="nav-link" href="#home">
+            {/* <img src={logo} className="mt-3 img-fluid" alt="logo" /> */}
+            <h1 className="display-1 logo">
+              <strong>Course Scheduler</strong>
+            </h1>
           </a>
           <div className="container-fluid flex-grow-1">
             <div className="row p-3">
