@@ -4,7 +4,7 @@ disable=missing-module-docstring,
         missing-function-docstring,
         too-many-locals,
         consider-using-enumerate,
-        import-error
-        line-too-long
-        too-many-branches
+        import-error,
+        line-too-long,
+        too-many-branches,
         too-many-statements
