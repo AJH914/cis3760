@@ -1,5 +1,5 @@
 import os
-import datetime
+from datetime import datetime
 import psycopg2
 import psycopg2.extras
 import sys
@@ -38,10 +38,24 @@ def get_search():
     times_str = args.get('times')
     levels = args.get('levels')
 
-    print(days,file=sys.stderr)
-    print(times_str,file=sys.stderr)
-    print(levels,file=sys.stderr)
-
+    #print(days,file=sys.stderr)
+    #print(type(days),file=sys.stderr)
+    #print(times_str,file=sys.stderr)
+    #print(type(times_str),file=sys.stderr)
+    #print(levels,file=sys.stderr)
+    #print(type(levels),file=sys.stderr)
+    
+    d = json.loads(days)
+    t = json.loads(times_str)
+    l = json.loads(levels)
+    
+    #print(d,file=sys.stderr)
+    #print(type(d),file=sys.stderr)
+    #print(t,file=sys.stderr)
+    #print(type(t),file=sys.stderr)
+    #print(l,file=sys.stderr)
+    #print(type(l),file=sys.stderr)
+    
     #Reference and test values
     #days = ["Fri"]
     #times = [["08:30","10:00")]]
@@ -51,7 +65,7 @@ def get_search():
         if len(query) == 0:
             return jsonify([])
 
-        res = search(query, sem, days,times_str,levels)
+        res = search(query, sem, d,t,l)
     else:
         res = search_dept(dept, sem)
 
@@ -90,15 +104,15 @@ def search(search_terms, semester,days,times_str,course_level):
 
     db_conn = connect_db()
     cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-
-    if not times_str is None:
+    times = None
+    if not times_str is None and times_str:
         times = string_to_time(times_str)
     
     selects = []
     params = []
     queries = search_terms.split(";")
 
-    if not course_level is None:
+    if (not course_level is None) and course_level:
         c_level = ["1","2","3","4","5","6","7","8"]
         if not course_level[0]:
             c_level[0] = "0"
@@ -128,10 +142,7 @@ def search(search_terms, semester,days,times_str,course_level):
         for term in terms:
             if term.strip() == "":
                 continue
-
-            query_selects.append("(SELECT section_id, department, course_code, course_name, "
-                                "TRIM(section) AS section, sem, status, faculty, location, "
-                                "available, capacity, credits, academic_level FROM sections "
+            query_selects.append("(SELECT * FROM sections "
                                 "WHERE ((department || course_code) LIKE %s "
                                 "OR UPPER(course_name) LIKE %s "
                                 "OR UPPER(faculty) LIKE %s) "
@@ -142,7 +153,8 @@ def search(search_terms, semester,days,times_str,course_level):
         selects.append(' INTERSECT '.join(query_selects))
 
     level_search = ""
-    if not course_level is None:
+    
+    if not course_level is None and course_level:
         level_search = ' OR '.join(["INTERSECT (SELECT * FROM sections WHERE LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
@@ -152,15 +164,15 @@ def search(search_terms, semester,days,times_str,course_level):
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s)"])
         params.extend([c_level[0],c_level[1],c_level[2],c_level[3],c_level[4],c_level[5],c_level[6],c_level[7]])
-
-    final_query ="((" + ' UNION '.join(selects) + ")" + level_search + ") ORDER BY department,course_code ASC"
-
+        
     # union all the selects
+    final_query ="((" + ' UNION '.join(selects) + ")" + level_search + ") ORDER BY department,course_code ASC"
+    
     cursor.execute(final_query, tuple(params))
     sections = cursor.fetchall()
 
     # group by course and select meetings for each section found
-
+    #print(sections,file=sys.stderr)
     courses = {}
     for i in range(len(sections)):
         course_id = sections[i]['department'] + sections[i]['course_code']
@@ -175,16 +187,16 @@ def search(search_terms, semester,days,times_str,course_level):
         valid_section = True
 
         # Search the meeting days to see if it is a forbidden day or forbidden time
-        if (not days is None) and (not times is None):
+        if (not days is None) or (not times is None):
             for meeting in meetings:
                 if meeting['meeting_type'] != "EXAM":
-                    if not days is None:
+                    if not days is None and days:
                         meet_days = meeting['meeting_day'].split(",")
                         for day in days:
                             if day in meet_days:
                                 valid_section = False
                                 break
-                    if valid_section and (not days is None):
+                    if valid_section and (not times is None) and times:
                         for time in times:
                             if not meeting['start_time'] is None:
                                 if time[0] <= meeting['start_time'] < time[1] or time[0] < meeting['end_time'] <= time[1]:
@@ -218,8 +230,9 @@ def string_to_time(times_str):
     times = []
     i = 0
     for str_pair in times_str:
-        times[i][0] = datetime.strptime(str_pair[0], '%H:%M').time()
-        times[i][1] = datetime.strptime(str_pair[1], '%H:%M').time()
+        times.append([])
+        times[i].append(datetime.strptime(str_pair[0], '%H:%M').time())
+        times[i].append(datetime.strptime(str_pair[1], '%H:%M').time())
         i = i + 1
     return times
 

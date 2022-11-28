@@ -43,10 +43,12 @@ const Search = () => {
         params: {
           q: query,
           sem: semesters[currentSem].sem,
-          days: filters.days,
-          times: filters.times,
-          levels: filters.levels,
-        }
+          days: JSON.stringify(filters.days),
+          times: JSON.stringify(filters.times),
+          levels: JSON.stringify(filters.levels),
+        }//, paramsSerializer: params => {
+        //  return JSON.stringify(params)
+        //}
       });
       setResult(res.data);
       console.log(res.data);
