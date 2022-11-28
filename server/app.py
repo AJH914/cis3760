@@ -32,12 +32,46 @@ def get_search():
     args = request.args
     query = args.get('q')
     sem = args.get('sem').upper()
+    dept = args.get('dept')
 
-    if len(query) == 0:
-        return jsonify([])
+    if not dept:
+        if len(query) == 0:
+            return jsonify([])
 
-    res = search(query, sem,["Fri"],[[time(8,30,00),time(10,00,00)]],[True,True,True,True,False])
+        res = search(query, sem,["Fri"],[[time(8,30,00),time(10,00,00)]],[True,True,True,True,False])
+    else:
+        res = search_dept(dept, sem)
+
     return json.dumps(res, indent=4, sort_keys=True, default=str)
+
+def group_by_course(cursor, sections, semester):
+    courses = {}
+    for i in range(len(sections)):
+        course_id = sections[i]['department'] + sections[i]['course_code']
+        section = sections[i]
+
+        if course_id not in courses:
+            courses[course_id] = {
+                'id': len(courses) + 1,
+                'course': sections[i]['department'] + sections[i]['course_code'],
+                'department': sections[i]['department'],
+                'course_code': sections[i]['course_code'],
+                'course_name': sections[i]['course_name'],
+                'academic_level': sections[i]['academic_level'],
+                'credits': sections[i]['credits'],
+                'sections': []
+            }
+
+        # add meetings to section
+        cursor.execute("SELECT * FROM meetings "
+                        "WHERE section_id = %s AND sem = %s", (section['section_id'], semester))
+
+        meetings = cursor.fetchall()
+
+        section['meetings'] = meetings
+        courses[course_id]['sections'].append(section)
+
+    return list(courses.values())
 
 def search(search_terms, semester,days,times,courseLevel):
     db_conn = connect_db()
@@ -160,6 +194,20 @@ def search(search_terms, semester,days,times,courseLevel):
     db_conn.close()
     return list(courses.values())
 
+def search_dept(dept, semester):
+    db_conn = connect_db()
+    cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+
+    cursor.execute("SELECT * FROM sections WHERE department = %s AND sem = %s", (dept, semester))
+    sections = cursor.fetchall()
+
+    courses = group_by_course(cursor, sections, semester)
+
+    db_conn.commit()
+    db_conn.close()
+
+    return courses
+
 @app.get(API_PREFIX + "/semesters")
 def get_semesters():
     db_conn = connect_db()
@@ -189,17 +237,14 @@ def get_departments():
     db_conn = connect_db()
     cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
-    cursor.execute("SELECT department FROM sections GROUP BY department")
+    cursor.execute("SELECT department as name, COUNT(course_code) as count "
+                   "FROM sections GROUP BY department ORDER BY department ASC")
     departments = cursor.fetchall()
-
-    out = []
-    for department in departments:
-        out.append(department['department'])
 
     db_conn.commit()
     db_conn.close()
 
-    return jsonify(out)
+    return jsonify(departments)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=PORT)
