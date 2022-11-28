@@ -37,24 +37,6 @@ def get_search():
     days = args.get('days')
     times_str = args.get('times')
     levels = args.get('levels')
-
-    #print(days,file=sys.stderr)
-    #print(type(days),file=sys.stderr)
-    #print(times_str,file=sys.stderr)
-    #print(type(times_str),file=sys.stderr)
-    #print(levels,file=sys.stderr)
-    #print(type(levels),file=sys.stderr)
-    
-    d = json.loads(days)
-    t = json.loads(times_str)
-    l = json.loads(levels)
-    
-    #print(d,file=sys.stderr)
-    #print(type(d),file=sys.stderr)
-    #print(t,file=sys.stderr)
-    #print(type(t),file=sys.stderr)
-    #print(l,file=sys.stderr)
-    #print(type(l),file=sys.stderr)
     
     #Reference and test values
     #days = ["Fri"]
@@ -64,7 +46,11 @@ def get_search():
     if not dept:
         if len(query) == 0:
             return jsonify([])
-
+        
+        d = json.loads(days)
+        t = json.loads(times_str)
+        l = json.loads(levels)
+        
         res = search(query, sem, d,t,l)
     else:
         res = search_dept(dept, sem)
@@ -245,7 +231,9 @@ def search_dept(dept, semester):
     db_conn = connect_db()
     cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
-    cursor.execute("SELECT * FROM sections WHERE department = %s AND sem = %s", (dept, semester))
+    cursor.execute("SELECT section_id, department, course_code, course_name, "
+                                "TRIM(section) AS section, sem, status, faculty, location, "
+                                "available, capacity, credits, academic_level FROM sections WHERE department = %s AND sem = %s", (dept, semester))
     sections = cursor.fetchall()
 
     courses = group_by_course(cursor, sections, semester)
