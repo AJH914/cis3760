@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 import psycopg2
 import psycopg2.extras
-import sys
 
 from flask import Flask, jsonify, json, request
 
@@ -38,7 +37,7 @@ def get_search():
 
     times_str = args.get('times')
     levels = args.get('levels')
-    
+
     #Reference and test values
     #days = ["Fri"]
     #times = [["08:30","10:00")]]
@@ -47,12 +46,12 @@ def get_search():
     if not dept:
         if len(query) == 0:
             return jsonify([])
-        
-        d = json.loads(days)
-        t = json.loads(times_str)
-        l = json.loads(levels)
-        
-        res = search(query, sem, d,t,l)
+
+        d_day = json.loads(days)
+        t_times = json.loads(times_str)
+        l_levels = json.loads(levels)
+
+        res = search(query, sem, d_day,t_times,l_levels)
     else:
         res = search_dept(dept, sem)
 
@@ -94,7 +93,7 @@ def search(search_terms, semester,days,times_str,course_level):
     times = None
     if not times_str is None and times_str:
         times = string_to_time(times_str)
-    
+
     selects = []
     params = []
     queries = search_terms.split(";")
@@ -143,7 +142,7 @@ def search(search_terms, semester,days,times_str,course_level):
         selects.append(' INTERSECT '.join(query_selects))
 
     level_search = ""
-    
+
     if not course_level is None and course_level:
         level_search = ' OR '.join(["INTERSECT (SELECT section_id, department, course_code, course_name, "
                                 "TRIM(section) AS section, sem, status, faculty, location, "
@@ -156,10 +155,10 @@ def search(search_terms, semester,days,times_str,course_level):
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s)"])
         params.extend([c_level[0],c_level[1],c_level[2],c_level[3],c_level[4],c_level[5],c_level[6],c_level[7]])
-        
+
     # union all the selects
     final_query ="((" + ' UNION '.join(selects) + ")" + level_search + ") ORDER BY department,course_code ASC"
-    
+
     cursor.execute(final_query, tuple(params))
     sections = cursor.fetchall()
 
