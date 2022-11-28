@@ -32,6 +32,7 @@ def get_search():
     args = request.args
     query = args.get('q')
     sem = args.get('sem').upper()
+
     dept = args.get('dept')    
     days = args.get('days')
     times = args.get('times')
@@ -81,11 +82,11 @@ def group_by_course(cursor, sections, semester):
 
     return list(courses.values())
 
+
 def search(search_terms, semester,days,times,courseLevel):
+
     db_conn = connect_db()
     cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-
-    semester = semester.upper()
 
     selects = []
     params = []
@@ -151,6 +152,7 @@ def search(search_terms, semester,days,times,courseLevel):
     sections = cursor.fetchall()
 
     # group by course and select meetings for each section found
+
     courses = {}
     for i in range(len(sections)):
         course_id = sections[i]['department'] + sections[i]['course_code']
@@ -202,7 +204,8 @@ def search(search_terms, semester,days,times,courseLevel):
 
     db_conn.commit()
     db_conn.close()
-    return list(courses.values())
+
+    return courses
 
 def search_dept(dept, semester):
     db_conn = connect_db()

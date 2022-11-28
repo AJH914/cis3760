@@ -10,13 +10,8 @@ export const ScheduleContextProvider = (props) => {
   // load from local storage on mount
   useEffect(() => {
     const localSchedule = JSON.parse(localStorage.getItem('schedule'));
-    if (localSchedule) {
+    if (localSchedule && localSchedule.length > 0) {
       setSchedule(localSchedule);
-    }
-
-    const localSemesters = JSON.parse(localStorage.getItem('semesters'));
-    if (localSemesters) {
-      setSemesters(localSemesters);
     }
 
     const localCurrentSem = JSON.parse(localStorage.getItem('currentSem'));
@@ -27,18 +22,14 @@ export const ScheduleContextProvider = (props) => {
 
   // save to local storage on update
   useEffect(() => {
-    if (schedule.length > 0) {
-      localStorage.setItem('schedule', JSON.stringify(schedule));
-    }
-
-    if (semesters.length > 0) {
-      localStorage.setItem('semesters', JSON.stringify(semesters));
-    }
+    localStorage.setItem('schedule', JSON.stringify(schedule));
 
     localStorage.setItem('currentSem', JSON.stringify(currentSem));
   }, [schedule, semesters, currentSem]);
 
   const getSchedule = () => {
+    if (semesters.length === 0) return [];
+
     return schedule.filter((section) => section.sem === semesters[currentSem].sem);
   };
 
