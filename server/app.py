@@ -142,7 +142,9 @@ def search(search_terms, semester,days,times_str,course_level):
         for term in terms:
             if term.strip() == "":
                 continue
-            query_selects.append("(SELECT * FROM sections "
+            query_selects.append("(SELECT section_id, department, course_code, course_name, "
+                                "TRIM(section) AS section, sem, status, faculty, location, "
+                                "available, capacity, credits, academic_level FROM sections "
                                 "WHERE ((department || course_code) LIKE %s "
                                 "OR UPPER(course_name) LIKE %s "
                                 "OR UPPER(faculty) LIKE %s) "
@@ -155,7 +157,9 @@ def search(search_terms, semester,days,times_str,course_level):
     level_search = ""
     
     if not course_level is None and course_level:
-        level_search = ' OR '.join(["INTERSECT (SELECT * FROM sections WHERE LEFT(course_code, 1) = %s",
+        level_search = ' OR '.join(["INTERSECT (SELECT section_id, department, course_code, course_name, "
+                                "TRIM(section) AS section, sem, status, faculty, location, "
+                                "available, capacity, credits, academic_level FROM sections WHERE LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
