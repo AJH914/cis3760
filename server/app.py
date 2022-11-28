@@ -202,7 +202,7 @@ def search(search_terms, semester,days,times,course_level):
     db_conn.commit()
     db_conn.close()
 
-    return courses
+    return list(courses.values())
 
 def search_dept(dept, semester):
     db_conn = connect_db()
