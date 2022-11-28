@@ -6,7 +6,7 @@ import SearchResults from './SearchResults';
 import SelectedSections from './SelectedSections';
 import { ScheduleContext } from '../contexts/ScheduleContext';
 import Departments from './departments/Departments';
-
+import AdvFilters from './advancedFilters/Filters';
 const Search = () => {
   const { semesters, currentSem } = useContext(ScheduleContext);
 
@@ -14,6 +14,7 @@ const Search = () => {
   const [query, setQuery] = useState('');
 
   const [deptView, setDeptView] = useState(false);
+  const [advFilterView, setAdvFilterView] = useState(false);
 
   useEffect(() => {
     clearSearch();
@@ -44,6 +45,10 @@ const Search = () => {
 
   const toggleDeptView = () => {
     setDeptView(!deptView);
+  };
+
+  const toggleAdvFilters = () => {
+    setAdvFilterView(!advFilterView);
   };
 
   return (
@@ -87,9 +92,14 @@ const Search = () => {
                   </button>
                 </div>
                 <div className='d-grid mt-2'>
-                  <button className='btn btn-sm btn-primary rounded-1' onClick={() => toggleDeptView()}>
+                  <button className='btn btn-sm btn-primary rounded-1' onClick={() => toggleAdvFilters()}>
                     Advanced Filters
                   </button>
+                  {advFilterView ? (
+                    <AdvFilters backFn={toggleAdvFilters} />
+                  ) : (
+                    <a></a>
+                  )}
                 </div>
               </div>
             </form>
