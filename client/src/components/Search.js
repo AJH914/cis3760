@@ -55,7 +55,7 @@ const Search = () => {
           <div className='px-4 py-4 rounded-4 courses'>
             <h3>
               Search Courses
-              <Tooltip text='Use semi-colon to search multiple courses at once'>
+              <Tooltip text='Use a semi-colon between course code searches to search multiple courses at once. Ex. (CIS3260;CIS3760;CIS1250)'>
                 <i className='helpTooltip bi bi-info-circle'></i>
               </Tooltip>
             </h3>
