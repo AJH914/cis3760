@@ -2,7 +2,6 @@ import os
 import psycopg2
 import psycopg2.extras
 
-from datetime import datetime
 
 from flask import Flask, jsonify, json, request
 
@@ -93,20 +92,20 @@ def search(search_terms, semester,days,times,course_level):
     queries = search_terms.split(";")
 
     if not course_level is None:
-        c_Level = ["1","2","3","4","5","6","7","8"]
+        c_level = ["1","2","3","4","5","6","7","8"]
         if not course_level[0]:
-            c_Level[0] = "0"
+            c_level[0] = "0"
         if not course_level[1]:
-            c_Level[1] = "0"
+            c_level[1] = "0"
         if not course_level[2]:
-            c_Level[2] = "0"
+            c_level[2] = "0"
         if not course_level[3]:
-            c_Level[3] = "0"
-            c_Level[4] = "0"
+            c_level[3] = "0"
+            c_level[4] = "0"
         if not course_level[4]:
-            c_Level[5] = "0"
-            c_Level[6] = "0"
-            c_Level[7] = "0"
+            c_level[5] = "0"
+            c_level[6] = "0"
+            c_level[7] = "0"
 
     # select sections
     for query in queries:
@@ -143,7 +142,7 @@ def search(search_terms, semester,days,times,course_level):
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s)"])
-        params.extend([c_Level[0],c_Level[1],c_Level[2],c_Level[3],c_Level[4],c_Level[5],c_Level[6],c_Level[7]])
+        params.extend([c_level[0],c_level[1],c_level[2],c_level[3],c_level[4],c_level[5],c_level[6],c_level[7]])
 
     final_query ="((" + ' UNION '.join(selects) + ")" + level_search + ") ORDER BY department,course_code ASC"
 
