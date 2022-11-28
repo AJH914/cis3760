@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-//import logo from "./logo5.png";
 import "./App.css";
 import Schedule from "./components/Schedule";
 import { ScheduleContextProvider } from "./contexts/ScheduleContext";
@@ -10,11 +9,6 @@ import Search from "./components/Search";
 function App() {
   const [examView, setExamView] = useState(false);
 
-  //const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  // const [theme, setTheme] = useLocalStorage(
-  //   "theme",
-  //   defaultDark ? "dark" : "light"
-  // );
   let storedTheme = localStorage.getItem("theme");
   const [theme, setTheme] = useState(
     storedTheme === null ? "Dark" : storedTheme
@@ -25,8 +19,6 @@ function App() {
     localStorage.setItem("theme", newTheme);
     setTheme(newTheme);
   };
-
-  //useEffect(() => {}, [theme]);
 
   return (
     <ScheduleContextProvider>
