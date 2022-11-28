@@ -15,10 +15,17 @@ const Search = () => {
 
   const [deptView, setDeptView] = useState(false);
   const [advFilterView, setAdvFilterView] = useState(false);
+  const [filtersApplied, setFiltersApplied] = useState(false);
 
   useEffect(() => {
     clearSearch();
   }, [currentSem]);
+
+  useEffect(() => {
+    if (advFilterView) {
+      setFiltersApplied(true);
+    }
+  }, [advFilterView]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -92,11 +99,12 @@ const Search = () => {
                   </button>
                 </div>
                 <div className='d-grid mt-2'>
-                  <button className='btn btn-sm btn-primary rounded-1' onClick={() => toggleAdvFilters()}>
+                    <button className='btn btn-sm btn-primary rounded-1'
+                      onClick={() => toggleAdvFilters() }>
                     Advanced Filters
                   </button>
                   {advFilterView ? (
-                    <AdvFilters backFn={toggleAdvFilters} />
+                      <AdvFilters backFn={toggleAdvFilters} isFiltersApplied={filtersApplied} />
                   ) : (
                     <a></a>
                   )}
