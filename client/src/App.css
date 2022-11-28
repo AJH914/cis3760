@@ -1,16 +1,33 @@
+:root {
+  --background: #000000;
+  --background-courses: #303245;
+  --background-btn-navy: #4d5169;
+  --background-btn-navy-hover: #6d718a;
+  --text-primary: white;
+}
+
+[data-theme="Light"] {
+  --background: #ffffff;
+  --background-courses: #c1c1cd;
+  --background-btn-navy: #dddee7;
+  --background-btn-navy-hover: #e4e6ef;
+  --text-primary: black;
+}
+
 html,
 body {
-  background-color: #000000;
+  background-color: var(--background);
   height: 100vh !important;
 }
 
 .App {
   height: 100%;
-  color: white;
+  background-color: var(--background);
+  color: var(--text-primary);
 }
 
 .courses {
-  background-color: #303245;
+  background-color: var(--background-courses);
 }
 
 .selectedSections {
@@ -32,16 +49,27 @@ body {
 }
 
 .btn-navy {
-  background-color: #4d5169;
-  color: white;
+  background-color: var(--background-btn-navy);
+  color: var(--text-primary);
 }
 
 .btn-navy:hover {
-  background-color: #6d718a;
+  background-color: var(--background-btn-navy-hover);
 }
 
 .helpTooltip {
   font-size: 25px;
   float: right;
   line-height: 40px;
+}
+
+.switch-theme {
+  float: right;
+  background-color: var(--background-courses);
+  color: var(--text-primary);
+}
+
+.switch-theme:hover {
+  background-color: var(--background-courses);
+  color: var(--text-primary);
 }
