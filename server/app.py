@@ -1,6 +1,8 @@
 import os
+import datetime
 import psycopg2
 import psycopg2.extras
+import sys
 
 from flask import Flask, jsonify, json, request
 
@@ -33,19 +35,23 @@ def get_search():
 
     dept = args.get('dept')
     days = args.get('days')
-    times = args.get('times')
+    times_str = args.get('times')
     levels = args.get('levels')
+
+    print(days,file=sys.stderr)
+    print(times_str,file=sys.stderr)
+    print(levels,file=sys.stderr)
 
     #Reference and test values
     #days = ["Fri"]
-    #times = [[time(8,30,00),time(10,00,00)]]
+    #times = [["08:30","10:00")]]
     #levels = [False,False,True,True,True]
 
     if not dept:
         if len(query) == 0:
             return jsonify([])
 
-        res = search(query, sem, days,times,levels)
+        res = search(query, sem, days,times_str,levels)
     else:
         res = search_dept(dept, sem)
 
@@ -80,12 +86,14 @@ def group_by_course(cursor, sections, semester):
 
     return list(courses.values())
 
-
-def search(search_terms, semester,days,times,course_level):
+def search(search_terms, semester,days,times_str,course_level):
 
     db_conn = connect_db()
     cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
+    if not times_str is None:
+        times = string_to_time(times_str)
+    
     selects = []
     params = []
     queries = search_terms.split(";")
@@ -205,6 +213,16 @@ def search(search_terms, semester,days,times,course_level):
     db_conn.close()
 
     return list(courses.values())
+
+def string_to_time(times_str):
+    times = []
+    i = 0
+    for str_pair in times_str:
+        times[i][0] = datetime.strptime(str_pair[0], '%H:%M').time()
+        times[i][1] = datetime.strptime(str_pair[1], '%H:%M').time()
+        i = i + 1
+    return times
+
 
 def search_dept(dept, semester):
     db_conn = connect_db()
