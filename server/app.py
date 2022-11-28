@@ -94,12 +94,14 @@ def search(search_terms, semester):
             if term.strip() == "":
                 continue
 
-            query_selects.append("(SELECT * FROM sections "
-                   "WHERE ((department || course_code) LIKE %s "
-                   "OR UPPER(course_name) LIKE %s "
-                   "OR UPPER(faculty) LIKE %s) "
-                   "AND sem = %s "
-                   ")")
+            query_selects.append("(SELECT section_id, department, course_code, course_name, "
+                                "TRIM(section) AS section, sem, status, faculty, location, "
+                                "available, capacity, credits, academic_level FROM sections "
+                                "WHERE ((department || course_code) LIKE %s "
+                                "OR UPPER(course_name) LIKE %s "
+                                "OR UPPER(faculty) LIKE %s) "
+                                "AND sem = %s "
+                                ")")
             params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester])
 
         selects.append(' INTERSECT '.join(query_selects))
