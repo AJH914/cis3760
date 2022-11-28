@@ -4,7 +4,7 @@
 
 ## Overview
 
-Our scheduler app allows the user to create a class schedule using data sourced from UofG's WebAdvisor. It is a work-in-progress.
+Our scheduler app allows the user to create a class schedule using data sourced from UofG's WebAdvisor. By searching for a course name, section name, or parts of either, the site will show all options containing the included keywords. These keywords can be separated by a semicolon to find the union of the keywords on both sides. The user can click view departments to sort the courses by their course departments rather than using the search function. Once these classes are selected, they can be deselected by clicking on them on either the list of selected courses, or by clicking on them on the calendar itself. The exam schedule for these courses can be viewed with the "View Exam Schedule" button, and the site can go between light and dark mode with the button below the calendar. The semester can be changed using the arrow keys above the calendar. Instructions for the setup can be viewed below.
 
 ## Tech
 
