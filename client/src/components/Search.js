@@ -77,11 +77,13 @@ const Search = () => {
           <div className="px-4 py-4 rounded-4 courses">
             <h3>
               Search Courses
+
               <Tooltip
                 text="Use a semi-colon between course code searches to search multiple courses at once. Example: (CIS3260;CIS3760;
                 CIS1250)"
               >
                 <i className="helpTooltip bi bi-info-circle"></i>
+
               </Tooltip>
             </h3>
             <form className="mt-2" onSubmit={(e) => e.preventDefault()}>
@@ -121,6 +123,7 @@ const Search = () => {
                     View Departments
                   </button>
                 </div>
+
                 <div className="d-grid mt-2">
                   <button
                     className="btn btn-sm btn-primary rounded-1"
@@ -137,6 +140,7 @@ const Search = () => {
                   ) : (
                     <a></a>
                   )}
+
                 </div>
               </div>
             </form>

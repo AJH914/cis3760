@@ -35,6 +35,7 @@ def get_search():
 
     dept = args.get('dept')
     days = args.get('days')
+
     times_str = args.get('times')
     levels = args.get('levels')
     
@@ -99,6 +100,7 @@ def search(search_terms, semester,days,times_str,course_level):
     queries = search_terms.split(";")
 
     if (not course_level is None) and course_level:
+
         c_level = ["1","2","3","4","5","6","7","8"]
         if not course_level[0]:
             c_level[0] = "0"
@@ -162,7 +164,6 @@ def search(search_terms, semester,days,times_str,course_level):
     sections = cursor.fetchall()
 
     # group by course and select meetings for each section found
-    #print(sections,file=sys.stderr)
     courses = {}
     for i in range(len(sections)):
         course_id = sections[i]['department'] + sections[i]['course_code']
@@ -225,7 +226,6 @@ def string_to_time(times_str):
         times[i].append(datetime.strptime(str_pair[1], '%H:%M').time())
         i = i + 1
     return times
-
 
 def search_dept(dept, semester):
     db_conn = connect_db()
