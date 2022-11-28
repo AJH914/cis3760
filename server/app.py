@@ -33,11 +33,11 @@ def get_search():
     query = args.get('q')
     sem = args.get('sem').upper()
 
-    dept = args.get('dept')    
+    dept = args.get('dept')
     days = args.get('days')
     times = args.get('times')
     levels = args.get('levels')
-    
+
     #Reference and test values
     #days = ["Fri"]
     #times = [[time(8,30,00),time(10,00,00)]]
@@ -83,7 +83,7 @@ def group_by_course(cursor, sections, semester):
     return list(courses.values())
 
 
-def search(search_terms, semester,days,times,courseLevel):
+def search(search_terms, semester,days,times,course_level):
 
     db_conn = connect_db()
     cursor = db_conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
@@ -91,23 +91,23 @@ def search(search_terms, semester,days,times,courseLevel):
     selects = []
     params = []
     queries = search_terms.split(";")
-    
-    if not courseLevel is None:
-        cLevel = ["1","2","3","4","5","6","7","8"]
-        if not courseLevel[0]:
-            cLevel[0] = "0"
-        if not courseLevel[1]:
-            cLevel[1] = "0"
-        if not courseLevel[2]:
-            cLevel[2] = "0"
-        if not courseLevel[3]:
-            cLevel[3] = "0"
-            cLevel[4] = "0"
-        if not courseLevel[4]:
-            cLevel[5] = "0"
-            cLevel[6] = "0"
-            cLevel[7] = "0"
-    
+
+    if not course_level is None:
+        c_Level = ["1","2","3","4","5","6","7","8"]
+        if not course_level[0]:
+            c_Level[0] = "0"
+        if not course_level[1]:
+            c_Level[1] = "0"
+        if not course_level[2]:
+            c_Level[2] = "0"
+        if not course_level[3]:
+            c_Level[3] = "0"
+            c_Level[4] = "0"
+        if not course_level[4]:
+            c_Level[5] = "0"
+            c_Level[6] = "0"
+            c_Level[7] = "0"
+
     # select sections
     for query in queries:
         query_selects = []
@@ -131,24 +131,24 @@ def search(search_terms, semester,days,times,courseLevel):
                    ")")
             params.extend([f'%{term}%', f'%{term}%', f'%{term}%', semester])
 
-        selects.append(' INTERSECT '.join(query_selects))      
-            
-    levelSearch = ""    
-    if not courseLevel is None:
-        levelSearch = ' OR '.join(["INTERSECT (SELECT * FROM sections WHERE LEFT(course_code, 1) = %s",
+        selects.append(' INTERSECT '.join(query_selects))
+
+    level_search = ""
+    if not course_level is None:
+        level_search = ' OR '.join(["INTERSECT (SELECT * FROM sections WHERE LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
                 "LEFT(course_code, 1) = %s",
-                "LEFT(course_code, 1) = %s)"])        
-        params.extend([cLevel[0],cLevel[1],cLevel[2],cLevel[3],cLevel[4],cLevel[5],cLevel[6],cLevel[7]])    
-        
-    finalQuery ="((" + ' UNION '.join(selects) + ")" + levelSearch + ") ORDER BY department,course_code ASC"      
+                "LEFT(course_code, 1) = %s)"])
+        params.extend([c_Level[0],c_Level[1],c_Level[2],c_Level[3],c_Level[4],c_Level[5],c_Level[6],c_Level[7]])
+
+    final_query ="((" + ' UNION '.join(selects) + ")" + level_search + ") ORDER BY department,course_code ASC"
 
     # union all the selects
-    cursor.execute(finalQuery, tuple(params))
+    cursor.execute(final_query, tuple(params))
     sections = cursor.fetchall()
 
     # group by course and select meetings for each section found
@@ -157,35 +157,35 @@ def search(search_terms, semester,days,times,courseLevel):
     for i in range(len(sections)):
         course_id = sections[i]['department'] + sections[i]['course_code']
         section = sections[i]
-        
+
         # add meetings to section
         cursor.execute("SELECT * FROM meetings "
                         "WHERE section_id = %s AND sem = %s", (section['section_id'], semester))
 
         meetings = cursor.fetchall()
-        
-        validSection = True
-        
+
+        valid_section = True
+
         # Search the meeting days to see if it is a forbidden day or forbidden time
         if (not days is None) and (not times is None):
             for meeting in meetings:
                 if meeting['meeting_type'] != "EXAM":
                     if not days is None:
-                        meetDays = meeting['meeting_day'].split(",")
+                        meet_days = meeting['meeting_day'].split(",")
                         for day in days:
-                            if day in meetDays:
-                                validSection = False
+                            if day in meet_days:
+                                valid_section = False
                                 break
-                    if validSection and (not days is None):
+                    if valid_section and (not days is None):
                         for time in times:
                             if not meeting['start_time'] is None:
                                 if time[0] <= meeting['start_time'] < time[1] or time[0] < meeting['end_time'] <= time[1]:
-                                    validSection = False
-                                    break  
+                                    valid_section = False
+                                    break
                     else:
-                        break              
+                        break
 
-        if validSection:
+        if valid_section:
             if course_id not in courses:
                 courses[course_id] = {
                     'id': len(courses) + 1,
@@ -197,10 +197,9 @@ def search(search_terms, semester,days,times,courseLevel):
                     'credits': sections[i]['credits'],
                     'sections': []
                 }
-            
+
             section['meetings'] = meetings
             courses[course_id]['sections'].append(section)
-            
 
     db_conn.commit()
     db_conn.close()
