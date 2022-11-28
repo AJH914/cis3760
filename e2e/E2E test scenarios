@@ -54,4 +54,45 @@ Assert true the monday meeting timings
 Click on view exam schedule button
 Assert true the exam date on 6th December
 
+Test7 : Add a course section in the fall semester
+
+Open Localhost at - http://localhost:3000/
+Type a course (acct1220) on the search bar
+Click on the accordion button containing return value CIS*3760
+Add first section to the course schedule
+Assert true the monday meeting timings
+
+
+Test8 : Add a course section in the winter semester
+
+Open Localhost at - http://localhost:3000/
+Click on the arrow to change semester to winter
+Type a course (acct1220) on the search bar
+Click on the accordion button containing return value ACCT*1220 
+Add first section to the course schedule
+Assert true the monday meeting timings
+
+
+Test9 : Check the states are mainted between different semesters
+
+Open Localhost at - http://localhost:3000/
+Type a course (acct1220) on the search bar
+Click on the accordion button containing return value CIS*3760
+Add first section to the course schedule
+Assert true the monday meeting timings
+Click on the arrow to change semester to winter
+Type a course (acct1220) on the search bar
+Click on the accordion button containing return value ACCT*1220 
+Add first section to the course schedule
+Assert true the monday meeting timings
+Click on the arrow to change semester to fall
+Assert true the monday meeting timings for 3760
+
+Test9 : Add a course section from the dropdown menu
+
+Open Localhost at - http://localhost:3000/
+Click on View Departments button
+Click on biology department
+Add first section to the course schedule
+Assert true meeting timings
 
